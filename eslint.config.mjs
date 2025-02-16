@@ -71,7 +71,7 @@ const eslintConfig = [
                   },
                 ],
               ],
-              allow: 'index.ts',
+              allow: ['index.ts', '*.(ts|tsx)'],
             },
             // shared/api
             {
@@ -83,7 +83,7 @@ const eslintConfig = [
                   },
                 ],
               ],
-              allow: 'index.ts',
+              allow: ['index.ts', '*.(ts|tsx)'],
             },
             // shared/hooks
             {
@@ -95,7 +95,7 @@ const eslintConfig = [
                   },
                 ],
               ],
-              allow: 'index.ts',
+              allow: ['index.ts', '*.(ts|tsx)'],
             },
             // shared/utils
             {
