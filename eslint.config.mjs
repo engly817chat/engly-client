@@ -61,101 +61,20 @@ const eslintConfig = [
         {
           default: 'disallow',
           rules: [
-            // app/providers
             {
               target: [
                 [
-                  'app',
+                  'shared',
                   {
-                    segment: 'providers',
+                    segment: '*',
                   },
                 ],
               ],
               allow: ['index.ts', '*.(ts|tsx)'],
             },
-            // shared/api
             {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'api',
-                  },
-                ],
-              ],
+              target: ['app'],
               allow: ['index.ts', '*.(ts|tsx)'],
-            },
-            // shared/hooks
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'hooks',
-                  },
-                ],
-              ],
-              allow: ['index.ts', '*.(ts|tsx)'],
-            },
-            // shared/utils
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'utils',
-                  },
-                ],
-              ],
-              allow: ['index.ts', '*.(ts|tsx)'],
-            },
-            // shared/lib
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'lib',
-                  },
-                ],
-              ],
-              allow: 'index.ts',
-            },
-            // shared/constants
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'constants',
-                  },
-                ],
-              ],
-              allow: 'index.ts',
-            },
-            // shared/types
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'types',
-                  },
-                ],
-              ],
-              allow: 'index.ts',
-            },
-            // shared/ui
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'ui',
-                  },
-                ],
-              ],
-              allow: '**',
             },
             {
               target: ['app', 'views', 'widgets', 'features', 'entities'],
