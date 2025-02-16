@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/shared/ui/common/tooltip'
-import { useIsMobile } from '@/shared/hooks/use-mobile'
+import { useIsMobile } from '@/shared/hooks'
 import { cn } from '@/shared/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'

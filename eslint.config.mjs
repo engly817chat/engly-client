@@ -61,6 +61,55 @@ const eslintConfig = [
         {
           default: 'disallow',
           rules: [
+            // app/providers
+            {
+              target: [
+                [
+                  'app',
+                  {
+                    segment: 'providers',
+                  },
+                ],
+              ],
+              allow: 'index.ts',
+            },
+            // shared/api
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'api',
+                  },
+                ],
+              ],
+              allow: 'index.ts',
+            },
+            // shared/hooks
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'hooks',
+                  },
+                ],
+              ],
+              allow: 'index.ts',
+            },
+            // shared/utils
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'utils',
+                  },
+                ],
+              ],
+              allow: ['index.ts', '*.(ts|tsx)'],
+            },
+            // shared/lib
             {
               target: [
                 [
@@ -70,19 +119,9 @@ const eslintConfig = [
                   },
                 ],
               ],
-              allow: '*/index.ts',
+              allow: 'index.ts',
             },
-            {
-              target: [
-                [
-                  'shared',
-                  {
-                    segment: 'lib',
-                  },
-                ],
-              ],
-              allow: '*.(ts|tsx)',
-            },
+            // shared/constants
             {
               target: [
                 [
@@ -94,6 +133,7 @@ const eslintConfig = [
               ],
               allow: 'index.ts',
             },
+            // shared/types
             {
               target: [
                 [
@@ -105,6 +145,7 @@ const eslintConfig = [
               ],
               allow: 'index.ts',
             },
+            // shared/ui
             {
               target: [
                 [
