@@ -61,20 +61,125 @@ const eslintConfig = [
         {
           default: 'disallow',
           rules: [
+            // app/providers
             {
               target: [
                 [
-                  'shared',
+                  'app',
                   {
-                    segment: '*',
+                    segment: 'providers',
                   },
                 ],
               ],
               allow: ['index.ts', '*.(ts|tsx)'],
             },
+            // shared/api
             {
-              target: ['app'],
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'api',
+                  },
+                ],
+              ],
               allow: ['index.ts', '*.(ts|tsx)'],
+            },
+            // shared/config
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'config',
+                  },
+                ],
+              ],
+              allow: ['index.ts'],
+            },
+            // shared/assets
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'assets',
+                  },
+                ],
+              ],
+              allow: ['**'],
+            },
+            // shared/hooks
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'hooks',
+                  },
+                ],
+              ],
+              allow: ['index.ts'],
+            },
+            // shared/utils
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'utils',
+                  },
+                ],
+              ],
+              allow: ['index.ts', '*.(ts|tsx)'],
+            },
+            // shared/lib
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'lib',
+                  },
+                ],
+              ],
+              allow: 'index.ts',
+            },
+            // shared/constants
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'constants',
+                  },
+                ],
+              ],
+              allow: 'index.ts',
+            },
+            // shared/types
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'types',
+                  },
+                ],
+              ],
+              allow: 'index.ts',
+            },
+            // shared/ui
+            {
+              target: [
+                [
+                  'shared',
+                  {
+                    segment: 'ui',
+                  },
+                ],
+              ],
+              allow: '**',
             },
             {
               target: ['app', 'views', 'widgets', 'features', 'entities'],
@@ -93,15 +198,13 @@ const eslintConfig = [
               from: 'shared',
               allow: ['shared'],
               disallow: ['app', 'views', 'widgets', 'features', 'entities'],
-              message:
-                'Shared module must not import upper layers (${dependency.type})',
+              message: 'Shared module must not import upper layers (${dependency.type})',
             },
             {
               from: 'entities',
               allow: ['shared'],
               disallow: ['app', 'views', 'widgets', 'features'],
-              message:
-                'Entity must not import upper layers (${dependency.type})',
+              message: 'Entity must not import upper layers (${dependency.type})',
             },
             {
               from: ['entities'],
@@ -119,8 +222,7 @@ const eslintConfig = [
               from: 'features',
               allow: ['entities', 'shared'],
               disallow: ['app', 'views', 'widgets'],
-              message:
-                'Feature must not import upper layers (${dependency.type})',
+              message: 'Feature must not import upper layers (${dependency.type})',
             },
             {
               from: ['features'],
@@ -138,8 +240,7 @@ const eslintConfig = [
               from: 'widgets',
               allow: ['features', 'entities', 'shared'],
               disallow: ['app', 'views'],
-              message:
-                'Feature must not import upper layers (${dependency.type})',
+              message: 'Feature must not import upper layers (${dependency.type})',
             },
             {
               from: ['widgets'],

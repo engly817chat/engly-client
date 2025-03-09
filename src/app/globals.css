@@ -8,24 +8,41 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --background: 216 100% 99%; /* #FAFCFF */
+    --foreground: 0 0% 0%; /*  #000000 */
+
+    --primary: 214 100% 50%; /* #016DFF */
+    --primary-dark: 229 100% 40%; /* #0026CA */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+
+    /* FIXME: */
+    --secondary: 216 100% 99%; /* #FAFCFF */
+    --secondary-foreground: 0 0% 0%; /*  #000000 */
+
+    /* 
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+     */
+
+    --destructive: 0 100% 59%; /* #FF3030 */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+
+    --success: 137 83% 40%; /* #11BC41 */
+    --success-foreground: 0 0% 100%; /* #FFFFFF */
+
+    --muted: 0 0% 32%; /* #525252 */
+    --muted-foreground: 0 0% 32%; /* #525252 */
+
+    --border: 220 13% 91%; /* #E5E7EB */
+    --input: 0 0% 98%; /* #FAFAFA */
+
+    /* ########## */
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
     --ring: 240 10% 3.9%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -82,9 +99,37 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* BUTTONS */
+  .btn-action {
+    @apply text-foreground;
+  }
+
+  .btn-link {
+    @apply flex h-9 items-center justify-center text-nowrap rounded-[10px] bg-primary px-3 text-sm/none font-semibold text-primary-foreground transition-colors duration-300 hover:bg-primary-dark md:h-[52px] md:px-6 xl:px-7 xl:text-xl/none;
+  }
+
+  /* FORM */
+  .form-label {
+    @apply text-base/none font-medium text-foreground md:text-xl/none !important;
+  }
+
+  .required {
+    @apply after:text-base after:font-medium after:text-destructive after:content-['_*'] md:after:text-xl;
+  }
+
+  .form-input {
+    @apply flex h-12 items-center rounded-[10px] border-border bg-input px-4 text-base text-foreground shadow-none ring-0 placeholder:text-base placeholder:text-foreground/30 focus:border-primary !important;
+  }
+
+  .form-error {
+    @apply text-xs font-medium text-destructive;
   }
 }
