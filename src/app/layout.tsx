@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
+import { CookieConsent } from '@/shared/ui/cookie-consent'
 
 const geistMontserrat = Montserrat({
   variable: '--font-montserrat',
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistMontserrat.className} antialiased`}>
         <Providers>{children}</Providers>
+        <CookieConsent />
       </body>
     </html>
   )
