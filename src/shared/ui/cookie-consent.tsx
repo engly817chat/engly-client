@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useCookieConsent } from '@/shared/hooks/useCookieConsent'
 
 export function CookieConsent() {
-  const { consent, acceptCookies, loading } = useCookieConsent()
+  const { consent, acceptCookies, loading, declineCookies } = useCookieConsent()
   const [isVisible, setIsVisible] = useState(true)
 
   const closeConsent = () => setIsVisible(false)
@@ -13,7 +13,7 @@ export function CookieConsent() {
   if (consent || !isVisible || loading) return null
 
   return (
-    <div className='fixed bottom-4 left-1/2 z-50 h-auto w-[90%] min-w-[320px] max-w-[1305px] -translate-x-1/2 rounded-[10px] border border-border bg-card shadow-lg px-[12px] py-[50px] md:px-[73px] md:py-[52px] sm:px-[40px] sm:py-[60px]'>
+    <div className='fixed bottom-4 left-1/2 z-50 h-auto w-[90%] min-w-[320px] max-w-[1305px] -translate-x-1/2 rounded-[10px] border border-border bg-card px-[12px] py-[50px] shadow-lg sm:px-[40px] sm:py-[60px] md:px-[73px] md:py-[52px]'>
       <button
         onClick={closeConsent}
         className='absolute right-7 top-7 text-sm hover:text-foreground md:text-2xl'
@@ -47,8 +47,11 @@ export function CookieConsent() {
         >
           Accept all Cookies
         </button>
-        <button className='rounded-[10px] border border-border px-8 py-3 text-sm font-semibold text-foreground hover:bg-gray-200 sm:px-12 sm:py-3 sm:text-xl bg-background'>
-          Manage Preferences
+        <button
+          onClick={declineCookies}
+          className='rounded-[10px] border border-border bg-background px-8 py-3 text-sm font-semibold text-foreground hover:bg-gray-200 sm:px-12 sm:py-3 sm:text-xl'
+        >
+          Decline cookies
         </button>
       </div>
     </div>
