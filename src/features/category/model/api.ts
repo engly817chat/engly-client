@@ -3,7 +3,7 @@ import type { SignalOptions } from '@/shared/types'
 import { PaginatedCategoriesResponse } from './types'
 
 const endpoints = {
-  getAllCategories: '/get-all-categories',
+  getAllCategories: '/public/get-all-categories',
 } as const
 
 export const categoryApi = {
