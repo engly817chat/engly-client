@@ -61,7 +61,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
     })
 
     return () => subscription.unsubscribe()
-  }, [form])
+  }, [form, debouncedCheckUsername])
 
   return (
     <div className='space-y-5 xl:space-y-3'>

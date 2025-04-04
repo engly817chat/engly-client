@@ -119,7 +119,7 @@ const eslintConfig = [
                   },
                 ],
               ],
-              allow: ['index.ts'],
+              allow: ['index.ts', '*.(ts|tsx)'],
             },
             // shared/utils
             {

@@ -5,7 +5,7 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
   activeRoomsCount: number;
-  rooms: any[];
+  rooms: unknown[];
   icon: string
 }
 
