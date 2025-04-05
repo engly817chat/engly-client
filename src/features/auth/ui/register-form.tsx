@@ -64,9 +64,11 @@ export function RegisterForm() {
 
       <StepBar step={step} className='mb-5 md:mb-10 xl:mb-5' />
 
-      <h1 className='xl:text-4xl/[ 43.88px] mb-10 text-center text-2xl/[29.26px] font-bold md:mb-4 md:text-[32px]/[39.01px] xl:mb-3'>
-        Registration
-      </h1>
+      {step === RegisterStepEnum.Credentials && (
+        <h1 className='mb-10 text-center text-2xl/[29.26px] font-bold md:mb-4 md:text-[32px]/[39.01px] xl:mb-3 xl:text-4xl/[43.88px]'>
+          Registration
+        </h1>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

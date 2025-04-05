@@ -14,6 +14,7 @@ export const NativeLangEnum = {
   French: 'FRENCH',
   Arabic: 'ARABIC',
   Chinese: 'CHINESE',
+  Ukrainian: 'UKRAINIAN'
 } as const
 
 export const nativeLangs = [
@@ -27,6 +28,7 @@ export const nativeLangs = [
   { value: NativeLangEnum.French, label: 'French' },
   { value: NativeLangEnum.Arabic, label: 'Arabic' },
   { value: NativeLangEnum.Chinese, label: 'Chinese' },
+  { value: NativeLangEnum.Ukrainian, label: 'Ukrainian' },
 ] as const
 
 export const GenderEnum = {

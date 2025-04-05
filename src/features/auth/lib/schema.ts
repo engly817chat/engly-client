@@ -11,9 +11,6 @@ export const RegisterFormSchema = z
   .object({
     username: z
       .string()
-      .min(1, {
-        message: 'Required field',
-      })
       .min(2, {
         message: 'Username must be at least 2 characters',
       })
@@ -22,7 +19,7 @@ export const RegisterFormSchema = z
       })
       .regex(new RegExp(regex.username), {
         message:
-          'Username must start with a letter and can contain only letters, numbers, dots, underscores and hyphens',
+         'Username can only include letters',
       }),
     email: z
       .string()

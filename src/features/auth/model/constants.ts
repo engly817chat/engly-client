@@ -41,8 +41,8 @@ export const credentialStepData = [
   {
     type: 'password',
     name: 'confirm',
-    label: 'Confirm password',
-    placeholder: 'Confirm password',
+    label: 'Password repeat',
+    placeholder: 'Password repeat',
     showPasswordToggle: true,
   },
 ] as const
@@ -50,22 +50,22 @@ export const credentialStepData = [
 export const profileStepData = [
   {
     name: 'nativeLanguage',
-    label: 'Native language',
-    placeholder: 'Select your native language',
+    label: 'Choose your native language',
+    placeholder: 'Select',
     type: 'select',
     items: nativeLangs,
   },
   {
     name: 'englishLevel',
-    label: 'Native language',
-    placeholder: 'Select your English level',
+    label: 'English level',
+    placeholder: 'Select',
     type: 'select',
     items: engLevels,
   },
   {
     name: 'goals',
     label: 'Goals',
-    placeholder: 'Select your goals',
+    placeholder: 'Select',
     type: 'select',
     items: [
       { value: 'DEFAULT', label: 'Default' },
