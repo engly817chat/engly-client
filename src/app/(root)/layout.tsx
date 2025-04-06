@@ -21,7 +21,7 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
               <Select>
                 <SelectTrigger className='flex h-auto items-center gap-1 rounded-[10px] border-border shadow-none md:px-3.5 md:py-4 xl:px-4'>
                   <GlobeIcon />
-                  <SelectValue placeholder='En' />
+                  <SelectValue placeholder='English' />
                 </SelectTrigger>
               </Select>
               <Link href={appRoutes.register} className='btn-link'>
