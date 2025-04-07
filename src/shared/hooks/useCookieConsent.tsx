@@ -18,7 +18,6 @@ export const useCookieConsent = () => {
 
 	const acceptCookies = () => {
 		Cookies.set(storageKeys.cookieConsent, 'accepted', {
-			domain: 'localhost',
 			sameSite: 'strict',
 			expires: 365,
 		})
@@ -27,7 +26,6 @@ export const useCookieConsent = () => {
 
 	const declineCookies = () => {
 		Cookies.set(storageKeys.cookieConsent, 'declined', {
-			domain: 'localhost',
 			sameSite: 'strict',
 			expires: 365,
 		})
