@@ -19,7 +19,7 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
 
             <div className='flex items-center gap-2 md:gap-3'>
               <Select>
-                <SelectTrigger className='flex h-auto items-center gap-1 rounded-[10px] border-border shadow-none md:px-3.5 md:py-4 xl:px-4'>
+                <SelectTrigger className='flex h-auto items-center gap-2 rounded-[10px] border-border shadow-none md:px-3.5 md:py-4 xl:px-4 text-[16px] xl:text-[20px] leading-none'>
                   <GlobeIcon />
                   <SelectValue placeholder='English' />
                 </SelectTrigger>
