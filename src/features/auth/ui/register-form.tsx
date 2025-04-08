@@ -23,8 +23,8 @@ export function RegisterForm() {
     defaultValues: {
       username: '',
       email: '',
-      password: 'VmaP_NZOBp#HF2LM7Ks?cSsyLc?@vq',
-      confirm: 'VmaP_NZOBp#HF2LM7Ks?cSsyLc?@vq',
+      password: '',
+      confirm: '',
       nativeLanguage: undefined,
       englishLevel: undefined,
       gender: undefined,

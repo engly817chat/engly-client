@@ -4,7 +4,7 @@ import type { EngLevelType, GenderType, NativeLangType } from '@/shared/types'
 
 const maxUsernameLength = 50
 const maxEmailLength = 50
-const maxPasswordLength = 30
+const maxPasswordLength = 50
 const minPasswordLength = 8
 
 export const RegisterFormSchema = z
@@ -18,8 +18,7 @@ export const RegisterFormSchema = z
         message: `Username must be less than ${maxUsernameLength} characters`,
       })
       .regex(new RegExp(regex.username), {
-        message:
-         'Username can only include letters',
+        message: 'Username can only include letters',
       }),
     email: z
       .string()
@@ -44,9 +43,14 @@ export const RegisterFormSchema = z
         message:
           'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
       }),
-    confirm: z.string().min(1, {
-      message: 'Required field',
-    }),
+    confirm: z
+      .string()
+      .min(1, {
+        message: 'Required field',
+      })
+      .max(maxPasswordLength, {
+        message: `Password must be less than ${maxPasswordLength} characters`,
+      }),
     nativeLanguage: z.enum(
       Object.values(NativeLangEnum) as [NativeLangType, ...NativeLangType[]],
       {
