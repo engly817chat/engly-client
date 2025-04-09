@@ -15,7 +15,7 @@ export const RegisterFormSchema = z
         message: 'Username must be at least 2 characters',
       })
       .max(maxUsernameLength, {
-        message: `Username must be less than ${maxUsernameLength} characters`,
+        message: `Username must be only ${maxUsernameLength} characters`,
       })
       .regex(new RegExp(regex.username), {
         message: 'Username can only include letters',
