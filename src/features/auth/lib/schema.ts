@@ -23,7 +23,7 @@ export const RegisterFormSchema = z
     email: z
       .string()
       .max(maxEmailLength, {
-        message: `Email must be less than ${maxEmailLength} characters`,
+        message: `Email must be only ${maxEmailLength} characters`,
       })
       .email({
         message: 'Invalid email address',
@@ -37,7 +37,7 @@ export const RegisterFormSchema = z
         message: `Password must be at least ${minPasswordLength} characters`,
       })
       .max(maxPasswordLength, {
-        message: `Password must be less than ${maxPasswordLength} characters`,
+        message: `Password must be only ${maxPasswordLength} characters`,
       })
       .regex(new RegExp(regex.password), {
         message:
@@ -49,7 +49,7 @@ export const RegisterFormSchema = z
         message: 'Required field',
       })
       .max(maxPasswordLength, {
-        message: `Password must be less than ${maxPasswordLength} characters`,
+        message: `Password must be only ${maxPasswordLength} characters`,
       }),
     nativeLanguage: z.enum(
       Object.values(NativeLangEnum) as [NativeLangType, ...NativeLangType[]],
