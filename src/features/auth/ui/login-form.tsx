@@ -28,6 +28,7 @@ export function LoginForm() {
       email: '',
       password: '',
     },
+    mode: 'onChange',
   })
 
   const { mutate, isPending } = useLogin()
