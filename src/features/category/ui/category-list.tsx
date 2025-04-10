@@ -10,8 +10,9 @@ import { categoryApi, PaginatedCategoriesResponse } from '../model'
 
 export const CategoryList = () => {
   const { data, error, isError, isLoading } = useQuery<PaginatedCategoriesResponse, AxiosError>({
-    queryKey: ['categories'],
-    queryFn: categoryApi.getAllCategories,
+    queryKey: ['categories', { page: 0, size: 8, sort: 'id,desc' }],
+    queryFn: () =>
+      categoryApi.getAllCategories({ page: 0, size: 8, sort: 'id,desc' }),
   })
 
   if (isError) {
@@ -30,8 +31,8 @@ export const CategoryList = () => {
 
   return (
     <div className='grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4 xl:gap-6'>
-      {data?.categories?.map(cat => {
-        const isTopPick = cat.activeRoomsCount > 20
+      {data?._embedded?.categoriesDtoList?.map(cat => {
+        const isTopPick = cat.activeRoomsCount > 15
 
         return (
           <Link

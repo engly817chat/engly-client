@@ -10,8 +10,13 @@ export interface Category {
 }
 
 export interface PaginatedCategoriesResponse {
-  totalPages: number;
-  categories: Category[];
-  current_page: number;
-  totalElements: number;
+  _embedded: {
+    categoriesDtoList: Category[];
+  };
+  page: {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+  };
 }

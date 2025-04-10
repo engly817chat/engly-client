@@ -1,5 +1,4 @@
 import { axiosWithAuth } from '@/shared/api'
-import type { SignalOptions } from '@/shared/types'
 import { PaginatedCategoriesResponse } from './types'
 
 const endpoints = {
@@ -8,15 +7,23 @@ const endpoints = {
 
 export const categoryApi = {
   getAllCategories: async ({
+    page = 0,
+    size = 8,
+    sort = 'name,asc',
     signal,
-  }: SignalOptions): Promise<PaginatedCategoriesResponse> => {
+  }: {
+    page?: number;
+    size?: number;
+    sort?: string;
+    signal?: AbortSignal;
+  }): Promise<PaginatedCategoriesResponse> => {
     const response = await axiosWithAuth.get<PaginatedCategoriesResponse>(
       endpoints.getAllCategories,
       {
+        params: { page, size, sort },
         signal,
-      },
-    )
-
-    return response.data
+      }
+    );
+    return response.data;
   },
-} as const
+} as const;
