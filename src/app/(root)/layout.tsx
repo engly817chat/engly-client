@@ -1,6 +1,12 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { Select, SelectTrigger, SelectValue } from '@/shared/ui/common/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/common/select'
 import { GlobeIcon } from '@/shared/ui/icons'
 import { appRoutes } from '@/shared/config'
 
@@ -18,11 +24,21 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
             </Link>
 
             <div className='flex items-center gap-2 md:gap-3'>
-              <Select>
-                <SelectTrigger className='flex h-auto items-center gap-2 rounded-[10px] border-border shadow-none md:px-3.5 md:py-4 xl:px-4 text-[16px] xl:text-[20px] leading-none'>
+              <Select defaultValue='en'>
+                <SelectTrigger className='flex h-auto items-center gap-1 rounded-[10px]  text-[16px] leading-none shadow-none sm:gap-2 border-white sm:border-border  md:px-3.5 md:py-4 xl:px-4 xl:text-[20px]'>
                   <GlobeIcon />
                   <SelectValue placeholder='English' />
                 </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='en'>
+                    <span className='sm:hidden'>En</span>
+                    <span className='hidden sm:inline'>English</span>
+                  </SelectItem>
+                  <SelectItem value='uk'>
+                    <span className='sm:hidden'>Uk</span>
+                    <span className='hidden sm:inline'>Ukrainian</span>
+                  </SelectItem>
+                </SelectContent>
               </Select>
               <Link href={appRoutes.register} className='btn-link'>
                 Sign Up
