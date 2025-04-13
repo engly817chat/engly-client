@@ -76,7 +76,7 @@ export function RegisterForm() {
 
           {step === RegisterStepEnum.Profile && <StepProfile form={form} />}
 
-          <div className='pt-8'>
+          <div className='pt-6'>
             {step === RegisterStepEnum.Credentials && (
               <Button type='button' onClick={onContinue} className='w-full'>
                 Continue

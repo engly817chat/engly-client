@@ -64,14 +64,14 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
   }, [form, debouncedCheckUsername])
 
   return (
-    <div className='space-y-5 xl:space-y-3'>
+    <div className='space-y-1'>
       {credentialStepData.map(i => (
         <FormField
           key={i.name}
           control={form.control}
           name={i.name}
           render={({ field }) => (
-            <FormItem className='space-y-1 md:space-y-3'>
+            <FormItem className='space-y-1 md:space-y-2'>
               <FormLabel className='form-label required'>{i.label}</FormLabel>
               <FormControl>
                 <div className='relative'>
@@ -131,7 +131,9 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                   </div>
                 </div>
               </FormControl>
-              <FormMessage className='form-error' />
+              <div className='min-h-[16px]'>
+                <FormMessage className='form-error' />
+              </div>
             </FormItem>
           )}
         />
