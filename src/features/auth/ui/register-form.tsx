@@ -50,7 +50,7 @@ export function RegisterForm() {
   }
 
   return (
-    <div className='relative h-full bg-background px-4 py-12 md:px-6 md:py-14 xl:px-16'>
+    <div className='relative h-full bg-background px-4 py-12 md:px-6 md:py-12 xl:px-16'>
       <Button
         variant='link'
         onClick={() => setStep(RegisterStepEnum.Credentials)}
@@ -76,7 +76,7 @@ export function RegisterForm() {
 
           {step === RegisterStepEnum.Profile && <StepProfile form={form} />}
 
-          <div className='pt-6'>
+          <div className='pt-4'>
             {step === RegisterStepEnum.Credentials && (
               <Button type='button' onClick={onContinue} className='w-full'>
                 Continue

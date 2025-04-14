@@ -18,15 +18,15 @@ export default function AuthLayout({
 
   return (
     <main className='flex h-screen items-center justify-center bg-slate-800'>
-      <div className='flex h-full w-full bg-slate-400 xl:h-[752px] xl:w-[1030px] xl:overflow-hidden xl:rounded-2xl'>
+      <div className='flex h-full w-full bg-slate-400 xl:h-[788px] xl:w-[1030px] xl:overflow-hidden xl:rounded-2xl'>
         <AuthSlider />
         <div className='relative flex-1'>
           <Button
             variant='ghost'
             onClick={closeForm}
-            className='absolute right-2 top-5 z-10 p-2 text-foreground hover:bg-black/10'
+            className='absolute right-2 top-3 z-10 p-2 text-foreground hover:bg-black/10'
           >
-            <XIcon className='h-4 w-4' />
+            <XIcon style={{ width: '20px', height: '20px' }}/>
           </Button>
           {children}
         </div>
