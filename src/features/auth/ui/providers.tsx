@@ -26,7 +26,7 @@ export const Providers = () => {
           {path === appRoutes.register
             ? 'Already have an account?'
             : 'Don’t have an account?'}
-          <Link href={appRoutes.login} className='text-foreground underline'>
+          <Link href={path === appRoutes.register ? appRoutes.login : appRoutes.register} className='text-foreground underline'>
             {path === appRoutes.register ? 'Log in' : 'Sign up'}
           </Link>
         </p>
