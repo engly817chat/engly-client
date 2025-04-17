@@ -1,0 +1,29 @@
+{
+  "welcome": "Welcome to the chat!",
+  "signUp": "Sign Up",
+  "home": {
+    "description": "Choose a chat and enjoy communication"
+  },
+  "topPick": "Top Pick",
+  "chatsCount": "{{count}} chats",
+  "categories": {
+    "career": "Career",
+    "general_chat": "General Chat",
+    "hobbies": "Hobbies",
+    "movies": "Movies",
+    "news": "News",
+    "sports": "Sports",
+    "tech": "Tech",
+    "travel_and_food": "Travel and Food",
+    "descriptions": {
+      "career": "Growth, Opportunities, and Professional Insights",
+      "general_chat": "Open discussions about anything",
+      "hobbies": "Passions, Pastimes, and Creative Pursuits",
+      "movies": "Reviews, Discussions, and Cinematic Experiences",
+      "news": "Latest updates and discussions",
+      "sports": "Sports news and discussions",
+      "tech": "Innovations, Gadgets, and Future Trends",
+      "travel_and_food": "Adventures, Culinary Delights, and Gastronomic Explorations"
+    }
+  }
+}

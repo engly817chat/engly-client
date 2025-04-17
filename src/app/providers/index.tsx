@@ -1,6 +1,7 @@
 import { Bounce, ToastContainer } from 'react-toastify'
 import { QueryProvider } from './query-provider'
 import { ThemeProvider } from './theme-provider'
+import I18nProvider from './I18nProvider'
 
 export const Providers = ({
   children,
@@ -27,7 +28,9 @@ export const Providers = ({
         theme='light'
         transition={Bounce}
       />
-      <QueryProvider>{children}</QueryProvider>
+       <I18nProvider>
+        <QueryProvider>{children}</QueryProvider>
+      </I18nProvider>
     </ThemeProvider>
   )
 }
