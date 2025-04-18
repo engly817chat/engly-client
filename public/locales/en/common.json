@@ -84,5 +84,14 @@
       "label": "Password",
       "placeholder": "Enter your password"
     }
+  },
+  "cookies": {
+    "title": "Accept the use of cookies.",
+    "description": "We use cookies to improve your browsing experience, serve personalized content, and analyze our traffic. By clicking Accept all Cookies, you agree to the storing of cookies on your device.",
+    "moreInfo": "For more details, see our",
+    "policyLink": "Cookie Policy",
+    "accept": "Accept all Cookies",
+    "decline": "Decline cookies",
+    "close": "Close"
   }
 }
