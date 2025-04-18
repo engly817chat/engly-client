@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { type UseFormReturn } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDebounceCallback } from 'usehooks-ts'
 import { authApi } from '@/entities/auth'
 import {
@@ -17,14 +18,13 @@ import { CircleAlertIcon } from '@/shared/ui/icons'
 import { cn } from '@/shared/utils'
 import { validatePasswords, type RegisterFormValues } from '../lib'
 import { credentialStepData } from '../model'
-import { useTranslation } from 'react-i18next'
 
 interface StepCredentialsProps {
   form: UseFormReturn<RegisterFormValues>
 }
 
 export const StepCredentials = ({ form }: StepCredentialsProps) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const [checkedState, setCheckedState] = useState<
     Partial<Record<keyof RegisterFormValues, boolean>>
   >({})
@@ -104,7 +104,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                       field.onBlur()
                       await form.trigger(i.name)
                       if (i.name === 'confirm') {
-                        const isValid = validatePasswords(form)
+                        const isValid = validatePasswords(form, t)
                         setCheckedState(prev => ({ ...prev, [i.name]: isValid }))
                       }
                     }}

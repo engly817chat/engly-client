@@ -20,7 +20,7 @@ export function RegisterForm() {
   const [step, setStep] = useState<RegisterStepType>(RegisterStepEnum.Credentials)
 
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(RegisterFormSchema),
+    resolver: zodResolver(RegisterFormSchema(t)),
     mode: 'onBlur',
     defaultValues: {
       username: '',
@@ -39,7 +39,7 @@ export function RegisterForm() {
   const onContinue = async () => {
     const isValid = await form.trigger(['username', 'email', 'password', 'confirm'])
 
-    if (!validatePasswords(form)) return
+    if (!validatePasswords(form, t)) return
 
     if (isValid) {
       setStep(RegisterStepEnum.Profile)
