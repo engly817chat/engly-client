@@ -1,6 +1,8 @@
 {
   "welcome": "Welcome to the chat!",
   "signUp": "Sign Up",
+  "ukrainian": "Ukrainian",
+  "english": "English",
   "home": {
     "description": "Choose a chat and enjoy communication"
   },
@@ -24,6 +26,63 @@
       "sports": "Sports news and discussions",
       "tech": "Innovations, Gadgets, and Future Trends",
       "travel_and_food": "Adventures, Culinary Delights, and Gastronomic Explorations"
+    }
+  },
+  "auth": {
+    "registration": "Registration",
+    "username": {
+      "label": "Username",
+      "placeholder": "Enter your username"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "confirm": {
+      "label": "Repeat password",
+      "placeholder": "Repeat your password"
+    },
+    "or": "Or",
+    "signUpWithGoogle": "Sign up with Google",
+    "loginWithGoogle": "Log in with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don’t have an account?",
+    "signUp": "Sign up",
+    "log_in": "Log in",
+    "creating": "Creating...",
+    "createAccount": "Create account",
+    "loading": "Loading...",
+    "login": "Login",
+    "validation": {
+      "usernameMin": "Username must be at least 2 characters",
+      "usernameMax": "Username must be only {{max}} characters",
+      "usernameRegex": "Username can only include letters",
+      "emailMax": "Email must be only {{max}} characters",
+      "emailInvalid": "Invalid email address",
+      "required": "Required field",
+      "passwordMin": "Password must be at least {{min}} characters",
+      "passwordMax": "Password must be only {{max}} characters",
+      "passwordRegex": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+      "nativeInvalid": "Please select valid native language",
+      "englishInvalid": "Please select valid English level",
+      "genderInvalid": "Please select valid gender",
+      "passwordsMustMatch": "Passwords must match!"
+    }
+  },
+  "continue": "Continue",
+  "login": {
+    "welcomeBack": "Welcome back!",
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
     }
   }
 }

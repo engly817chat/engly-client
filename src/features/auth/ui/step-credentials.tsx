@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { type UseFormReturn } from 'react-hook-form'
@@ -15,12 +17,14 @@ import { CircleAlertIcon } from '@/shared/ui/icons'
 import { cn } from '@/shared/utils'
 import { validatePasswords, type RegisterFormValues } from '../lib'
 import { credentialStepData } from '../model'
+import { useTranslation } from 'react-i18next'
 
 interface StepCredentialsProps {
   form: UseFormReturn<RegisterFormValues>
 }
 
 export const StepCredentials = ({ form }: StepCredentialsProps) => {
+  const {t} = useTranslation()
   const [checkedState, setCheckedState] = useState<
     Partial<Record<keyof RegisterFormValues, boolean>>
   >({})
@@ -72,7 +76,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
           name={i.name}
           render={({ field }) => (
             <FormItem className='space-y-1 md:space-y-2'>
-              <FormLabel className='form-label required'>{i.label}</FormLabel>
+              <FormLabel className='form-label required'>{t(i.label)}</FormLabel>
               <FormControl>
                 <div className='relative'>
                   <Input
@@ -89,7 +93,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                           : 'password'
                         : i.type
                     }
-                    placeholder={i.placeholder}
+                    placeholder={t(i.placeholder)}
                     {...field}
                     onChange={async e => {
                       field.onChange(e)
