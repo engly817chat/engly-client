@@ -1,6 +1,9 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { type UseFormReturn } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDebounceCallback } from 'usehooks-ts'
 import { authApi } from '@/entities/auth'
 import {
@@ -21,6 +24,7 @@ interface StepCredentialsProps {
 }
 
 export const StepCredentials = ({ form }: StepCredentialsProps) => {
+  const { t } = useTranslation()
   const [checkedState, setCheckedState] = useState<
     Partial<Record<keyof RegisterFormValues, boolean>>
   >({})
@@ -72,7 +76,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
           name={i.name}
           render={({ field }) => (
             <FormItem className='space-y-1 md:space-y-2'>
-              <FormLabel className='form-label required'>{i.label}</FormLabel>
+              <FormLabel className='form-label required'>{t(i.label)}</FormLabel>
               <FormControl>
                 <div className='relative'>
                   <Input
@@ -89,7 +93,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                           : 'password'
                         : i.type
                     }
-                    placeholder={i.placeholder}
+                    placeholder={t(i.placeholder)}
                     {...field}
                     onChange={async e => {
                       field.onChange(e)
@@ -100,7 +104,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                       field.onBlur()
                       await form.trigger(i.name)
                       if (i.name === 'confirm') {
-                        const isValid = validatePasswords(form)
+                        const isValid = validatePasswords(form, t)
                         setCheckedState(prev => ({ ...prev, [i.name]: isValid }))
                       }
                     }}

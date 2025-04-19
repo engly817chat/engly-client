@@ -1,0 +1,97 @@
+{
+  "welcome": "Welcome to the chat!",
+  "signUp": "Sign Up",
+  "ukrainian": "Ukrainian",
+  "english": "English",
+  "home": {
+    "description": "Choose a chat and enjoy communication"
+  },
+  "topPick": "Top Pick",
+  "chatsCount": "{{count}} chats",
+  "categories": {
+    "career": "Career",
+    "general_chat": "General Chat",
+    "hobbies": "Hobbies",
+    "movies": "Movies",
+    "news": "News",
+    "sports": "Sports",
+    "tech": "Tech",
+    "travel_and_food": "Travel and Food",
+    "descriptions": {
+      "career": "Growth, Opportunities, and Professional Insights",
+      "general_chat": "Open discussions about anything",
+      "hobbies": "Passions, Pastimes, and Creative Pursuits",
+      "movies": "Reviews, Discussions, and Cinematic Experiences",
+      "news": "Latest updates and discussions",
+      "sports": "Sports news and discussions",
+      "tech": "Innovations, Gadgets, and Future Trends",
+      "travel_and_food": "Adventures, Culinary Delights, and Gastronomic Explorations"
+    }
+  },
+  "auth": {
+    "registration": "Registration",
+    "username": {
+      "label": "Username",
+      "placeholder": "Enter your username"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "confirm": {
+      "label": "Repeat password",
+      "placeholder": "Repeat your password"
+    },
+    "or": "Or",
+    "signUpWithGoogle": "Sign up with Google",
+    "loginWithGoogle": "Log in with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don’t have an account?",
+    "signUp": "Sign up",
+    "log_in": "Log in",
+    "creating": "Creating...",
+    "createAccount": "Create account",
+    "loading": "Loading...",
+    "login": "Login",
+    "validation": {
+      "usernameMin": "Username must be at least 2 characters",
+      "usernameMax": "Username must be only {{max}} characters",
+      "usernameRegex": "Username can only include letters",
+      "emailMax": "Email must be only {{max}} characters",
+      "emailInvalid": "Invalid email address",
+      "required": "Required field",
+      "passwordMin": "Password must be at least {{min}} characters",
+      "passwordMax": "Password must be only {{max}} characters",
+      "passwordRegex": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+      "nativeInvalid": "Please select valid native language",
+      "englishInvalid": "Please select valid English level",
+      "genderInvalid": "Please select valid gender",
+      "passwordsMustMatch": "Passwords must match!"
+    }
+  },
+  "continue": "Continue",
+  "login": {
+    "welcomeBack": "Welcome back!",
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    }
+  },
+  "cookies": {
+    "title": "Accept the use of cookies.",
+    "description": "We use cookies to improve your browsing experience, serve personalized content, and analyze our traffic. By clicking Accept all Cookies, you agree to the storing of cookies on your device.",
+    "moreInfo": "For more details, see our",
+    "policyLink": "Cookie Policy",
+    "accept": "Accept all Cookies",
+    "decline": "Decline cookies",
+    "close": "Close"
+  }
+}

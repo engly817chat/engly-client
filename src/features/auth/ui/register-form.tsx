@@ -13,12 +13,14 @@ import { Providers } from './providers'
 import { StepBar } from './step-bar'
 import { StepCredentials } from './step-credentials'
 import { StepProfile } from './step-profile'
+import { useTranslation } from 'react-i18next'
 
 export function RegisterForm() {
+  const {t} = useTranslation()
   const [step, setStep] = useState<RegisterStepType>(RegisterStepEnum.Credentials)
 
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(RegisterFormSchema),
+    resolver: zodResolver(RegisterFormSchema(t)),
     mode: 'onBlur',
     defaultValues: {
       username: '',
@@ -37,7 +39,7 @@ export function RegisterForm() {
   const onContinue = async () => {
     const isValid = await form.trigger(['username', 'email', 'password', 'confirm'])
 
-    if (!validatePasswords(form)) return
+    if (!validatePasswords(form, t)) return
 
     if (isValid) {
       setStep(RegisterStepEnum.Profile)
@@ -66,7 +68,7 @@ export function RegisterForm() {
 
       {step === RegisterStepEnum.Credentials && (
         <h1 className='mb-10 text-center text-2xl/[29.26px] font-bold md:mb-4 md:text-[32px]/[39.01px] xl:mb-3 xl:text-4xl/[43.88px]'>
-          Registration
+          {t('auth.registration')}
         </h1>
       )}
 
@@ -79,12 +81,12 @@ export function RegisterForm() {
           <div className='pt-4'>
             {step === RegisterStepEnum.Credentials && (
               <Button type='button' onClick={onContinue} className='w-full'>
-                Continue
+                {t('continue')}
               </Button>
             )}
             {step === RegisterStepEnum.Profile && (
               <Button type='submit' className={cn('w-full')}>
-                {isPending ? 'Creating...' : 'Create account'}
+                 {isPending ? t('auth.creating') : t('auth.createAccount')}
               </Button>
             )}
           </div>

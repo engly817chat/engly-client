@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next'
 import { z } from 'zod'
 import { EngLevelEnum, GenderEnum, NativeLangEnum, regex } from '@/shared/constants'
 import type { EngLevelType, GenderType, NativeLangType } from '@/shared/types'
@@ -7,91 +8,94 @@ const maxEmailLength = 50
 const maxPasswordLength = 50
 const minPasswordLength = 8
 
-export const RegisterFormSchema = z
-  .object({
-    username: z
-      .string()
-      .min(2, {
-        message: 'Username must be at least 2 characters',
-      })
-      .max(maxUsernameLength, {
-        message: `Username must be only ${maxUsernameLength} characters`,
-      })
-      .regex(new RegExp(regex.username), {
-        message: 'Username can only include letters',
+export const RegisterFormSchema = (t: TFunction) =>
+  z
+    .object({
+      username: z
+        .string()
+        .min(2, {
+          message: t('auth.validation.usernameMin'),
+        })
+        .max(maxUsernameLength, {
+          message: t('auth.validation.usernameMax', { max: maxUsernameLength }),
+        })
+        .regex(new RegExp(regex.username), {
+          message: t('auth.validation.usernameRegex'),
+        }),
+      email: z
+        .string()
+        .max(maxEmailLength, {
+          message: t('auth.validation.emailMax', { max: maxEmailLength }),
+        })
+        .email({
+          message: t('auth.validation.emailInvalid'),
+        }),
+      password: z
+        .string()
+        .min(1, {
+          message: t('auth.validation.required'),
+        })
+        .min(minPasswordLength, {
+          message: t('auth.validation.passwordMin', { min: minPasswordLength }),
+        })
+        .max(maxPasswordLength, {
+          message: t('auth.validation.passwordMax', { max: maxPasswordLength }),
+        })
+        .regex(new RegExp(regex.password), {
+          message: t('auth.validation.passwordRegex'),
+        }),
+      confirm: z
+        .string({
+          required_error: t('auth.validation.required'),
+        })
+        .min(1, {
+          message: t('auth.validation.required'),
+        })
+        .max(maxPasswordLength, {
+          message: t('auth.validation.passwordMax', { max: maxPasswordLength }),
+        }),
+      nativeLanguage: z.enum(
+        Object.values(NativeLangEnum) as [NativeLangType, ...NativeLangType[]],
+        {
+          required_error: t('auth.validation.required'),
+          invalid_type_error: t('auth.validation.nativeInvalid'),
+        },
+      ),
+      englishLevel: z.enum(
+        Object.values(EngLevelEnum) as [EngLevelType, ...EngLevelType[]],
+        {
+          required_error: t('auth.validation.required'),
+          invalid_type_error: t('auth.validation.englishInvalid'),
+        },
+      ),
+      gender: z.enum(Object.values(GenderEnum) as [GenderType, ...GenderType[]], {
+        required_error: t('auth.validation.required'),
+        invalid_type_error: t('auth.validation.genderInvalid'),
       }),
-    email: z
-      .string()
-      .max(maxEmailLength, {
-        message: `Email must be only ${maxEmailLength} characters`,
-      })
-      .email({
-        message: 'Invalid email address',
+      goals: z.string().min(1, {
+        message: t('auth.validation.required'),
       }),
-    password: z
-      .string()
-      .min(1, {
-        message: 'Required field',
-      })
-      .min(minPasswordLength, {
-        message: `Password must be at least ${minPasswordLength} characters`,
-      })
-      .max(maxPasswordLength, {
-        message: `Password must be only ${maxPasswordLength} characters`,
-      })
-      .regex(new RegExp(regex.password), {
-        message:
-          'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
-      }),
-    confirm: z
-      .string()
-      .min(1, {
-        message: 'Required field',
-      })
-      .max(maxPasswordLength, {
-        message: `Password must be only ${maxPasswordLength} characters`,
-      }),
-    nativeLanguage: z.enum(
-      Object.values(NativeLangEnum) as [NativeLangType, ...NativeLangType[]],
-      {
-        required_error: 'Required field',
-        invalid_type_error: 'Please select valid native language',
+    })
+    .refine(
+      values => {
+        return values.password === values.confirm
       },
-    ),
-    englishLevel: z.enum(
-      Object.values(EngLevelEnum) as [EngLevelType, ...EngLevelType[]],
       {
-        required_error: 'Required field',
-        invalid_type_error: 'Please select valid English level',
+        message: t('auth.validation.passwordsMustMatch'),
+        path: ['confirm'],
       },
-    ),
-    gender: z.enum(Object.values(GenderEnum) as [GenderType, ...GenderType[]], {
-      required_error: 'Required field',
-      invalid_type_error: 'Please select valid gender',
+    )
+
+export type RegisterFormValues = z.infer<ReturnType<typeof RegisterFormSchema>>
+
+export const LoginFormSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z.string().email({
+      message: t('auth.validation.emailInvalid'),
     }),
-    goals: z.string().min(1, {
-      message: 'Required field',
+    password: z.string().min(1, {
+      message: t('auth.validation.required'),
     }),
   })
-  .refine(
-    values => {
-      return values.password === values.confirm
-    },
-    {
-      message: 'Passwords must match!',
-      path: ['confirm'],
-    },
-  )
 
-export type RegisterFormValues = z.infer<typeof RegisterFormSchema>
-
-export const LoginFormSchema = z.object({
-  email: z.string().email({
-    message: 'Invalid email address',
-  }),
-  password: z.string().min(1, {
-    message: 'Required field',
-  }),
-})
-
-export type LoginFormValues = z.infer<typeof LoginFormSchema>
+export type LoginFormValues = z.infer<ReturnType<typeof LoginFormSchema>>

@@ -4,15 +4,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { Skeleton } from '@/shared/ui/common/skeleton'
 import { categoryApi, PaginatedCategoriesResponse } from '../model'
 
 export const CategoryList = () => {
-  const { data, error, isError, isLoading } = useQuery<PaginatedCategoriesResponse, AxiosError>({
+  const { t } = useTranslation()
+
+  const { data, error, isError, isLoading } = useQuery<
+    PaginatedCategoriesResponse,
+    AxiosError
+  >({
     queryKey: ['categories', { page: 0, size: 8, sort: 'id,desc' }],
-    queryFn: () =>
-      categoryApi.getAllCategories({ page: 0, size: 8, sort: 'id,desc' }),
+    queryFn: () => categoryApi.getAllCategories({ page: 0, size: 8, sort: 'id,desc' }),
   })
 
   if (isError) {
@@ -29,10 +34,13 @@ export const CategoryList = () => {
     )
   }
 
+  const formatKey = (name: string) => name.toLowerCase().replace(/\s+/g, '_')
+
   return (
     <div className='grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4 xl:gap-6'>
       {data?._embedded?.categoriesDtoList?.map(cat => {
         const isTopPick = cat.activeRoomsCount > 15
+        const key = formatKey(cat.name)
 
         return (
           <Link
@@ -51,18 +59,18 @@ export const CategoryList = () => {
 
               {isTopPick ? (
                 <span className='flex items-center justify-center rounded-[10px] bg-primary px-4 py-1.5 text-sm/none text-primary-foreground'>
-                  Top Pick
+                  {t('topPick')}
                 </span>
               ) : (
                 <span className='flex w-24 items-center justify-center rounded-[10px] bg-[#F6FEFF] py-1.5 text-sm/none'>
-                  {cat.activeRoomsCount} chats
+                  {t('chatsCount', { count: cat.activeRoomsCount })}
                 </span>
               )}
             </div>
 
             <div className='space-y-2 md:space-y-3'>
               <h2 className='flex items-center justify-between text-base/5 font-semibold md:text-xl/none'>
-                {cat.name}
+                {t(`categories.${key}`)}
 
                 <Image
                   src={`/icons/${cat.icon}`}
@@ -73,7 +81,7 @@ export const CategoryList = () => {
                 />
               </h2>
               <p className='line-clamp-2 h-[34px] text-sm/4 md:text-base/none'>
-                {cat.description}
+                {t(`categories.descriptions.${key}`)}
               </p>
             </div>
           </Link>

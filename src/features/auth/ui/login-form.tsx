@@ -18,12 +18,14 @@ import { cn } from '@/shared/utils'
 import { LoginFormSchema, type LoginFormValues } from '../lib'
 import { loginData, useLogin } from '../model'
 import { Providers } from './providers'
+import { useTranslation } from 'react-i18next'
 
 export function LoginForm() {
+  const { t } = useTranslation()
   const [visiblePassword, setVisiblePassword] = useState(false)
 
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginFormSchema),
+    resolver: zodResolver(LoginFormSchema(t)),
     defaultValues: {
       email: '',
       password: '',
@@ -40,7 +42,7 @@ export function LoginForm() {
   return (
     <div className='relative h-full bg-background px-4 py-12 md:px-6 md:py-14 xl:px-16'>
       <h1 className='xl:text-4xl/[ 43.88px] mb-10 text-center text-2xl/[29.26px] font-bold md:mb-4 md:text-[32px]/[39.01px] xl:mb-3'>
-        Login
+        {t('login.welcomeBack')}
       </h1>
 
       <Form {...form}>
@@ -53,7 +55,7 @@ export function LoginForm() {
                 name={i.name}
                 render={({ field }) => (
                   <FormItem className='space-y-1 md:space-y-3'>
-                    <FormLabel className='form-label required'>{i.label}</FormLabel>
+                    <FormLabel className='form-label required'>{t(i.label)}</FormLabel>
                     <FormControl>
                       <div className='relative'>
                         <Input
@@ -70,7 +72,7 @@ export function LoginForm() {
                                 : 'password'
                               : i.type
                           }
-                          placeholder={i.placeholder}
+                          placeholder={t(i.placeholder)}
                           {...field}
                         />
 
@@ -105,7 +107,7 @@ export function LoginForm() {
           </div>
           <div className='pt-8'>
             <Button type='submit' className={cn('w-full')}>
-              {isPending ? 'Loading...' : 'Login'}
+            {isPending ? t('auth.loading') : t('auth.login')}
             </Button>
           </div>
         </form>
