@@ -4,6 +4,9 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { authApi, type RegisterRequestDto } from '@/entities/auth'
 import { saveTokenStorage } from '@/shared/utils'
+import { useRouter } from 'next/navigation'
+import { appRoutes } from '@/shared/config'
+import axios from 'axios'
 
 export interface RegisterMutationParams {
   formData: RegisterRequestDto
@@ -14,6 +17,7 @@ export interface RegisterMutationParams {
 }
 
 export function useRegister() {
+  const router = useRouter()
   const abortController = new AbortController()
 
   const registerMutation = useMutation({
@@ -22,14 +26,18 @@ export function useRegister() {
         signal: meta?.signal ?? abortController.signal,
       }),
     onError: async error => {
-      toast.error('Something went wrong. Please try again.')
-      console.log(error)
+      if (axios.isAxiosError(error) && error.response?.data?.message === 'User Already Exist') {
+        toast.error('Email is already registered');
+      } else {
+        toast.error('Something went wrong. Please try again.')
+        console.log(error)
+      }
     },
     onSuccess: async data => {
       toast.success('User registered successfully.')
       saveTokenStorage(data.access_token)
       console.log(data)
-      // router.push(AppRoutes.chats)
+      router.push(appRoutes.chats)
     },
     // onSettled: async (data, error, variables, context) => {},
   })
