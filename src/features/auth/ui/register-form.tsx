@@ -29,7 +29,6 @@ export function RegisterForm() {
       confirm: '',
       nativeLanguage: undefined,
       englishLevel: undefined,
-      gender: undefined,
       goals: 'DEFAULT',
     },
   })

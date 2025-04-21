@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next'
 import { z } from 'zod'
-import { EngLevelEnum, GenderEnum, NativeLangEnum, regex } from '@/shared/constants'
-import type { EngLevelType, GenderType, NativeLangType } from '@/shared/types'
+import { EngLevelEnum, NativeLangEnum, regex } from '@/shared/constants'
+import type { EngLevelType, NativeLangType } from '@/shared/types'
 
 const maxUsernameLength = 50
 const maxEmailLength = 50
@@ -68,10 +68,6 @@ export const RegisterFormSchema = (t: TFunction) =>
           invalid_type_error: t('auth.validation.englishInvalid'),
         },
       ),
-      gender: z.enum(Object.values(GenderEnum) as [GenderType, ...GenderType[]], {
-        required_error: t('auth.validation.required'),
-        invalid_type_error: t('auth.validation.genderInvalid'),
-      }),
       goals: z.string().min(1, {
         message: t('auth.validation.required'),
       }),
