@@ -7,6 +7,7 @@ import { saveTokenStorage } from '@/shared/utils'
 import { useRouter } from 'next/navigation'
 import { appRoutes } from '@/shared/config'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 
 export interface RegisterMutationParams {
   formData: RegisterRequestDto
@@ -19,6 +20,7 @@ export interface RegisterMutationParams {
 export function useRegister() {
   const router = useRouter()
   const abortController = new AbortController()
+  const { t } = useTranslation()
 
   const registerMutation = useMutation({
     mutationFn: ({ formData, meta }: RegisterMutationParams) =>
@@ -27,14 +29,14 @@ export function useRegister() {
       }),
     onError: async error => {
       if (axios.isAxiosError(error) && error.response?.data?.message === 'User Already Exist') {
-        toast.error('Email is already registered');
+        toast.error(t('auth.userExists'));
       } else {
-        toast.error('Something went wrong. Please try again.')
+        toast.error(t('auth.unknownError'))
         console.log(error)
       }
     },
     onSuccess: async data => {
-      toast.success('User registered successfully.')
+      toast.success(t('auth.success'))
       saveTokenStorage(data.access_token)
       console.log(data)
       router.push(appRoutes.chats)

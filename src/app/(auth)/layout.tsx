@@ -18,7 +18,7 @@ export default function AuthLayout({
 
   return (
     <main className='flex h-screen items-center justify-center bg-slate-800'>
-      <div className='flex h-full w-full bg-slate-400 xl:h-[788px] xl:w-[1030px] xl:overflow-hidden xl:rounded-2xl'>
+      <div className='flex h-full w-full bg-slate-400 xl:h-[800px] xl:w-[1030px] xl:overflow-hidden xl:rounded-2xl'>
         <AuthSlider />
         <div className='relative flex-1'>
           <Button

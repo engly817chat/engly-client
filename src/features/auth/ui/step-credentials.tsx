@@ -49,7 +49,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
     if (!data.available) {
       form.setError('username', {
         type: 'manual',
-        message: 'Username is already taken',
+        message: t('usernameTaken'),
       })
       setCheckedState(prev => ({ ...prev, username: false }))
     } else {

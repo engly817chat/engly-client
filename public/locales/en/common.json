@@ -70,8 +70,12 @@
       "nativeInvalid": "Please select valid native language",
       "englishInvalid": "Please select valid English level",
       "genderInvalid": "Please select valid gender",
-      "passwordsMustMatch": "Passwords must match!"
-    }
+      "passwordsMustMatch": "Passwords must match!",
+      "usernameTaken": "Username is already taken"
+    },
+    "userExists": "Email is already registered",
+    "unknownError": "Something went wrong. Please try again.",
+    "success": "User registered successfully."
   },
   "continue": "Continue",
   "login": {

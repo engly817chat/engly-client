@@ -37,7 +37,7 @@ export const AuthSlider = () => {
       <Carousel setApi={setApi} className=''>
         <CarouselContent className='h-full'>
           {authSlidePosters.map(({ id, src, alt }) => (
-            <CarouselItem key={id} className='relative h-screen xl:h-[788px]'>
+            <CarouselItem key={id} className='relative h-screen xl:h-[800px]'>
               <Image
                 src={src}
                 alt={alt}
