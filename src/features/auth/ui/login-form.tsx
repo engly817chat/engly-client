@@ -12,7 +12,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/shared/ui/common/form'
 import { Input } from '@/shared/ui/common/input'
@@ -60,7 +59,6 @@ export function LoginForm() {
                 name={i.name}
                 render={({ field }) => (
                   <FormItem className='space-y-1 md:space-y-3'>
-                    {/* <FormLabel className='form-label required'>{t(i.label)}</FormLabel> */}
                     <FormControl>
                       <div className='relative'>
                         {i.name === 'email' && (
