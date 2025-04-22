@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/common/button'
 import { Form } from '@/shared/ui/common/form'
 import { cn, excludeProperties } from '@/shared/utils'
@@ -13,10 +14,11 @@ import { Providers } from './providers'
 import { StepBar } from './step-bar'
 import { StepCredentials } from './step-credentials'
 import { StepProfile } from './step-profile'
-import { useTranslation } from 'react-i18next'
+import Link from 'next/link'
+import { appRoutes } from '@/shared/config'
 
 export function RegisterForm() {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const [step, setStep] = useState<RegisterStepType>(RegisterStepEnum.Credentials)
 
   const form = useForm<RegisterFormValues>({
@@ -85,7 +87,7 @@ export function RegisterForm() {
             )}
             {step === RegisterStepEnum.Profile && (
               <Button type='submit' className={cn('w-full')}>
-                 {isPending ? t('auth.creating') : t('auth.createAccount')}
+                {isPending ? t('auth.creating') : t('auth.createAccount')}
               </Button>
             )}
           </div>
@@ -93,6 +95,13 @@ export function RegisterForm() {
       </Form>
 
       <Providers />
+
+      <p className='mt-6 text-center text-sm/none text-foreground/30 md:text-base/none'>
+        {t('auth.dontHaveAccount')}
+        <Link href={appRoutes.login} className='ml-1 text-foreground underline'>
+          {t('auth.log_in')}
+        </Link>
+      </p>
     </div>
   )
 }

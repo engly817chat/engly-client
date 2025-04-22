@@ -83,12 +83,13 @@
     "welcomeBack": "З поверненням!",
     "email": {
       "label": "Електронна пошта",
-      "placeholder": "Введіть електронну пошту"
+      "placeholder": "Пошта"
     },
     "password": {
       "label": "Пароль",
-      "placeholder": "Введіть пароль"
-    }
+      "placeholder": "Пароль"
+    },
+    "forgotPassword": "Забули пароль?"
   },
   "cookies": {
     "title": "Прийміть використання файлів cookie.",

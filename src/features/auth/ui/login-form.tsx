@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CircleAlertIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/common/button'
 import {
   Form,
@@ -14,11 +16,11 @@ import {
   FormMessage,
 } from '@/shared/ui/common/form'
 import { Input } from '@/shared/ui/common/input'
+import { appRoutes } from '@/shared/config'
 import { cn } from '@/shared/utils'
 import { LoginFormSchema, type LoginFormValues } from '../lib'
 import { loginData, useLogin } from '../model'
 import { Providers } from './providers'
-import { useTranslation } from 'react-i18next'
 
 export function LoginForm() {
   const { t } = useTranslation()
@@ -40,10 +42,13 @@ export function LoginForm() {
   }
 
   return (
-    <div className='relative h-full bg-background px-4 py-12 md:px-6 md:py-14 xl:px-16'>
-      <h1 className='xl:text-4xl/[ 43.88px] mb-10 text-center text-2xl/[29.26px] font-bold md:mb-4 md:text-[32px]/[39.01px] xl:mb-3'>
+    <div className='flex justify-center flex-col relative h-full bg-background px-4 py-12 md:px-6 md:py-14 xl:px-16'>
+      <h1 className='xl:text-4xl/[ 43.88px] mb-10 text-center text-2xl/[29.26px] font-bold md:mb-4 md:text-[32px]/[39.01px] xl:mb-8'>
         {t('login.welcomeBack')}
       </h1>
+
+      <p className='mb-8 text-center text-xl'>Please enter your details</p>
+      <Providers />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -55,7 +60,7 @@ export function LoginForm() {
                 name={i.name}
                 render={({ field }) => (
                   <FormItem className='space-y-1 md:space-y-3'>
-                    <FormLabel className='form-label required'>{t(i.label)}</FormLabel>
+                    {/* <FormLabel className='form-label required'>{t(i.label)}</FormLabel> */}
                     <FormControl>
                       <div className='relative'>
                         <Input
@@ -105,15 +110,33 @@ export function LoginForm() {
               />
             ))}
           </div>
+
+          <div className='flex justify-end pt-2'>
+            <button
+              type='button'
+              className='text-sm text-black opacity-30 transition-colors hover:underline'
+              onClick={() => {
+                console.log('Forgot password clicked')
+              }}
+            >
+              {t('login.forgotPassword')}
+            </button>
+          </div>
+
           <div className='pt-8'>
             <Button type='submit' className={cn('w-full')}>
-            {isPending ? t('auth.loading') : t('auth.login')}
+              {isPending ? t('auth.loading') : t('auth.login')}
             </Button>
           </div>
         </form>
       </Form>
 
-      <Providers />
+      <p className='mt-6 text-center text-sm/none text-foreground/30 md:text-base/none'>
+        {t('auth.dontHaveAccount')}
+        <Link href={appRoutes.register} className='ml-1 text-foreground underline'>
+          {t('auth.signUp')}
+        </Link>
+      </p>
     </div>
   )
 }
