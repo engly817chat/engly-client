@@ -81,6 +81,7 @@
   "continue": "Продовжити",
   "login": {
     "welcomeBack": "З поверненням!",
+    "details": "Будь ласка, введіть свої дані",
     "email": {
       "label": "Електронна пошта",
       "placeholder": "Пошта"

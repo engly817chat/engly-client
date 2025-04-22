@@ -75,7 +75,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
           control={form.control}
           name={i.name}
           render={({ field }) => (
-            <FormItem className='space-y-1 md:space-y-2'>
+            <FormItem className='space-y-1 md:space-y-1.5'>
               <FormLabel className='form-label required'>{t(i.label)}</FormLabel>
               <FormControl>
                 <div className='relative'>

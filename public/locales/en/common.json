@@ -80,6 +80,7 @@
   "continue": "Continue",
   "login": {
     "welcomeBack": "Welcome back!",
+    "details": "Please enter your details",
     "email": {
       "label": "Email",
       "placeholder": "Email"
