@@ -80,14 +80,16 @@
   "continue": "Continue",
   "login": {
     "welcomeBack": "Welcome back!",
+    "details": "Please enter your details",
     "email": {
       "label": "Email",
-      "placeholder": "Enter your email"
+      "placeholder": "Email"
     },
     "password": {
       "label": "Password",
-      "placeholder": "Enter your password"
-    }
+      "placeholder": "Password"
+    },
+    "forgotPassword": "Forgot your password?"
   },
   "cookies": {
     "title": "Accept the use of cookies.",

@@ -33,11 +33,11 @@ export const AuthSlider = () => {
   }, [api])
 
   return (
-    <div className='relative hidden md:block md:h-full md:w-[486px] xl:w-[491px]'>
-      <Carousel setApi={setApi} className=''>
+    <div className='relative hidden md:block h-full md:w-[486px] xl:w-[491px]'>
+      <Carousel setApi={setApi} className='h-full'>
         <CarouselContent className='h-full'>
           {authSlidePosters.map(({ id, src, alt }) => (
-            <CarouselItem key={id} className='relative h-screen xl:h-[800px]'>
+            <CarouselItem key={id} className='relative h-full'>
               <Image
                 src={src}
                 alt={alt}
@@ -50,7 +50,7 @@ export const AuthSlider = () => {
           ))}
         </CarouselContent>
       </Carousel>
-      <div className='absolute bottom-16 left-0 right-0 space-y-5 px-2 text-center text-[32px]/[39.01px] font-medium text-secondary xl:bottom-8'>
+      <div className='absolute bottom-8 left-0 right-0 space-y-5 px-2 text-center text-[32px]/[39.01px] font-medium text-secondary xl:bottom-5'>
         {path === appRoutes.register ? (
           <h2>Capturing Moments, Creating Memories</h2>
         ) : (
