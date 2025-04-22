@@ -1,5 +1,5 @@
 export const AppConfig = {
-  apiUrl: 'https://favourable-rodie-java-service-b82e5859.koyeb.app',
+  apiUrl: 'https://equal-aardvark-java-service-74283cac.koyeb.app',
   isClient: typeof window !== 'undefined',
 } as const
 
