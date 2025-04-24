@@ -11,7 +11,7 @@ import type {
 const endpoints = {
   register: '/sign-up',
   login: '/sign-in',
-  checkUsername: '/check-username?username=',
+  checkUsername: '/valid/check-username?username=',
   refreshToken: '/refresh-token',
 } as const
 
