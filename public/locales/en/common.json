@@ -99,5 +99,9 @@
     "accept": "Accept all Cookies",
     "decline": "Decline cookies",
     "close": "Close"
+  },
+  "emailConfirmation": {
+    "title": "Please confirm your email!",
+    "description": "We have sent a confirmation link to your email. Please check it."
   }
 }

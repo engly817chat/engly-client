@@ -1,13 +1,11 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { authApi, type RegisterRequestDto } from '@/entities/auth'
 import { saveTokenStorage } from '@/shared/utils'
-import { useRouter } from 'next/navigation'
-import { appRoutes } from '@/shared/config'
-import axios from 'axios'
-import { useTranslation } from 'react-i18next'
 
 export interface RegisterMutationParams {
   formData: RegisterRequestDto
@@ -17,8 +15,11 @@ export interface RegisterMutationParams {
   }
 }
 
-export function useRegister() {
-  const router = useRouter()
+export function useRegister({
+  setIsModalOpen,
+}: {
+  setIsModalOpen: (value: boolean) => void
+}) {
   const abortController = new AbortController()
   const { t } = useTranslation()
 
@@ -28,8 +29,11 @@ export function useRegister() {
         signal: meta?.signal ?? abortController.signal,
       }),
     onError: async error => {
-      if (axios.isAxiosError(error) && error.response?.data?.message === 'User Already Exist') {
-        toast.error(t('auth.userExists'));
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.data?.message === 'User Already Exist'
+      ) {
+        toast.error(t('auth.userExists'))
       } else {
         toast.error(t('auth.unknownError'))
         console.log(error)
@@ -38,8 +42,15 @@ export function useRegister() {
     onSuccess: async data => {
       toast.success(t('auth.success'))
       saveTokenStorage(data.access_token)
+
+      try {
+        await authApi.sendVerificationEmail(data.access_token)
+        setIsModalOpen(true)
+      } catch (notifyError) {
+        console.error('Error sending email:', notifyError)
+      }
+
       console.log(data)
-      router.push(appRoutes.chats)
     },
     // onSettled: async (data, error, variables, context) => {},
   })

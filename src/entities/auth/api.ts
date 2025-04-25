@@ -13,6 +13,8 @@ const endpoints = {
   login: '/sign-in',
   checkUsername: '/valid/check-username?username=',
   refreshToken: '/refresh-token',
+  sendVerification: '/api/notify',
+  confirmEmail: '/api/notify/check',
 } as const
 
 export const authApi = {
@@ -70,6 +72,29 @@ export const authApi = {
     const response = await axiosBase.get<AvailableResponse>(
       `${endpoints.checkUsername}${username}`,
     )
+
+    return response.data
+  },
+
+  sendVerificationEmail: async (accessToken: string): Promise<void> => {
+    await axiosBase.post(
+      endpoints.sendVerification,
+      {},
+      {
+        headers: {
+          Authorization: `${TokenTypeEnum.Bearer} ${accessToken}`,
+        },
+      },
+    )
+  },
+
+  confirmEmail: async (email: string, token: string, accessToken: string | null) => {
+    const response = await axiosBase.get<AuthResponse>(endpoints.confirmEmail, {
+      params: { email, token },
+      headers: {
+        Authorization: `${TokenTypeEnum.Bearer} ${accessToken}`,
+      },
+    })
 
     return response.data
   },
