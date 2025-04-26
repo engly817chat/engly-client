@@ -42,11 +42,11 @@ export function LoginForm() {
 
   return (
     <div className='relative flex h-full flex-col justify-center bg-background px-4 py-12 md:px-6 md:py-14 xl:px-16'>
-      <h1 className='mb-4 text-center text-[32px] font-semibold sm:text-[40px] md:mb-7 xl:mb-8'>
+      <h1 className='mb-4 text-center text-[32px] font-semibold text-foreground sm:text-[40px] md:mb-7 xl:mb-8'>
         {t('login.welcomeBack')}
       </h1>
 
-      <p className='mb-8 text-center text-xl'>{t('login.details')}</p>
+      <p className='mb-8 text-center text-xl text-foreground'>{t('login.details')}</p>
       <Providers />
 
       <Form {...form}>
@@ -61,7 +61,7 @@ export function LoginForm() {
                   <FormItem className='space-y-1 md:space-y-3'>
                     <FormControl>
                       <div className='relative'>
-                        {i.name === 'email' && (
+                        {i.name === 'email' && !form.formState.errors[i.name] && (
                           <MailIcon className='absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 stroke-1 text-gray-500' />
                         )}
                         <Input
@@ -83,7 +83,7 @@ export function LoginForm() {
                         />
 
                         <div className='absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-2'>
-                          {i.showPasswordToggle && (
+                          {i.showPasswordToggle && !form.formState.errors[i.name] && (
                             <button
                               type='button'
                               onClick={() => setVisiblePassword(prev => !prev)}
@@ -100,7 +100,7 @@ export function LoginForm() {
                             </button>
                           )}
                           {form.formState.errors[i.name] && (
-                            <CircleAlertIcon className='text-destructive' />
+                            <CircleAlertIcon className='h-5 w-5 text-destructive' />
                           )}
                         </div>
                       </div>
@@ -115,7 +115,7 @@ export function LoginForm() {
           <div className='flex justify-end pt-2'>
             <button
               type='button'
-              className='text-sm text-black opacity-30 transition-colors hover:underline'
+              className='text-sm text-muted-foreground opacity-50 transition-colors hover:underline'
               onClick={() => {
                 console.log('Forgot password clicked')
               }}

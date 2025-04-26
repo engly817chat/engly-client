@@ -22,9 +22,9 @@ export default function AuthLayout({
         <AuthSlider />
         <div className='relative flex-1'>
           <Button
-            variant='ghost'
+            variant='link'
             onClick={closeForm}
-            className='absolute right-2 top-2 z-10 p-2 text-foreground hover:bg-black/10'
+            className='absolute right-2 top-2 md:right-4 md:top-2 z-10 p-2 text-foreground hover:bg-muted/10'
           >
             <XIcon style={{ width: '20px', height: '20px' }}/>
           </Button>
