@@ -95,3 +95,28 @@ export const LoginFormSchema = (t: (key: string) => string) =>
   })
 
 export type LoginFormValues = z.infer<ReturnType<typeof LoginFormSchema>>
+
+export const GoogleRegisterFormSchema = (t: TFunction) =>
+  z.object({
+    nativeLanguage: z.enum(
+      Object.values(NativeLangEnum) as [NativeLangType, ...NativeLangType[]],
+      {
+        required_error: t('auth.validation.required'),
+        invalid_type_error: t('auth.validation.nativeInvalid'),
+      },
+    ),
+    englishLevel: z.enum(
+      Object.values(EngLevelEnum) as [EngLevelType, ...EngLevelType[]],
+      {
+        required_error: t('auth.validation.required'),
+        invalid_type_error: t('auth.validation.englishInvalid'),
+      },
+    ),
+    goals: z.string().min(1, {
+      message: t('auth.validation.required'),
+    }),
+  })
+
+export type GoogleRegisterFormValues = z.infer<
+  ReturnType<typeof GoogleRegisterFormSchema>
+>

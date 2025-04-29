@@ -14,11 +14,10 @@ import {
   SelectValue,
 } from '@/shared/ui/common/select'
 import { cn } from '@/shared/utils'
-import type { RegisterFormValues } from '../lib'
 import { profileStepData } from '../model'
 
 interface StepProfileProps {
-  form: UseFormReturn<RegisterFormValues>
+  form: UseFormReturn<any>
 }
 
 export const StepProfile = ({ form }: StepProfileProps) => {
