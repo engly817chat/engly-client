@@ -6,8 +6,8 @@ import type {
   AvailableResponse,
   LoginRequestDto,
   RegisterRequestDto,
+  GoogleRegisterRequest
 } from './types'
-import { getAccessToken } from '@/shared/utils'
 
 const endpoints = {
   register: '/sign-up',
@@ -81,12 +81,13 @@ export const authApi = {
     // TODO: Implement logout logic
   },
 
-  saveGoogleInfo: async (data: Record<string, any>): Promise<any> => {
-    const response = await axiosWithAuth.post(endpoints.saveGoogleInfo, data)
-    return response.data
+  saveGoogleInfo: async (
+    data: GoogleRegisterRequest
+  ): Promise<void> => {
+    await axiosWithAuth.post(endpoints.saveGoogleInfo, data)
   },
 
-  isFirstLogin: async (): Promise<boolean> => {
+  isFirstLogin: async (): Promise<AvailableResponse> => {
     const response = await axiosWithAuth.get(endpoints.firstLogin)
     return response.data 
   },

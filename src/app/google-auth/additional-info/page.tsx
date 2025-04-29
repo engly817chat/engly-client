@@ -4,12 +4,11 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { GoogleRegisterFormSchema, GoogleRegisterFormValues } from '@/features/auth/lib'
-import { StepProfile } from '@/features/auth/ui/step-profile'
 import { authApi } from '@/entities/auth'
 import { Button } from '@/shared/ui/common/button'
 import { Form } from '@/shared/ui/common/form'
 import { toast } from 'react-toastify'
+import { GoogleRegisterFormSchema, GoogleRegisterFormValues, StepProfile } from '@/features/auth'
 
 const AdditionalInfoPage = () => {
   const { t } = useTranslation()
@@ -48,7 +47,7 @@ const AdditionalInfoPage = () => {
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <StepProfile form={form} />
+        <StepProfile<GoogleRegisterFormValues> form={form} />
 
           <Button type='submit' className='mt-8 w-full' disabled={form.formState.isSubmitting}>
             

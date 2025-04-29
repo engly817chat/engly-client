@@ -77,7 +77,7 @@ export function RegisterForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {step === RegisterStepEnum.Credentials && <StepCredentials form={form} />}
 
-          {step === RegisterStepEnum.Profile && <StepProfile form={form} />}
+          {step === RegisterStepEnum.Profile && <StepProfile<RegisterFormValues> form={form} />}
 
           <div className='pt-4'>
             {step === RegisterStepEnum.Credentials && (
