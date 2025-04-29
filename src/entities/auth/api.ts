@@ -6,7 +6,8 @@ import type {
   AvailableResponse,
   LoginRequestDto,
   RegisterRequestDto,
-  GoogleRegisterRequest
+  GoogleRegisterRequest,
+  FirstLoginResponse
 } from './types'
 
 const endpoints = {
@@ -87,7 +88,7 @@ export const authApi = {
     await axiosWithAuth.post(endpoints.saveGoogleInfo, data)
   },
 
-  isFirstLogin: async (): Promise<AvailableResponse> => {
+  isFirstLogin: async (): Promise<FirstLoginResponse> => {
     const response = await axiosWithAuth.get(endpoints.firstLogin)
     return response.data 
   },

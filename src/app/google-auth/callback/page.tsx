@@ -18,8 +18,8 @@ export default function GoogleCallbackPage() {
         saveTokenStorage(accessToken)
         authApi
           .isFirstLogin()
-          .then(isFirstLogin => {
-            if (isFirstLogin) {
+          .then(response => {
+            if (!response.userExists) {
               router.push('/google-auth/additional-info')
             } else {
               router.push('/chats')

@@ -32,3 +32,7 @@ export interface GoogleRegisterRequest {
   englishLevel: string;
   goals: string;
 }
+
+export interface FirstLoginResponse {
+  userExists: boolean
+}
