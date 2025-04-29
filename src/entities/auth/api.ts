@@ -1,4 +1,4 @@
-import { axiosBase } from '@/shared/api'
+import { axiosBase, axiosWithAuth } from '@/shared/api'
 import { TokenTypeEnum } from '@/shared/constants'
 import type { SignalOptions } from '@/shared/types'
 import type {
@@ -6,6 +6,8 @@ import type {
   AvailableResponse,
   LoginRequestDto,
   RegisterRequestDto,
+  GoogleRegisterRequest,
+  FirstLoginResponse
 } from './types'
 
 const endpoints = {
@@ -13,6 +15,8 @@ const endpoints = {
   login: '/sign-in',
   checkUsername: '/valid/check-username?username=',
   refreshToken: '/refresh-token',
+  saveGoogleInfo: '/api/addition_info/for-google',
+  firstLogin: '/valid/first-login',
   sendVerification: '/api/notify',
   confirmEmail: '/api/notify/check',
 } as const
@@ -101,5 +105,16 @@ export const authApi = {
 
   logout: async (): Promise<void> => {
     // TODO: Implement logout logic
+  },
+
+  saveGoogleInfo: async (
+    data: GoogleRegisterRequest
+  ): Promise<void> => {
+    await axiosWithAuth.post(endpoints.saveGoogleInfo, data)
+  },
+
+  isFirstLogin: async (): Promise<FirstLoginResponse> => {
+    const response = await axiosWithAuth.get(endpoints.firstLogin)
+    return response.data 
   },
 } as const

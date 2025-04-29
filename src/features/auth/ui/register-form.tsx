@@ -60,11 +60,11 @@ export function RegisterForm() {
         variant='link'
         onClick={() => setStep(RegisterStepEnum.Credentials)}
         className={cn(
-          'absolute left-0 top-1 text-foreground md:left-2 md:top-2 xl:left-12 xl:top-3',
+          'absolute left-2 top-2 text-foreground md:left-4 md:top-2 p-2',
           step === RegisterStepEnum.Credentials && 'hidden',
         )}
       >
-        <ArrowLeftIcon />
+        <ArrowLeftIcon style={{ width: '20px', height: '20px' }}/>
       </Button>
 
       <StepBar step={step} className='mb-5 md:mb-10 xl:mb-5' />
@@ -79,7 +79,7 @@ export function RegisterForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {step === RegisterStepEnum.Credentials && <StepCredentials form={form} />}
 
-          {step === RegisterStepEnum.Profile && <StepProfile form={form} />}
+          {step === RegisterStepEnum.Profile && <StepProfile<RegisterFormValues> form={form} />}
 
           <div className='pt-4'>
             {step === RegisterStepEnum.Credentials && (

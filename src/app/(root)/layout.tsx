@@ -42,12 +42,12 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value='en'>
-                    <span className='sm:hidden'>En</span>
-                    <span className='hidden sm:inline'>{t('english')}</span>
+                    <span className='md:hidden'>En</span>
+                    <span className='hidden md:inline'>{t('english')}</span>
                   </SelectItem>
                   <SelectItem value='uk'>
-                    <span className='sm:hidden'>Uk</span>
-                    <span className='hidden sm:inline'>{t('ukrainian')}</span>
+                    <span className='md:hidden'>Uk</span>
+                    <span className='hidden md:inline'>{t('ukrainian')}</span>
                   </SelectItem>
                 </SelectContent>
               </Select>

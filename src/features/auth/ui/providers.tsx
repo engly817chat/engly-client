@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/common/button'
 import { GoogleIcon } from '@/shared/ui/icons'
 import { appRoutes } from '@/shared/config'
+import { AppConfig } from '@/shared/constants'
 
 export const Providers = () => {
   const { t } = useTranslation()
@@ -12,7 +13,14 @@ export const Providers = () => {
   const isLogin = path === appRoutes.login
 
   const googleButton = (
-    <Button variant='secondary' className='w-full'>
+    <Button
+      variant='secondary'
+      className='w-full'
+      onClick={() => {
+        window.location.href =
+        AppConfig.apiUrl + '/oauth2/login/google'
+      }}
+    >
       <GoogleIcon />
       {isLogin ? t('auth.loginWithGoogle') : t('auth.signUpWithGoogle')}
     </Button>

@@ -26,3 +26,13 @@ export interface AuthResponse {
 export interface AvailableResponse {
   available: boolean
 }
+
+export interface GoogleRegisterRequest {
+  nativeLanguage: string;
+  englishLevel: string;
+  goals: string;
+}
+
+export interface FirstLoginResponse {
+  userExists: boolean
+}
