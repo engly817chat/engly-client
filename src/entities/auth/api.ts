@@ -82,10 +82,9 @@ export const authApi = {
     // TODO: Implement logout logic
   },
 
-  saveGoogleInfo: async (
-    data: GoogleRegisterRequest
-  ): Promise<void> => {
-    await axiosWithAuth.post(endpoints.saveGoogleInfo, data)
+  saveGoogleInfo: async (data: GoogleRegisterRequest): Promise<AuthResponse> => {
+    const response = await axiosWithAuth.post<AuthResponse>(endpoints.saveGoogleInfo, data)
+    return response.data
   },
 
   isFirstLogin: async (): Promise<FirstLoginResponse> => {

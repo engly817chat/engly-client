@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/common/button'
 import { Form } from '@/shared/ui/common/form'
 import { toast } from 'react-toastify'
 import { GoogleRegisterFormSchema, GoogleRegisterFormValues, StepProfile } from '@/features/auth'
+import { saveTokenStorage } from '@/shared/utils'
 
 const AdditionalInfoPage = () => {
   const { t } = useTranslation()
@@ -26,11 +27,15 @@ const AdditionalInfoPage = () => {
 
   const onSubmit = async (data: GoogleRegisterFormValues) => {
     try {
-      await authApi.saveGoogleInfo({
+      const res = await authApi.saveGoogleInfo({
         nativeLanguage: data.nativeLanguage,
         englishLevel: data.englishLevel,
         goals: data.goals,
       })
+  
+      if (res.access_token) {
+        saveTokenStorage(res.access_token)
+      }
 
       toast.success(t('auth.success'))
       router.push('/chats')
