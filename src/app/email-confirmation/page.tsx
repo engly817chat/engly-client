@@ -1,14 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { authApi } from '@/entities/auth'
 import { getAccessToken, saveTokenStorage } from '@/shared/utils'
 
 export default function EmailConfirmationPage() {
-  const searchParams = useSearchParams()
-  const email = searchParams.get('email')
-  const token = searchParams.get('token')
   const router = useRouter()
   const accessToken = getAccessToken()
 
@@ -16,6 +13,12 @@ export default function EmailConfirmationPage() {
 
   useEffect(() => {
     const confirmEmail = async () => {
+      if (typeof window === 'undefined') return
+
+      const params = new URLSearchParams(window.location.search)
+      const email = params.get('email')
+      const token = params.get('token')
+
       if (!email || !token || !accessToken) {
         setStatus('error')
         return
@@ -23,22 +26,19 @@ export default function EmailConfirmationPage() {
 
       try {
         const res = await authApi.confirmEmail(email, token, accessToken)
-
         if (res.access_token) {
           saveTokenStorage(res.access_token)
         }
         setStatus('success')
-
-        setTimeout(() => {
-          router.push('/chats')
-        }, 3000)
+        setTimeout(() => router.push('/chats'), 3000)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         setStatus('error')
       }
     }
+
     confirmEmail()
-  }, [email, token, accessToken])
+  }, [accessToken, router])
 
   return (
     <div className='flex h-screen items-center justify-center px-4 text-center'>
