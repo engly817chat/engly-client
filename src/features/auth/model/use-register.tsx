@@ -35,7 +35,7 @@ export function useRegister({
       ) {
         toast.error(t('auth.userExists'))
       } else {
-        toast.error(t('auth.unknownError'))
+        toast.error(t('errors.unknownError'))
         console.log(error)
       }
     },
