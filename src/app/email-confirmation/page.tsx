@@ -19,10 +19,7 @@ export default function EmailConfirmationPage() {
 
   useEffect(() => {
     const confirmEmail = async () => {
-      if (!email || !token || !accessToken) {
-        setStatus('error')
-        return
-      }
+      if (!email || !token || !accessToken) return
 
       try {
         const res = await authApi.confirmEmail(email, token, accessToken)
