@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { type UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useDebounceCallback } from 'usehooks-ts'
-import { authApi } from '@/entities/auth'
 import {
   FormControl,
   FormField,
@@ -18,6 +16,7 @@ import { CircleAlertIcon } from '@/shared/ui/icons'
 import { cn } from '@/shared/utils'
 import { validatePasswords, type RegisterFormValues } from '../lib'
 import { credentialStepData } from '../model'
+import { checkFieldAvailability } from '../lib/checkFieldAvailability'
 
 interface StepCredentialsProps {
   form: UseFormReturn<RegisterFormValues>
@@ -39,33 +38,6 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
       [fieldName]: !prev[fieldName],
     }))
   }
-
-  const debouncedCheckUsername = useDebounceCallback(async (username: string) => {
-    const isValid = await form.trigger('username')
-    if (!isValid) return
-
-    const data = await authApi.checkUsername(username)
-
-    if (!data.available) {
-      form.setError('username', {
-        type: 'manual',
-        message: t('auth.validation.usernameTaken'),
-      })
-      setCheckedState(prev => ({ ...prev, username: false }))
-    } else {
-      setCheckedState(prev => ({ ...prev, username: true }))
-    }
-  }, 500)
-
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === 'username' && value.username) {
-        debouncedCheckUsername(value.username)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [form, debouncedCheckUsername])
 
   return (
     <div className='space-y-1'>
@@ -102,10 +74,8 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                     }}
                     onBlur={async () => {
                       field.onBlur()
-                      const isValid = await form.trigger(i.name)
-
-                      if (i.name === 'username' && isValid) {
-                        debouncedCheckUsername(field.value)
+                      if (i.name === 'username' || i.name === 'email') {
+                        await checkFieldAvailability(i.name, field.value, form, t, setCheckedState)
                       }
                       if (i.name === 'confirm') {
                         const isValid = validatePasswords(form, t)

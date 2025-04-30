@@ -74,7 +74,8 @@
       "englishInvalid": "Please select valid English level",
       "genderInvalid": "Please select valid gender",
       "passwordsMustMatch": "Passwords must match!",
-      "usernameTaken": "Username is already taken"
+      "usernameTaken": "Username is already taken",
+      "emailTaken": "This email is already registered"
     },
     "userExists": "Email is already registered",
     "success": "User registered successfully."

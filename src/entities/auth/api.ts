@@ -14,6 +14,7 @@ const endpoints = {
   register: '/sign-up',
   login: '/sign-in',
   checkUsername: '/valid/check-username?username=',
+  checkEmail: 'valid/check-email?email=',
   refreshToken: '/refresh-token',
   saveGoogleInfo: '/api/addition_info/for-google',
   firstLogin: '/valid/first-login',
@@ -75,6 +76,14 @@ export const authApi = {
   checkUsername: async (username: string): Promise<AvailableResponse> => {
     const response = await axiosBase.get<AvailableResponse>(
       `${endpoints.checkUsername}${username}`,
+    )
+
+    return response.data
+  },
+
+  checkEmail: async (email: string): Promise<AvailableResponse> => {
+    const response = await axiosBase.get<AvailableResponse>(
+      `${endpoints.checkEmail}${email}`,
     )
 
     return response.data
