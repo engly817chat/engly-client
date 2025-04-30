@@ -4,36 +4,36 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { authApi } from '@/entities/auth'
+import { useQueryParams } from '@/shared/hooks/useQueryParams'
 import { saveTokenStorage } from '@/shared/utils'
 
 export default function GoogleCallbackPage() {
+  const params = useQueryParams()
+  const accessToken = params?.get('access_token')
   const router = useRouter()
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search)
-      const accessToken = urlParams.get('access_token')
+    if (!params) return
 
-      if (accessToken) {
-        saveTokenStorage(accessToken)
-        authApi
-          .isFirstLogin()
-          .then(response => {
-            if (!response.userExists) {
-              router.push('/google-auth/additional-info')
-            } else {
-              router.push('/chats')
-            }
-          })
-          .catch(error => {
-            console.error('Error checking first login:', error)
-            router.push('/login')
-          })
-      } else {
-        router.push('/login')
-      }
+    if (accessToken) {
+      saveTokenStorage(accessToken)
+      authApi
+        .isFirstLogin()
+        .then(response => {
+          if (!response.userExists) {
+            router.push('/google-auth/additional-info')
+          } else {
+            router.push('/chats')
+          }
+        })
+        .catch(error => {
+          console.error('Error checking first login:', error)
+          router.push('/login')
+        })
+    } else {
+      router.push('/login')
     }
-  }, [router])
+  }, [params, accessToken, router])
 
   return (
     <div className='flex h-screen items-center justify-center'>
