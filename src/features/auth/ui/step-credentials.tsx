@@ -49,7 +49,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
     if (!data.available) {
       form.setError('username', {
         type: 'manual',
-        message: t('usernameTaken'),
+        message: t('auth.validation.usernameTaken'),
       })
       setCheckedState(prev => ({ ...prev, username: false }))
     } else {
@@ -102,7 +102,11 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                     }}
                     onBlur={async () => {
                       field.onBlur()
-                      await form.trigger(i.name)
+                      const isValid = await form.trigger(i.name)
+
+                      if (i.name === 'username' && isValid) {
+                        debouncedCheckUsername(field.value)
+                      }
                       if (i.name === 'confirm') {
                         const isValid = validatePasswords(form, t)
                         setCheckedState(prev => ({ ...prev, [i.name]: isValid }))

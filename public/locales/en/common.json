@@ -63,7 +63,7 @@
     "validation": {
       "usernameMin": "Username must be at least 2 characters",
       "usernameMax": "Username must be only {{max}} characters",
-      "usernameRegex": "Username can only include letters",
+      "usernameRegex": "Username can contain only latin letters",
       "emailMax": "Email must be only {{max}} characters",
       "emailInvalid": "Invalid email address",
       "required": "Required field",
