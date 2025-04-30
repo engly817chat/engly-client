@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/common/button'
 import { Form } from '@/shared/ui/common/form'
+import { MessageModal } from '@/shared/ui/message-modal'
+import { appRoutes } from '@/shared/config'
 import { cn, excludeProperties } from '@/shared/utils'
 import { RegisterFormSchema, validatePasswords, type RegisterFormValues } from '../lib'
 import { RegisterStepEnum, useRegister, type RegisterStepType } from '../model'
@@ -14,12 +17,11 @@ import { Providers } from './providers'
 import { StepBar } from './step-bar'
 import { StepCredentials } from './step-credentials'
 import { StepProfile } from './step-profile'
-import Link from 'next/link'
-import { appRoutes } from '@/shared/config'
 
 export function RegisterForm() {
   const { t } = useTranslation()
   const [step, setStep] = useState<RegisterStepType>(RegisterStepEnum.Credentials)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(RegisterFormSchema(t)),
@@ -35,7 +37,7 @@ export function RegisterForm() {
     },
   })
 
-  const { mutate, isPending } = useRegister()
+  const { mutate, isPending } = useRegister({ setIsModalOpen })
 
   const onContinue = async () => {
     const isValid = await form.trigger(['username', 'email', 'password', 'confirm'])
@@ -102,6 +104,13 @@ export function RegisterForm() {
           {t('auth.log_in')}
         </Link>
       </p>
+
+      <MessageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={t('emailConfirmation.title')}
+        description={t('emailConfirmation.description')}
+      />
     </div>
   )
 }

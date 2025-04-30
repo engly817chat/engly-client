@@ -28,6 +28,9 @@
       "travel_and_food": "Adventures, Culinary Delights, and Gastronomic Explorations"
     }
   },
+  "errors": {
+    "unknownError": "Something went wrong. Please try again."
+  },
   "auth": {
     "registration": "Registration",
     "username": {
@@ -74,7 +77,6 @@
       "usernameTaken": "Username is already taken"
     },
     "userExists": "Email is already registered",
-    "unknownError": "Something went wrong. Please try again.",
     "success": "User registered successfully."
   },
   "continue": "Continue",
@@ -99,5 +101,14 @@
     "accept": "Accept all Cookies",
     "decline": "Decline cookies",
     "close": "Close"
+  },
+  "emailConfirmation": {
+    "title": "Please confirm your email!",
+    "description": "We have sent a confirmation link to your email. Please check it.",
+    "loading": "Confirming email...",
+    "successTitle": "Email successfully confirmed ✅",
+    "successMessage": "You will be redirected to the chat shortly...",
+    "errorTitle": "Something went wrong",
+    "errorMessage": "Please check the link or try again."
   }
 }
