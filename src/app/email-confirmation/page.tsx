@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { authApi } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
-import { getAccessToken, saveTokenStorage } from '@/shared/utils'
+import { saveTokenStorage } from '@/shared/utils'
 
 export default function EmailConfirmationPage() {
   const { t } = useTranslation()
   const router = useRouter()
-  const accessToken = getAccessToken()
   const params = useQueryParams()
   const email = params?.get('email')
   const token = params?.get('token')
@@ -19,10 +18,10 @@ export default function EmailConfirmationPage() {
 
   useEffect(() => {
     const confirmEmail = async () => {
-      if (!email || !token || !accessToken) return
+      if (!email || !token) return
 
       try {
-        const res = await authApi.confirmEmail(email, token, accessToken)
+        const res = await authApi.confirmEmail(email, token)
         if (res.access_token) {
           saveTokenStorage(res.access_token)
         }
@@ -35,7 +34,7 @@ export default function EmailConfirmationPage() {
     }
 
     confirmEmail()
-  }, [email, token, accessToken, router, t])
+  }, [email, token, router])
 
   if (!params) {
     return <p>{t('emailConfirmation.loading')}</p>

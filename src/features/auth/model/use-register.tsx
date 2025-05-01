@@ -44,7 +44,7 @@ export function useRegister({
       saveTokenStorage(data.access_token)
 
       try {
-        await authApi.sendVerificationEmail(data.access_token)
+        await authApi.sendVerificationEmail()
         setIsModalOpen(true)
       } catch (notifyError) {
         console.error('Error sending email:', notifyError)

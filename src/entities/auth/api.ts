@@ -89,26 +89,15 @@ export const authApi = {
     return response.data
   },
 
-  sendVerificationEmail: async (accessToken: string): Promise<void> => {
-    await axiosBase.post(
-      endpoints.sendVerification,
-      {},
-      {
-        headers: {
-          Authorization: `${TokenTypeEnum.Bearer} ${accessToken}`,
-        },
-      },
-    )
+  sendVerificationEmail: async (): Promise<void> => {
+    await axiosWithAuth.post(endpoints.sendVerification)
   },
 
-  confirmEmail: async (email: string, token: string, accessToken: string | null) => {
-    const response = await axiosBase.get<AuthResponse>(endpoints.confirmEmail, {
+  confirmEmail: async (email: string, token: string) => {
+    const response = await axiosWithAuth.get<AuthResponse>(endpoints.confirmEmail, {
       params: { email, token },
-      headers: {
-        Authorization: `${TokenTypeEnum.Bearer} ${accessToken}`,
-      },
     })
-
+  
     return response.data
   },
 
