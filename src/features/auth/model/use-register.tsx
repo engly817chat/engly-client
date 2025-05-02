@@ -1,7 +1,6 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { authApi, type RegisterRequestDto } from '@/entities/auth'
@@ -29,15 +28,8 @@ export function useRegister({
         signal: meta?.signal ?? abortController.signal,
       }),
     onError: async error => {
-      if (
-        axios.isAxiosError(error) &&
-        error.response?.data?.message === 'User Already Exist'
-      ) {
-        toast.error(t('auth.userExists'))
-      } else {
-        toast.error(t('errors.unknownError'))
-        console.log(error)
-      }
+      toast.error(t('errors.unknownError'))
+      console.log(error)
     },
     onSuccess: async data => {
       toast.success(t('auth.success'))
