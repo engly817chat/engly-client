@@ -14,21 +14,21 @@ export const NativeLangEnum = {
   French: 'FRENCH',
   Arabic: 'ARABIC',
   Chinese: 'CHINESE',
-  Ukrainian: 'UKRAINIAN'
+  Ukrainian: 'UKRAINIAN',
 } as const
 
 export const nativeLangs = [
-  { value: NativeLangEnum.English, label: 'English' },
-  { value: NativeLangEnum.Japanese, label: 'Japanese' },
-  { value: NativeLangEnum.Hindi, label: 'Hindi' },
-  { value: NativeLangEnum.Russian, label: 'Russian' },
-  { value: NativeLangEnum.Spanish, label: 'Spanish' },
-  { value: NativeLangEnum.Portuguese, label: 'Portuguese' },
-  { value: NativeLangEnum.German, label: 'German' },
-  { value: NativeLangEnum.French, label: 'French' },
-  { value: NativeLangEnum.Arabic, label: 'Arabic' },
-  { value: NativeLangEnum.Chinese, label: 'Chinese' },
-  { value: NativeLangEnum.Ukrainian, label: 'Ukrainian' },
+  { value: NativeLangEnum.English, label: 'auth.nativeLanguage.items.eng' },
+  { value: NativeLangEnum.Japanese, label: 'auth.nativeLanguage.items.jap' },
+  { value: NativeLangEnum.Hindi, label: 'auth.nativeLanguage.items.hin' },
+  { value: NativeLangEnum.Russian, label: 'auth.nativeLanguage.items.rus' },
+  { value: NativeLangEnum.Spanish, label: 'auth.nativeLanguage.items.spa' },
+  { value: NativeLangEnum.Portuguese, label: 'auth.nativeLanguage.items.por' },
+  { value: NativeLangEnum.German, label: 'auth.nativeLanguage.items.ger' },
+  { value: NativeLangEnum.French, label: 'auth.nativeLanguage.items.fre' },
+  { value: NativeLangEnum.Arabic, label: 'auth.nativeLanguage.items.ara' },
+  { value: NativeLangEnum.Chinese, label: 'auth.nativeLanguage.items.chi' },
+  { value: NativeLangEnum.Ukrainian, label: 'auth.nativeLanguage.items.ukr' },
 ] as const
 
 export const GenderEnum = {
@@ -46,12 +46,12 @@ export const EngLevelEnum = {
 } as const
 
 export const engLevels = [
-  { value: EngLevelEnum.A1, label: 'A1 - Beginner' },
-  { value: EngLevelEnum.A2, label: 'A2 - Elementary' },
-  { value: EngLevelEnum.B1, label: 'B1 - Intermediate' },
-  { value: EngLevelEnum.B2, label: 'B2 - Upper Intermediate' },
-  { value: EngLevelEnum.C1, label: 'C1 - Advanced' },
-  { value: EngLevelEnum.C2, label: 'C2 - Proficient' },
+  { value: EngLevelEnum.A1, label: 'auth.englishLevel.items.A1' },
+  { value: EngLevelEnum.A2, label: 'auth.englishLevel.items.A2' },
+  { value: EngLevelEnum.B1, label: 'auth.englishLevel.items.B1' },
+  { value: EngLevelEnum.B2, label: 'auth.englishLevel.items.B2' },
+  { value: EngLevelEnum.C1, label: 'auth.englishLevel.items.C1' },
+  { value: EngLevelEnum.C2, label: 'auth.englishLevel.items.C2' },
 ] as const
 
 export const TokenTypeEnum = {

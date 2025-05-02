@@ -49,6 +49,44 @@
       "label": "Repeat password",
       "placeholder": "Repeat your password"
     },
+    "nativeLanguage": {
+      "label": "Choose your native language",
+      "placeholder": "Select",
+      "items": {
+        "eng": "English",
+        "jap": "Japanese",
+        "hin": "Hindi",
+        "rus": "Russian",
+        "spa": "Spanish",
+        "por": "Portuguese",
+        "ger": "German",
+        "fre": "French",
+        "ara": "Arabic",
+        "chi": "Chinese",
+        "ukr": "Ukrainian"
+      }
+    },
+    "englishLevel": {
+      "label": "English level",
+      "placeholder": "Select",
+      "items": {
+        "A1": "A1 - Beginner",
+        "A2": "A2 - Elementary",
+        "B1": "B1 - Intermediate",
+        "B2": "B2 - Upper Intermediate",
+        "C1": "C1 - Advanced",
+        "C2": "C2 - Proficient"
+      }
+    },
+    "goals": {
+      "label": "Goals",
+      "placeholder": "Select",
+      "items": {
+        "improveEng": "Improve English",
+        "learnNewLang": "Learn new language",
+        "meetPeople": "Meet new people"
+      }
+    },
     "or": "Or",
     "signUpWithGoogle": "Sign up with Google",
     "loginWithGoogle": "Log in with Google",

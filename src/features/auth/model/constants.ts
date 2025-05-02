@@ -50,28 +50,27 @@ export const credentialStepData = [
 export const profileStepData = [
   {
     name: 'nativeLanguage',
-    label: 'Choose your native language',
-    placeholder: 'Select',
+    label: 'auth.nativeLanguage.label',
+    placeholder: 'auth.nativeLanguage.placeholder',
     type: 'select',
     items: nativeLangs,
   },
   {
     name: 'englishLevel',
-    label: 'English level',
-    placeholder: 'Select',
+    label: 'auth.englishLevel.label',
+    placeholder: 'auth.goals.placeholder',
     type: 'select',
     items: engLevels,
   },
   {
     name: 'goals',
-    label: 'Goals',
-    placeholder: 'Select',
+    label: 'auth.goals.label',
+    placeholder: 'auth.goals.placeholder',
     type: 'select',
     items: [
-      { value: 'DEFAULT', label: 'Default' },
-      { value: 'IMPROVE_ENGLISH', label: 'Improve English' },
-      { value: 'LEARN_NEW_LANGUAGE', label: 'Learn new language' },
-      { value: 'MEET_NEW_PEOPLE', label: 'Meet new people' },
+      { value: 'IMPROVE_ENGLISH', label: 'auth.goals.items.improveEng' },
+      { value: 'LEARN_NEW_LANGUAGE', label: 'auth.goals.items.learnNewLang' },
+      { value: 'MEET_NEW_PEOPLE', label: 'auth.goals.items.meetPeople' },
     ],
   },
 ] as const

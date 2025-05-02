@@ -34,7 +34,7 @@ export function RegisterForm() {
       confirm: '',
       nativeLanguage: undefined,
       englishLevel: undefined,
-      goals: 'DEFAULT',
+      goals: '',
     },
   })
 
