@@ -12,6 +12,7 @@ import { MessageModal } from '@/shared/ui/message-modal'
 import { appRoutes } from '@/shared/config'
 import { cn, excludeProperties } from '@/shared/utils'
 import { RegisterFormSchema, validatePasswords, type RegisterFormValues } from '../lib'
+import { checkFieldAvailability } from '../lib/checkFieldAvailability'
 import { RegisterStepEnum, useRegister, type RegisterStepType } from '../model'
 import { Providers } from './providers'
 import { StepBar } from './step-bar'
@@ -44,7 +45,12 @@ export function RegisterForm() {
 
     if (!validatePasswords(form, t)) return
 
-    if (isValid) {
+    await checkFieldAvailability('username', form.getValues('username'), form, t, () => {})
+    await checkFieldAvailability('email', form.getValues('email'), form, t, () => {})
+
+    const hasErrors = Object.keys(form.formState.errors).length > 0
+
+    if (isValid && !hasErrors) {
       setStep(RegisterStepEnum.Profile)
     }
   }
