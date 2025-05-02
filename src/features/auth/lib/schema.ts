@@ -86,9 +86,14 @@ export type RegisterFormValues = z.infer<ReturnType<typeof RegisterFormSchema>>
 
 export const LoginFormSchema = (t: (key: string) => string) =>
   z.object({
-    email: z.string().email({
-      message: t('auth.validation.emailInvalid'),
-    }),
+    email: z
+      .string()
+      .min(1, {
+        message: t('auth.validation.required'),
+      })
+      .email({
+        message: t('auth.validation.emailInvalid'),
+      }),
     password: z.string().min(1, {
       message: t('auth.validation.required'),
     }),
