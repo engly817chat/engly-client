@@ -36,3 +36,19 @@ export interface GoogleRegisterRequest {
 export interface FirstLoginResponse {
   userExists: boolean
 }
+
+export interface UserProfile {
+  id: string
+  username: string
+  email: string
+  providerId: string
+  createdAt: string
+  roles: string
+  emailVerified: boolean
+  provider: string
+  additionalInfo: {
+    englishLevel: string
+    nativeLanguage: string
+    goal: string
+  }
+}
