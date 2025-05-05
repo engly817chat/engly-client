@@ -12,7 +12,7 @@ import {
 } from '@/shared/ui/common/select'
 import { GlobeIcon } from '@/shared/ui/icons'
 import { appRoutes } from '@/shared/config'
-import { useAuth } from '../providers/auth-context'
+import { useAuth } from '@/entities/auth'
 
 export default function HomePage() {
   const { isAuthenticated } = useAuth()

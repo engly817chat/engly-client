@@ -1,8 +1,8 @@
 import { Bounce, ToastContainer } from 'react-toastify'
-import { AuthProvider } from './auth-context'
 import I18nProvider from './I18nProvider'
 import { QueryProvider } from './query-provider'
 import { ThemeProvider } from './theme-provider'
+import { AuthProvider } from '@/entities/auth'
 
 export const Providers = ({
   children,

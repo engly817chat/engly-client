@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/app/providers/auth-context'
+import { useAuth } from '@/entities/auth'
 import { SidebarProvider } from '@/shared/ui/common/sidebar'
 import { AppSidebar } from '@/shared/ui'
 
@@ -18,8 +18,8 @@ export default function Layout({
     if (!isLoading && !isAuthenticated) {
       router.push('/login')
     }
-  }, [isLoading, isAuthenticated])
-  
+  }, [isLoading, isAuthenticated, router])
+
   if (isLoading) return null
 
   return (
