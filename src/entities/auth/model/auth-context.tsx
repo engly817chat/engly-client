@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { UserProfile } from '@/entities/auth'
+import { authApi, UserProfile } from '@/entities/auth'
 import { getAccessToken, removeFromStorage } from '@/shared/utils'
 
 interface AuthContextType {
@@ -25,11 +25,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const token = getAccessToken()
-    if (token) {
+    if (!token) {
       setIsLoading(false)
-    } else {
-      setIsLoading(false)
+      return
     }
+  
+    authApi
+      .getProfile()
+      .then(userData => {
+        setUser(userData)
+      })
+      .catch(() => {
+        removeFromStorage()
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [])
 
   return (
