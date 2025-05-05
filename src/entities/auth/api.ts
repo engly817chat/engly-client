@@ -7,7 +7,8 @@ import type {
   LoginRequestDto,
   RegisterRequestDto,
   GoogleRegisterRequest,
-  FirstLoginResponse
+  FirstLoginResponse,
+  UserProfile
 } from './types'
 
 const endpoints = {
@@ -20,6 +21,7 @@ const endpoints = {
   firstLogin: '/valid/first-login',
   sendVerification: '/api/notify',
   confirmEmail: '/api/notify/check',
+  getProfile: 'api/profile/check'
 } as const
 
 export const authApi = {
@@ -113,5 +115,10 @@ export const authApi = {
   isFirstLogin: async (): Promise<FirstLoginResponse> => {
     const response = await axiosWithAuth.get(endpoints.firstLogin)
     return response.data 
+  },
+
+  getProfile: async (): Promise<UserProfile> => {
+    const response = await axiosWithAuth.get<UserProfile>(endpoints.getProfile)
+    return response.data
   },
 } as const
