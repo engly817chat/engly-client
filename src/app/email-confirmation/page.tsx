@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import { authApi } from '@/entities/auth'
+import { authApi, useAuth } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
 import { saveTokenStorage } from '@/shared/utils'
 
@@ -13,6 +13,7 @@ export default function EmailConfirmationPage() {
   const params = useQueryParams()
   const email = params?.get('email')
   const token = params?.get('token')
+  const { setUser } = useAuth()
 
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
 
@@ -24,6 +25,8 @@ export default function EmailConfirmationPage() {
         const res = await authApi.confirmEmail(email, token)
         if (res.access_token) {
           saveTokenStorage(res.access_token)
+          const userData = await authApi.getProfile()
+          setUser(userData)
         }
         setStatus('success')
         setTimeout(() => router.push('/chats'), 3000)

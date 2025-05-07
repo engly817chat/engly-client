@@ -34,16 +34,13 @@ export function useLogin() {
       toast.success('Logged in successfully')
       saveTokenStorage(data.access_token)
 
-      authApi
-        .getProfile()
-        .then(userData => {
-          setUser(userData)
-        })
-        .catch(error => {
-          console.error('Error fetching user profile', error)
-        })
-
-      router.push(appRoutes.chats)
+      try {
+        const userData = await authApi.getProfile()
+        setUser(userData)
+        router.push(appRoutes.chats)
+      } catch (error) {
+        console.error('Error fetching user profile', error)
+      }
     },
     // onSettled: async (data, error, variables, context) => {},
   })
