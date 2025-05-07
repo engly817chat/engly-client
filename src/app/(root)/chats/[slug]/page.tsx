@@ -1,15 +1,13 @@
+'use client'
 
-type Props = {
-  params: { slug: string }
-}
+import { useParams } from 'next/navigation'
 
-export default async function CategoryPage({ params }: Props) {
-  const { slug } = params
-
-
+export default function ChatCategoryPage() {
+  const params = useParams()
+  const slug = params?.slug
 
   return (
-    <div className="container">
+    <div className="p-4 text-xl font-semibold">
       {slug}
     </div>
   )

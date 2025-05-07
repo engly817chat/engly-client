@@ -57,7 +57,7 @@ export const CategoryList = () => {
           <div
             key={cat.id}
             onClick={() => handleCategoryClick(cat.name)}
-            className='h-[102px] rounded-[10px] border border-border bg-white p-3 hover:border-primary md:h-[178px] md:space-y-5 md:p-5'
+            className='h-[102px] rounded-[10px] border border-border bg-white p-3 hover:border-primary md:h-[178px] md:space-y-5 md:p-5 cursor-pointer'
           >
             <div className='hidden items-center justify-between md:flex'>
               <Image
