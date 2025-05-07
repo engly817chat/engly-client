@@ -145,7 +145,6 @@
     "description": "We have sent a confirmation link to your email. Please check it.",
     "loading": "Confirming email...",
     "successTitle": "Email successfully confirmed ✅",
-    "successMessage": "You will be redirected to the chat shortly...",
     "errorTitle": "Something went wrong",
     "errorMessage": "Please check the link or try again."
   }

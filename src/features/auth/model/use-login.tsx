@@ -1,11 +1,9 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { authApi, type LoginRequestDto } from '@/entities/auth'
-import { useAuth } from '@/entities/auth'
-import { appRoutes } from '@/shared/config'
+import { authApi, useAuth, type LoginRequestDto } from '@/entities/auth'
 import { saveTokenStorage } from '@/shared/utils'
 
 export interface LoginMutationParams {
@@ -20,6 +18,8 @@ export function useLogin() {
   const abortController = new AbortController()
   const router = useRouter()
   const { setUser } = useAuth()
+  const searchParams = useSearchParams()
+  const redirectPath = searchParams.get('redirect') || '/'
 
   const loginMutation = useMutation({
     mutationFn: ({ formData, meta }: LoginMutationParams) =>
@@ -37,7 +37,7 @@ export function useLogin() {
       try {
         const userData = await authApi.getProfile()
         setUser(userData)
-        router.push(appRoutes.chats)
+        router.push(redirectPath)
       } catch (error) {
         console.error('Error fetching user profile', error)
       }

@@ -1,16 +1,27 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
+import { useAuth } from '@/entities/auth'
 import { Skeleton } from '@/shared/ui/common/skeleton'
 import { categoryApi, PaginatedCategoriesResponse } from '../model'
 
 export const CategoryList = () => {
   const { t } = useTranslation()
+  const router = useRouter()
+  const { isAuthenticated } = useAuth()
+
+  const handleCategoryClick = (name: string) => {
+    if (!isAuthenticated) {
+      router.push(`/login?redirect=/chats/${formatKey(name)}`)
+    } else {
+      router.push(`/chats/${formatKey(name)}`)
+    }
+  }
 
   const { data, error, isError, isLoading } = useQuery<
     PaginatedCategoriesResponse,
@@ -43,9 +54,9 @@ export const CategoryList = () => {
         const key = formatKey(cat.name)
 
         return (
-          <Link
-            href={cat.name.toLowerCase()}
+          <div
             key={cat.id}
+            onClick={() => handleCategoryClick(cat.name)}
             className='h-[102px] rounded-[10px] border border-border bg-white p-3 hover:border-primary md:h-[178px] md:space-y-5 md:p-5'
           >
             <div className='hidden items-center justify-between md:flex'>
@@ -84,7 +95,7 @@ export const CategoryList = () => {
                 {t(`categories.descriptions.${key}`)}
               </p>
             </div>
-          </Link>
+          </div>
         )
       })}
     </div>

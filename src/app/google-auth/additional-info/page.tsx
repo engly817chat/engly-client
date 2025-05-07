@@ -38,7 +38,7 @@ const AdditionalInfoPage = () => {
       }
 
       toast.success(t('auth.success'))
-      router.push('/chats')
+      router.push('/')
     } catch (error) {
       console.error('Failed to save additional info:', error)
     }

@@ -15,7 +15,7 @@ import { appRoutes } from '@/shared/config'
 import { useAuth } from '@/entities/auth'
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
   const { t } = useTranslation()
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language || 'en'
@@ -53,7 +53,7 @@ export default function HomePage() {
                   </SelectItem>
                 </SelectContent>
               </Select>
-              {!isAuthenticated && (
+              {!isAuthenticated && !isLoading && (
                 <Link href={appRoutes.register} className='btn-link'>
                   {t('signUp')}
                 </Link>

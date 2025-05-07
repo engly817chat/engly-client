@@ -29,7 +29,7 @@ export default function EmailConfirmationPage() {
           setUser(userData)
         }
         setStatus('success')
-        setTimeout(() => router.push('/chats'), 3000)
+        setTimeout(() => router.push('/'), 3000)
       } catch (error) {
         console.error(error)
         setStatus('error')
@@ -51,7 +51,6 @@ export default function EmailConfirmationPage() {
           <p className='font-semibold text-green-600'>
             {t('emailConfirmation.successTitle')}
           </p>
-          <p>{t('emailConfirmation.successMessage')}</p>
         </div>
       )}
       {status === 'error' && (
