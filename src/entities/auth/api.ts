@@ -4,11 +4,11 @@ import type { SignalOptions } from '@/shared/types'
 import type {
   AuthResponse,
   AvailableResponse,
+  FirstLoginResponse,
+  GoogleRegisterRequest,
   LoginRequestDto,
   RegisterRequestDto,
-  GoogleRegisterRequest,
-  FirstLoginResponse,
-  UserProfile
+  UserProfile,
 } from './types'
 
 const endpoints = {
@@ -21,7 +21,7 @@ const endpoints = {
   firstLogin: '/valid/first-login',
   sendVerification: '/api/notify',
   confirmEmail: '/api/notify/check',
-  getProfile: 'api/profile/check'
+  getProfile: 'api/profile/check',
 } as const
 
 export const authApi = {
@@ -60,21 +60,6 @@ export const authApi = {
     return response.data
   },
 
-  refreshTokens: async (): Promise<AuthResponse> => {
-    const response = await axiosBase.post<AuthResponse>(
-      endpoints.refreshToken,
-      {},
-      {
-        headers: {
-          // TODO: Implement getRefreshToken() method
-          // Authorization: `Bearer ${getRefreshToken()}`,
-        },
-      },
-    )
-
-    return response.data
-  },
-
   checkUsername: async (username: string): Promise<AvailableResponse> => {
     const response = await axiosBase.get<AvailableResponse>(
       `${endpoints.checkUsername}${username}`,
@@ -99,7 +84,7 @@ export const authApi = {
     const response = await axiosWithAuth.get<AuthResponse>(endpoints.confirmEmail, {
       params: { token },
     })
-  
+
     return response.data
   },
 
@@ -108,13 +93,16 @@ export const authApi = {
   },
 
   saveGoogleInfo: async (data: GoogleRegisterRequest): Promise<AuthResponse> => {
-    const response = await axiosWithAuth.post<AuthResponse>(endpoints.saveGoogleInfo, data)
+    const response = await axiosWithAuth.post<AuthResponse>(
+      endpoints.saveGoogleInfo,
+      data,
+    )
     return response.data
   },
 
   isFirstLogin: async (): Promise<FirstLoginResponse> => {
     const response = await axiosWithAuth.get(endpoints.firstLogin)
-    return response.data 
+    return response.data
   },
 
   getProfile: async (): Promise<UserProfile> => {

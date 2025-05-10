@@ -23,7 +23,7 @@ export default function GoogleCallbackPage() {
           if (!response.userExists) {
             router.push('/google-auth/additional-info')
           } else {
-            router.push('/chats')
+            router.push('/')
           }
         })
         .catch(error => {

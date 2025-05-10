@@ -3,6 +3,7 @@ import axios, {
   type AxiosError,
   type InternalAxiosRequestConfig,
 } from 'axios'
+import { refreshTokens } from '@/shared/api/refresh'
 import { AppConfig } from '@/shared/constants'
 import { getAccessToken, removeFromStorage } from '@/shared/utils'
 
@@ -59,8 +60,7 @@ axiosWithAuth.interceptors.response.use(
       originalRequest._isRetry = true
 
       try {
-        // FIXME: Implement getNewTokens() method
-        // await authService.getNewTokens()
+        refreshTokens()
         return axiosWithAuth.request(originalRequest)
       } catch (error) {
         if (axios.isAxiosError<ApiErrorResponse>(error)) {
