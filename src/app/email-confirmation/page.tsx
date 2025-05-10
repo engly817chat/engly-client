@@ -11,7 +11,6 @@ export default function EmailConfirmationPage() {
   const { t } = useTranslation()
   const router = useRouter()
   const params = useQueryParams()
-  const email = params?.get('email')
   const token = params?.get('token')
   const { setUser } = useAuth()
 
@@ -19,10 +18,10 @@ export default function EmailConfirmationPage() {
 
   useEffect(() => {
     const confirmEmail = async () => {
-      if (!email || !token) return
+      if (!token) return
 
       try {
-        const res = await authApi.confirmEmail(email, token)
+        const res = await authApi.confirmEmail(token)
         if (res.access_token) {
           saveTokenStorage(res.access_token)
           const userData = await authApi.getProfile()
@@ -37,7 +36,7 @@ export default function EmailConfirmationPage() {
     }
 
     confirmEmail()
-  }, [email, token, router])
+  }, [token, router])
 
   if (!params) {
     return <p>{t('emailConfirmation.loading')}</p>

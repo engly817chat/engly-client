@@ -95,9 +95,9 @@ export const authApi = {
     await axiosWithAuth.post(endpoints.sendVerification)
   },
 
-  confirmEmail: async (email: string, token: string) => {
+  confirmEmail: async (token: string) => {
     const response = await axiosWithAuth.get<AuthResponse>(endpoints.confirmEmail, {
-      params: { email, token },
+      params: { token },
     })
   
     return response.data
