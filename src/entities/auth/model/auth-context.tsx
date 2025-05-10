@@ -29,14 +29,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(false)
       return
     }
-  
+
     authApi
       .getProfile()
       .then(userData => {
         setUser(userData)
       })
-      .catch(() => {
-        removeFromStorage()
+      .catch(error => {
+        if (error.response?.status === 401) {
+          removeFromStorage()
+        } else {
+          console.error('Error fetching profile:', error)
+        }
       })
       .finally(() => {
         setIsLoading(false)
