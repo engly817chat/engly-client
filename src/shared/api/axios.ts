@@ -60,7 +60,7 @@ axiosWithAuth.interceptors.response.use(
       originalRequest._isRetry = true
 
       try {
-        refreshTokens()
+        await refreshTokens()
         return axiosWithAuth.request(originalRequest)
       } catch (error) {
         if (axios.isAxiosError<ApiErrorResponse>(error)) {
