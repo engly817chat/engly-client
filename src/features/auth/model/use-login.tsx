@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { authApi, useAuth, type LoginRequestDto } from '@/entities/auth'
+import { useQueryParams } from '@/shared/hooks/useQueryParams'
 import { saveTokenStorage } from '@/shared/utils'
-import { useEffect, useState } from 'react'
 
 export interface LoginMutationParams {
   formData: LoginRequestDto
@@ -19,14 +19,9 @@ export function useLogin() {
   const abortController = new AbortController()
   const router = useRouter()
   const { setUser } = useAuth()
-  const [redirectPath, setRedirectPath] = useState('/')
+  const queryParams = useQueryParams()
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search)
-      setRedirectPath(params.get('redirect') || '/')
-    }
-  }, [])
+  const redirectPath = queryParams?.get('redirect') || '/'
 
   const loginMutation = useMutation({
     mutationFn: ({ formData, meta }: LoginMutationParams) =>
