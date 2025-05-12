@@ -19,8 +19,8 @@ const endpoints = {
   refreshToken: '/refresh-token',
   saveGoogleInfo: '/api/addition_info/for-google',
   firstLogin: '/valid/first-login',
-  sendVerification: '/api/notify',
-  confirmEmail: '/api/notify/check',
+  sendVerification: '/api/email-verify',
+  confirmEmail: '/api/email-verify/check',
   getProfile: 'api/profile/check',
 } as const
 
