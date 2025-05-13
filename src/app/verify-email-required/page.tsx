@@ -24,7 +24,7 @@ export default function VerifyEmailRequiredPage() {
           Please Verify Your Email Address
         </h1>
         <p className='mb-6 text-muted'>
-          To continue, check your inbox and click on the verification link we've sent you.
+          To continue, check your inbox and click on the verification link we&apos;ve sent you.
         </p>
         <p className='mb-6 text-sm text-muted'>
           Didn’t receive the email? Click the button below to resend it.
