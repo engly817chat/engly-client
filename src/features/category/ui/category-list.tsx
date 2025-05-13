@@ -13,14 +13,22 @@ import { categoryApi, PaginatedCategoriesResponse } from '../model'
 export const CategoryList = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
 
   const handleCategoryClick = (name: string) => {
+    const formattedName = formatKey(name)
+
     if (!isAuthenticated) {
-      router.push(`/login?redirect=/chats/${formatKey(name)}`)
-    } else {
-      router.push(`/chats/${formatKey(name)}`)
+      router.push(`/login?redirect=/chats/${formattedName}`)
+      return
     }
+
+    if (user && !user.emailVerified) {
+      router.push('/verify-email-required')
+      return
+    }
+
+    router.push(`/chats/${formattedName}`)
   }
 
   const { data, error, isError, isLoading } = useQuery<
@@ -57,7 +65,7 @@ export const CategoryList = () => {
           <div
             key={cat.id}
             onClick={() => handleCategoryClick(cat.name)}
-            className='h-[102px] rounded-[10px] border border-border bg-white p-3 hover:border-primary md:h-[178px] md:space-y-5 md:p-5 cursor-pointer'
+            className='h-[102px] cursor-pointer rounded-[10px] border border-border bg-white p-3 hover:border-primary md:h-[178px] md:space-y-5 md:p-5'
           >
             <div className='hidden items-center justify-between md:flex'>
               <Image

@@ -7,6 +7,7 @@ import { getAccessToken, removeFromStorage } from '@/shared/utils'
 interface AuthContextType {
   user: UserProfile | null
   isAuthenticated: boolean
+  isEmailVerified: boolean
   isLoading: boolean
   setUser: (user: UserProfile | null) => void
   logout: () => void
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isAuthenticated: !!user, logout, isLoading }}
+      value={{ user, setUser, isAuthenticated: !!user, logout, isLoading, isEmailVerified: !!user?.emailVerified, }}
     >
       {children}
     </AuthContext.Provider>

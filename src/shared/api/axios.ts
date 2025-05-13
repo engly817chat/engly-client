@@ -45,15 +45,21 @@ axiosWithAuth.interceptors.request.use(config => {
   return config
 })
 
+const isTokenError = (errorMessage: string) =>
+  ['jwt expired', 'jwt must be provided', 'refresh token not passed'].some(msg =>
+    errorMessage.toLowerCase().includes(msg.toLowerCase())
+  )
+
 axiosWithAuth.interceptors.response.use(
-  config => config,
+  response => response,
   async (error: AxiosError<ApiErrorResponse>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig
 
+    const message = errorCatch(error)
+    const status = error?.response?.status
+
     if (
-      (error?.response?.status === 401 ||
-        errorCatch(error) === 'jwt expired' ||
-        errorCatch(error) === 'jwt must be provided') &&
+      ([401, 406].includes(status || 0) || isTokenError(message)) &&
       originalRequest &&
       !originalRequest._isRetry
     ) {
@@ -61,21 +67,18 @@ axiosWithAuth.interceptors.response.use(
 
       try {
         await refreshTokens()
-        return axiosWithAuth.request(originalRequest)
-      } catch (error) {
-        if (axios.isAxiosError<ApiErrorResponse>(error)) {
-          if (
-            errorCatch(error) === 'jwt expired' ||
-            errorCatch(error) === 'Refresh token not passed'
-          ) {
+        return axiosWithAuth(originalRequest)
+      } catch (refreshError) {
+        if (axios.isAxiosError<ApiErrorResponse>(refreshError)) {
+          if (isTokenError(errorCatch(refreshError))) {
             removeFromStorage()
           }
         } else {
-          console.error('Unknown error:', error)
+          console.error('Unknown error:', refreshError)
         }
       }
     }
 
     throw error
-  },
+  }
 )
