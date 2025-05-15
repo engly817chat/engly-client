@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation'
 import { XIcon } from 'lucide-react'
 import { AuthSlider } from '@/features/auth'
-import { AccessGuard } from '@/shared/ui/access-guard'
 import { Button } from '@/shared/ui/common/button'
+import { AccessGuard } from '@/entities/auth'
 
 export default function AuthLayout({
   children,

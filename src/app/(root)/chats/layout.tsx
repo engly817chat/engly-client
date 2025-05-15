@@ -1,8 +1,8 @@
 'use client'
 
-import { AccessGuard } from '@/shared/ui/access-guard'
 import { SidebarProvider } from '@/shared/ui/common/sidebar'
 import { AppSidebar } from '@/shared/ui'
+import { AccessGuard } from '@/entities/auth'
 
 export default function Layout({
   children,
