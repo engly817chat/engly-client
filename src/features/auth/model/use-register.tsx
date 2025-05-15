@@ -3,7 +3,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import { authApi, type RegisterRequestDto } from '@/entities/auth'
+import { authApi, useAuth, type RegisterRequestDto } from '@/entities/auth'
 import { saveTokenStorage } from '@/shared/utils'
 
 export interface RegisterMutationParams {
@@ -21,6 +21,7 @@ export function useRegister({
 }) {
   const abortController = new AbortController()
   const { t } = useTranslation()
+   const { setUser } = useAuth()
 
   const registerMutation = useMutation({
     mutationFn: ({ formData, meta }: RegisterMutationParams) =>
@@ -38,6 +39,8 @@ export function useRegister({
       try {
         await authApi.sendVerificationEmail()
         setIsModalOpen(true)
+        const userData = await authApi.getProfile()
+        setUser(userData)
       } catch (notifyError) {
         console.error('Error sending email:', notifyError)
       }
