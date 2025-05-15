@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { XIcon } from 'lucide-react'
 import { AuthSlider } from '@/features/auth'
+import { AccessGuard } from '@/shared/ui/access-guard'
 import { Button } from '@/shared/ui/common/button'
 
 export default function AuthLayout({
@@ -17,20 +18,22 @@ export default function AuthLayout({
   }
 
   return (
-    <main className='flex items-center justify-center bg-slate-800 min-h-screen'>
-      <div className='flex w-full max-w-[1030px] bg-slate-400 h-[800px] rounded-2xl overflow-hidden shadow-xl'>
-        <AuthSlider />
-        <div className='relative flex-1'>
-          <Button
-            variant='link'
-            onClick={closeForm}
-            className='absolute right-2 top-2 md:right-4 md:top-2 z-10 p-2 text-foreground hover:bg-muted/10'
-          >
-            <XIcon style={{ width: '20px', height: '20px' }}/>
-          </Button>
-          {children}
+    <AccessGuard requireAuth={false}>
+      <main className='flex min-h-screen items-center justify-center bg-slate-800'>
+        <div className='flex h-[800px] w-full max-w-[1030px] overflow-hidden rounded-2xl bg-slate-400 shadow-xl'>
+          <AuthSlider />
+          <div className='relative flex-1'>
+            <Button
+              variant='link'
+              onClick={closeForm}
+              className='absolute right-2 top-2 z-10 p-2 text-foreground hover:bg-muted/10 md:right-4 md:top-2'
+            >
+              <XIcon style={{ width: '20px', height: '20px' }} />
+            </Button>
+            {children}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </AccessGuard>
   )
 }

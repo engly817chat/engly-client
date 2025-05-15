@@ -39,7 +39,7 @@ export function useLogin() {
       try {
         const userData = await authApi.getProfile()
         setUser(userData)
-        router.push(redirectPath)
+        router.replace(redirectPath)
       } catch (error) {
         console.error('Error fetching user profile', error)
       }

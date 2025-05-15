@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { authApi, useAuth } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
@@ -18,7 +19,10 @@ export default function EmailConfirmationPage() {
 
   useEffect(() => {
     const confirmEmail = async () => {
-      if (!token) return
+      if (!token) {
+        router.replace('/')
+        return
+      }
 
       try {
         const res = await authApi.confirmEmail(token)
@@ -39,7 +43,9 @@ export default function EmailConfirmationPage() {
   }, [token, router])
 
   if (!params) {
-    return <p>{t('emailConfirmation.loading')}</p>
+    <div className='flex min-h-screen items-center justify-center'>
+      <Loader2 className='h-10 w-10 animate-spin text-primary' />
+    </div>
   }
 
   return (
