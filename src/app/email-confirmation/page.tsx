@@ -20,7 +20,6 @@ export default function EmailConfirmationPage() {
   useEffect(() => {
     const confirmEmail = async () => {
       if (!token) {
-        router.replace('/')
         return
       }
 
@@ -43,9 +42,11 @@ export default function EmailConfirmationPage() {
   }, [token, router])
 
   if (!params) {
-    <div className='flex min-h-screen items-center justify-center'>
-      <Loader2 className='h-10 w-10 animate-spin text-primary' />
-    </div>
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <Loader2 className='h-10 w-10 animate-spin text-primary' />
+      </div>
+    )
   }
 
   return (
