@@ -10,7 +10,7 @@ import { Button } from '@/shared/ui/common/button'
 
 export default function VerifyEmailRequiredPage() {
   const { t } = useTranslation()
-  const { isLoading, isEmailVerified } = useAuth()
+  const { isLoading, isEmailVerified, user } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function VerifyEmailRequiredPage() {
   const handleResend = async () => {
     try {
       await authApi.sendVerificationEmail()
-      toast.success(t('A new verification link has been sent to your email.'))
+      toast.success(t('emailConfirmation.resentSuccess'))
     } catch {
       toast.error(t('errors.unknownError'))
     }
@@ -37,17 +37,19 @@ export default function VerifyEmailRequiredPage() {
       ) : (
         <div className='w-full max-w-lg rounded-lg bg-white p-8 text-center shadow-lg'>
           <h1 className='mb-4 text-2xl font-bold text-foreground'>
-            Please Verify Your Email Address
+             {t('emailConfirmation.title')}
           </h1>
           <p className='mb-6 text-muted'>
-            To continue, check your inbox and click on the verification link we&apos;ve
-            sent you.
+             {t('emailConfirmation.linkSentTo')}{' '}
+            <span className='font-semibold'>{user?.email}</span>
           </p>
-          <p className='mb-6 text-sm text-muted'>
-            Didn’t receive the email? Click the button below to resend it.
+
+          <p className='mb-6 text-muted'>
+            {t('emailConfirmation.instructions')}
           </p>
+
           <Button type='button' onClick={handleResend} className='rounded-lg px-6 py-2'>
-            Resend Link
+             {t('emailConfirmation.resend')}
           </Button>
         </div>
       )}

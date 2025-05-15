@@ -146,6 +146,10 @@
     "loading": "Confirming email...",
     "successTitle": "Email successfully confirmed ✅",
     "errorTitle": "Something went wrong",
-    "errorMessage": "Please check the link or try again."
+    "errorMessage": "Please check the link or try again.",
+    "resentSuccess": "A new verification link has been sent to your email.",
+    "linkSentTo": "An email with a verification link has been sent to:",
+    "instructions": "Please click the link in that email to validate your account.",
+    "resend": "Resend Link"
   }
 }
