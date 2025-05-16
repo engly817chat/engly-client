@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { authApi, useAuth } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
@@ -13,55 +13,48 @@ export default function EmailConfirmationPage() {
   const router = useRouter()
   const params = useQueryParams()
   const token = params?.get('token')
-  const { setUser } = useAuth()
+  const { isAuthenticated, setUser } = useAuth()
 
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const { mutate, isPending, isSuccess, isError } = useMutation({
+    mutationFn: async (token: string) => {
+      const res = await authApi.confirmEmail(token)
+      if (res.access_token) {
+        saveTokenStorage(res.access_token)
+        const userData = await authApi.getProfile()
+        setUser(userData)
+      }
+      return res
+    },
+    onSuccess: () => {
+      setTimeout(() => router.push('/'), 3000)
+    },
+    onError: error => {
+      console.error('Email confirmation failed:', error)
+    },
+  })
 
   useEffect(() => {
-    const confirmEmail = async () => {
-      if (!token) {
-        return
-      }
+    if (token) mutate(token)
+  }, [token])
 
-      try {
-        const res = await authApi.confirmEmail(token)
-        if (res.access_token) {
-          saveTokenStorage(res.access_token)
-          const userData = await authApi.getProfile()
-          setUser(userData)
-        }
-        setStatus('success')
-        setTimeout(() => router.push('/'), 3000)
-      } catch (error) {
-        console.error(error)
-        setStatus('error')
-      }
-    }
-
-    confirmEmail()
-  }, [token, router])
-
-  if (!params) {
-    return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <Loader2 className='h-10 w-10 animate-spin text-primary' />
-      </div>
-    )
+  if (isAuthenticated && !isPending && !isSuccess) {
+    router.replace('/')
+    return null
   }
 
   return (
     <div className='flex h-screen items-center justify-center px-4 text-center'>
-      {status === 'loading' && <p>{t('emailConfirmation.loading')}</p>}
-      {status === 'success' && (
-        <div>
-          <p className='font-semibold text-green-600'>
-            {t('emailConfirmation.successTitle')}
-          </p>
-        </div>
+      {isPending && <p className='font-semibold text-muted'>{t('emailConfirmation.loading')}</p>}
+
+      {isSuccess && (
+        <p className='font-semibold text-success'>
+          {t('emailConfirmation.successTitle')}
+        </p>
       )}
-      {status === 'error' && (
+
+      {isError && (
         <div>
-          <p className='font-semibold text-red-600'>
+          <p className='font-semibold text-destructive'>
             {t('emailConfirmation.errorTitle')}
           </p>
           <p>{t('emailConfirmation.errorMessage')}</p>
