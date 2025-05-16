@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation'
 import { XIcon } from 'lucide-react'
 import { AuthSlider } from '@/features/auth'
+import { AccessGuard, authApi, useAuth } from '@/entities/auth'
 import { Button } from '@/shared/ui/common/button'
-import { AccessGuard } from '@/entities/auth'
 
 export default function AuthLayout({
   children,
@@ -12,8 +12,15 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   const router = useRouter()
+  const { setUser } = useAuth()
 
-  const closeForm = () => {
+  const closeForm = async () => {
+    try {
+      const userData = await authApi.getProfile()
+      setUser(userData)
+    } catch (error) {
+      console.error('Failed to fetch user profile on close:', error)
+    }
     router.push('/')
   }
 
