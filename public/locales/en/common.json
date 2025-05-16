@@ -151,5 +151,10 @@
     "linkSentTo": "An email with a verification link has been sent to:",
     "instructions": "Please click the link in that email to validate your account.",
     "resend": "Resend Link"
+  },
+  "additionalInfo": {
+    "title": "Almost there!",
+    "description": "Please fill in the additional information to complete your registration.",
+    "completeRegister": "Complete registration"
   }
 }

@@ -53,10 +53,10 @@ const AdditionalInfoPage = () => {
   return (
     <div className='w-full max-w-[500px] overflow-hidden rounded-2xl bg-white px-8 py-8 shadow-xl'>
       <h1 className='mb-3 text-center text-3xl font-semibold text-foreground'>
-        Almost there!
+        {t('additionalInfo.title')}
       </h1>
       <h2 className='mb-8 text-center text-lg text-foreground'>
-        Please fill in the additional information to complete your registration.
+        {t('additionalInfo.description')}
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -67,7 +67,7 @@ const AdditionalInfoPage = () => {
             className='mt-8 w-full'
             disabled={form.formState.isSubmitting}
           >
-            Complete registration
+           {t('additionalInfo.completeRegister')}
           </Button>
         </form>
       </Form>
