@@ -31,7 +31,7 @@ export const authApi = {
   ): Promise<AuthResponse> => {
     const response = await axiosBase.post<AuthResponse>(
       endpoints.register,
-      { ...data, dateOfBirth: '2025-02-19' },
+      { ...data},
       {
         signal,
       },
