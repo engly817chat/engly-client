@@ -2,36 +2,19 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { authApi, useAuth } from '@/entities/auth'
+import { useAuth } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
-import { saveTokenStorage } from '@/shared/utils'
+import { useConfirmEmail } from '@/features/auth'
 
 export default function EmailConfirmationPage() {
   const { t } = useTranslation()
   const router = useRouter()
   const params = useQueryParams()
   const token = params?.get('token')
-  const { isAuthenticated, setUser } = useAuth()
+  const { isAuthenticated } = useAuth()
 
-  const { mutate, isPending, isSuccess, isError } = useMutation({
-    mutationFn: async (token: string) => {
-      const res = await authApi.confirmEmail(token)
-      if (res.access_token) {
-        saveTokenStorage(res.access_token)
-        const userData = await authApi.getProfile()
-        setUser(userData)
-      }
-      return res
-    },
-    onSuccess: () => {
-      setTimeout(() => router.push('/'), 3000)
-    },
-    onError: error => {
-      console.error('Email confirmation failed:', error)
-    },
-  })
+  const { mutate, isPending, isSuccess, isError } = useConfirmEmail()
 
   useEffect(() => {
     if (token) mutate(token)
