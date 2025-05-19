@@ -48,10 +48,11 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
           name={i.name}
           render={({ field }) => (
             <FormItem className='space-y-1 md:space-y-1.5'>
-              <FormLabel className='form-label required'>{t(i.label)}</FormLabel>
+              <FormLabel className='form-label required' htmlFor={i.name}>{t(i.label)}</FormLabel>
               <FormControl>
                 <div className='relative'>
                   <Input
+                   id={i.name}
                     className={cn(
                       'form-input',
                       form.formState.errors[i.name]
