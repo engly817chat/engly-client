@@ -125,3 +125,17 @@ export const GoogleRegisterFormSchema = (t: TFunction) =>
 export type GoogleRegisterFormValues = z.infer<
   ReturnType<typeof GoogleRegisterFormSchema>
 >
+
+export const ResetPasswordSchema = (t: TFunction) =>
+  z.object({
+    email: z
+      .string()
+      .min(1, {
+        message: t('auth.validation.required'),
+      })
+      .email({
+        message: t('auth.validation.emailInvalid'),
+      }),
+  })
+
+export type ResetPasswordValues = z.infer<ReturnType<typeof ResetPasswordSchema>>

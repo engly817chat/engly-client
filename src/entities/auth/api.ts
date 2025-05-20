@@ -22,6 +22,7 @@ const endpoints = {
   sendVerification: '/api/email-verify',
   confirmEmail: '/api/email-verify/check',
   getProfile: 'api/profile/check',
+  resetPasswordSend: 'api/password-reset/send',
 } as const
 
 export const authApi = {
@@ -31,7 +32,7 @@ export const authApi = {
   ): Promise<AuthResponse> => {
     const response = await axiosBase.post<AuthResponse>(
       endpoints.register,
-      { ...data},
+      { ...data },
       {
         signal,
       },
@@ -108,5 +109,10 @@ export const authApi = {
   getProfile: async (): Promise<UserProfile> => {
     const response = await axiosWithAuth.get<UserProfile>(endpoints.getProfile)
     return response.data
+  },
+  sendResetLink: async (email: string): Promise<void> => {
+    await axiosBase.post(endpoints.resetPasswordSend, null, {
+      params: { email },
+    })
   },
 } as const

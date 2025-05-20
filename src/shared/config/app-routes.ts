@@ -4,4 +4,5 @@ export const appRoutes = {
   profile: '/profile',
   home: '/',
   chats: '/chats',
+  passwordResetRequest: '/password-reset-request'
 } as const

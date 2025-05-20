@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CircleAlertIcon, EyeIcon, EyeOffIcon, MailIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -24,6 +25,7 @@ import { Providers } from './providers'
 export function LoginForm() {
   const { t } = useTranslation()
   const [visiblePassword, setVisiblePassword] = useState(false)
+  const router = useRouter()
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginFormSchema(t)),
@@ -116,9 +118,7 @@ export function LoginForm() {
             <button
               type='button'
               className='text-sm text-muted-foreground opacity-50 transition-colors hover:underline'
-              onClick={() => {
-                console.log('Forgot password clicked')
-              }}
+              onClick={() => router.push(appRoutes.passwordResetRequest)}
             >
               {t('login.forgotPassword')}
             </button>
