@@ -115,7 +115,16 @@
       "usernameTaken": "Username is already taken",
       "emailTaken": "This email is already registered"
     },
-    "success": "User registered successfully."
+    "success": "User registered successfully.",
+    "reset": {
+      "title": "Password Reset",
+      "subtitle": "Enter your email address and we’ll send you a link to reset your password.",
+      "email": "Email",
+      "placeholder": "Enter your email",
+      "submit": "Send",
+      "successMessage": "A password reset link has been sent to your email.",
+      "back": "Back to login"
+    }
   },
   "continue": "Continue",
   "login": {

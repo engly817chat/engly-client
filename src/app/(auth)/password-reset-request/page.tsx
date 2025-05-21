@@ -35,7 +35,7 @@ export default function PasswordResetRequestPage() {
       await authApi.sendResetLink(values.email)
       setSuccess(true)
     } catch (error) {
-      console.error('Помилка при надсиланні посилання для відновлення:', error)
+      console.error('Error while sending the reset link:', error)
     }
   }
 
@@ -43,15 +43,11 @@ export default function PasswordResetRequestPage() {
     <div className='flex h-full items-center justify-center bg-background'>
       <div className='w-full max-w-md p-6'>
         <h1 className='mb-6 text-center text-3xl font-semibold text-foreground'>
-          Відновлення паролю
+          {t('auth.reset.title')}
         </h1>
-        <p className='mb-6 text-center text-muted'>
-          Введіть свою електронну адресу, і ми надішлемо вам листа для скидання паролю.
-        </p>
+        <p className='mb-6 text-center text-muted'>{t('auth.reset.subtitle')}</p>
         {success ? (
-          <p className='text-success'>
-            Посилання для відновлення паролю надіслано на вашу електронну пошту.
-          </p>
+          <p className='text-success'>{t('auth.reset.successMessage')}</p>
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='space-y-4'>
@@ -61,14 +57,14 @@ export default function PasswordResetRequestPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className='form-label required' htmlFor='email'>
-                      Email
+                      {t('auth.reset.email')}
                     </FormLabel>
                     <FormControl>
                       <div className='relative'>
                         <Input
                           id='email'
                           type='email'
-                          placeholder='Введіть email'
+                          placeholder={t('auth.reset.placeholder')}
                           className={cn(
                             'form-input',
                             form.formState.errors.email
@@ -98,7 +94,7 @@ export default function PasswordResetRequestPage() {
                 )}
               />
               <Button type='submit' className='w-full'>
-                Надіслати
+                {t('auth.reset.submit')}
               </Button>
             </form>
           </Form>
@@ -106,7 +102,7 @@ export default function PasswordResetRequestPage() {
         <p className='mt-6 text-center text-sm/none text-foreground/40 md:text-base/none'>
           <Link href='/login' className='inline-flex items-center justify-center gap-1'>
             <ArrowLeft className='h-4 w-4' />
-            <span>Back to login</span>
+            <span>{t('auth.reset.back')}</span>
           </Link>
         </p>
       </div>
