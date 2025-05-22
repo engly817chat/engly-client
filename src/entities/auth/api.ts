@@ -1,5 +1,4 @@
 import { axiosBase, axiosWithAuth } from '@/shared/api'
-import { TokenTypeEnum } from '@/shared/constants'
 import type { SignalOptions } from '@/shared/types'
 import type {
   AuthResponse,
@@ -31,7 +30,7 @@ export const authApi = {
   ): Promise<AuthResponse> => {
     const response = await axiosBase.post<AuthResponse>(
       endpoints.register,
-      { ...data},
+      { ...data },
       {
         signal,
       },
@@ -44,16 +43,14 @@ export const authApi = {
     data: LoginRequestDto,
     { signal }: SignalOptions,
   ): Promise<AuthResponse> => {
-    const encodedCredentials = btoa(`${data.email}:${data.password}`)
-
     const response = await axiosBase.post<AuthResponse>(
       endpoints.login,
-      {},
+      {
+        email: data.email,
+        password: data.password,
+      },
       {
         signal,
-        headers: {
-          Authorization: `${TokenTypeEnum.Basic} ${encodedCredentials}`,
-        },
       },
     )
 
