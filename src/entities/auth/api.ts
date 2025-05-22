@@ -22,7 +22,7 @@ const endpoints = {
   sendVerification: '/api/email-verify',
   confirmEmail: '/api/email-verify/check',
   getProfile: 'api/profile/check',
-  resetPasswordSend: 'api/password-reset/,send',
+  resetPasswordSend: 'api/password-reset/send',
   resetPasswordConfirm: '/api/password-reset',
 } as const
 
