@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
 import { toast } from 'react-toastify'
 import { authApi, useAuth, type LoginRequestDto } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
@@ -28,7 +29,16 @@ export function useLogin() {
       authApi.login(formData, {
         signal: meta?.signal ?? abortController.signal,
       }),
-    onError: async error => {
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        if (
+          error.response?.status === 401 &&
+          error.response?.data?.message === 'Password or email is not correct'
+        ) {
+          toast.error('Email or password is incorrect')
+          return
+        }
+      }
       toast.error('Something went wrong. Please try again.')
       console.log(error)
     },
