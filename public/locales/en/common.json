@@ -113,9 +113,26 @@
       "genderInvalid": "Please select valid gender",
       "passwordsMustMatch": "Passwords must match!",
       "usernameTaken": "Username is already taken",
-      "emailTaken": "This email is already registered"
+      "emailTaken": "This email is already registered",
+      "emailNotFound": "This email is not registered"
     },
-    "success": "User registered successfully."
+    "success": "User registered successfully.",
+    "reset": {
+      "title": "Password Reset",
+      "subtitle": "Enter your email address and we’ll send you a link to reset your password.",
+      "email": "Email",
+      "placeholder": "Enter your email",
+      "submit": "Send",
+      "successMessage": "A password reset link has been sent to your email.",
+      "back": "Back to login",
+       "newPasswordSubtitle": "Please create a new password to regain access to your account.",
+      "newPasswordLabel": "New password",
+      "newPasswordConfirmLabel": "Confirm password",
+      "newPasswordPlaceholder": "Enter new password",
+      "newPasswordConfirmPlaceholder": "Repeat your password",
+      "newPasswordSubmit": "Set new password",
+      "newPasswordSuccess": "Password has been successfully updated"
+    }
   },
   "continue": "Continue",
   "login": {
