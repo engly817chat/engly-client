@@ -139,3 +139,36 @@ export const ResetPasswordSchema = (t: TFunction) =>
   })
 
 export type ResetPasswordValues = z.infer<ReturnType<typeof ResetPasswordSchema>>
+
+export const SetNewPasswordSchema = (t: TFunction) =>
+  z
+    .object({
+      password: z
+        .string()
+        .min(1, {
+          message: t('auth.validation.required'),
+        })
+        .min(minPasswordLength, {
+          message: t('auth.validation.passwordMin', { min: minPasswordLength }),
+        })
+        .max(maxPasswordLength, {
+          message: t('auth.validation.passwordMax', { max: maxPasswordLength }),
+        })
+        .regex(new RegExp(regex.password), {
+          message: t('auth.validation.passwordRegex'),
+        }),
+      confirm: z
+        .string()
+        .min(1, {
+          message: t('auth.validation.required'),
+        })
+        .max(maxPasswordLength, {
+          message: t('auth.validation.passwordMax', { max: maxPasswordLength }),
+        }),
+    })
+    .refine(values => values.password === values.confirm, {
+      message: t('auth.validation.passwordsMustMatch'),
+      path: ['confirm'],
+    })
+
+export type SetNewPasswordValues = z.infer<ReturnType<typeof SetNewPasswordSchema>>

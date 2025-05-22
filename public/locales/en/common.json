@@ -124,7 +124,14 @@
       "placeholder": "Enter your email",
       "submit": "Send",
       "successMessage": "A password reset link has been sent to your email.",
-      "back": "Back to login"
+      "back": "Back to login",
+       "newPasswordSubtitle": "Please create a new password to regain access to your account.",
+      "newPasswordLabel": "New password",
+      "newPasswordConfirmLabel": "Confirm password",
+      "newPasswordPlaceholder": "Enter new password",
+      "newPasswordConfirmPlaceholder": "Repeat your password",
+      "newPasswordSubmit": "Set new password",
+      "newPasswordSuccess": "Password has been successfully updated"
     }
   },
   "continue": "Continue",

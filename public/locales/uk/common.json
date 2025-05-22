@@ -124,7 +124,14 @@
       "placeholder": "Введіть email",
       "submit": "Надіслати",
       "successMessage": "Посилання для відновлення паролю надіслано на вашу електронну пошту.",
-      "back": "Назад до входу"
+      "back": "Назад до входу",
+      "newPasswordSubtitle": "Будь ласка, створіть новий пароль, щоб відновити доступ до свого акаунта.",
+      "newPasswordLabel": "Новий пароль",
+      "newPasswordConfirmLabel": "Підтвердження пароля",
+      "newPasswordPlaceholder": "Введіть новий пароль",
+      "newPasswordConfirmPlaceholder": "Повторіть пароль",
+      "newPasswordSubmit": "Встановити новий пароль",
+      "newPasswordSuccess": "Пароль успішно змінено"
     }
   },
   "continue": "Продовжити",

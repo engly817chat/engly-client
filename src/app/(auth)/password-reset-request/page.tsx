@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { PasswordResetRequestForm } from '@/features/auth'
 
-import { PasswordResetRequestForm } from '@/features/auth/ui/password-reset-request-form'
 
 export default function PasswordResetRequestPage() {
   const { t } = useTranslation()
