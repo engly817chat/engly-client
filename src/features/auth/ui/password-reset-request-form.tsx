@@ -106,6 +106,10 @@ export function PasswordResetRequestForm() {
                       await form.trigger('email')
                       debouncedCheckEmail(e.target.value)
                     }}
+                    onBlur={async () => {
+                      field.onBlur()
+                      await form.trigger('email')
+                    }}
                   />
                   <div className='absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-2'>
                     {form.formState.errors.email && (
