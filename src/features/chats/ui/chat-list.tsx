@@ -1,5 +1,5 @@
+import { Chat } from '@/entities/chats'
 import Link from 'next/link'
-import { Chat } from '../model/types'
 
 interface ChatListProps {
   chats: Chat[]

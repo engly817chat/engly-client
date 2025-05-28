@@ -14,10 +14,9 @@ import {
   UserRound,
   Users,
 } from 'lucide-react'
-import { Chat } from '@/features/chats/model/types'
 import { ChatList } from '@/features/chats/ui'
 import { useAuth } from '@/entities/auth'
-import { chatsApi } from '@/entities/chats'
+import { Chat, chatsApi } from '@/entities/chats'
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +30,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
-import { Sheet, SheetContent } from './common/sheet'
+import { Sheet, SheetContent } from '../../../shared/ui/common/sheet'
 
 const data = {
   user: {
@@ -366,7 +365,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarFooter>
       </Sidebar>
 
-      <Sidebar collapsible='none' className='md768:flex hidden flex-1'>
+      <Sidebar collapsible='none' className='hidden flex-1 md768:flex'>
         <SidebarHeader className='gap-3.5 border-b p-4'>
           <div className='flex w-full flex-col gap-5'>
             <div className='text-[24px] font-medium text-foreground md:text-4xl'>

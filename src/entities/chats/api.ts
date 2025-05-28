@@ -1,5 +1,5 @@
-import { axiosBase, axiosWithAuth } from '@/shared/api'
-import type { SignalOptions } from '@/shared/types'
+import { axiosWithAuth } from '@/shared/api'
+
 
 const endpoints = {
   getChatsByCategory: '/api/rooms/by-category',
