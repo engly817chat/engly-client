@@ -1,8 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import { ArchiveX, Command, File, Inbox, Send, Trash2 } from 'lucide-react'
-import { Label } from '@/shared/ui/common/label'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import {
+  Bell,
+  CircleAlert,
+  ListFilter,
+  LogOut,
+  MessageSquare,
+  Search,
+  Settings,
+  UserRound,
+  Users,
+} from 'lucide-react'
+import { Chat } from '@/features/chats/model/types'
+import { ChatList } from '@/features/chats/ui'
+import { useAuth } from '@/entities/auth'
+import { chatsApi } from '@/entities/chats'
 import {
   Sidebar,
   SidebarContent,
@@ -16,10 +31,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
-import { Switch } from '@/shared/ui/common/switch'
-import { NavUser } from '@/shared/ui/nav-user'
+import { Sheet, SheetContent } from './common/sheet'
 
-// This is sample data
 const data = {
   user: {
     name: 'shadcn',
@@ -28,33 +41,33 @@ const data = {
   },
   navMain: [
     {
-      title: 'Inbox',
+      title: 'Messages',
       url: '#',
-      icon: Inbox,
+      icon: MessageSquare,
       isActive: true,
     },
     {
-      title: 'Drafts',
+      title: 'Users',
       url: '#',
-      icon: File,
+      icon: Users,
       isActive: false,
     },
     {
-      title: 'Sent',
+      title: 'Bell',
       url: '#',
-      icon: Send,
+      icon: Bell,
       isActive: false,
     },
     {
-      title: 'Junk',
+      title: 'User',
       url: '#',
-      icon: ArchiveX,
+      icon: UserRound,
       isActive: false,
     },
     {
-      title: 'Trash',
+      title: 'Alert',
       url: '#',
-      icon: Trash2,
+      icon: CircleAlert,
       isActive: false,
     },
   ],
@@ -143,11 +156,151 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Note: I'm using state to show active item.
-  // IRL you should use the url/router.
   const [activeItem, setActiveItem] = useState(data.navMain[0])
-  const [mails, setMails] = useState(data.mails)
   const { setOpen } = useSidebar()
+  const { logout } = useAuth()
+  const params = useParams()
+  const [chats, setChats] = useState<Chat[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const slug = params.slug ?? ''
+  const slugValue = Array.isArray(slug) ? slug[0] : (slug ?? '')
+  const { isMobile, openMobile, setOpenMobile } = useSidebar()
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      if (!slugValue) return
+      setIsLoading(true)
+
+      try {
+        const data = await chatsApi.getChatsByCategory(slugValue.toUpperCase())
+        const rooms = data._embedded?.roomsDtoList || []
+        console.log(data)
+        setChats(rooms)
+      } catch (error) {
+        console.error('Error fetching chats:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchChats()
+  }, [slugValue])
+
+  if (isMobile) {
+    return (
+      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+        <SheetContent
+          side='left'
+          className='w-full max-w-[668px] overflow-auto bg-sidebar p-0 text-sidebar-foreground'
+        >
+          <div className='flex h-full w-full flex-row'>
+            <Sidebar
+              collapsible='none'
+              className='!w-[72px] border-r bg-sidebar-primary-foreground'
+            >
+              <SidebarHeader>
+                {/* <SidebarTrigger className='-ml-1' /> */}
+
+                <Link href='/' className='mb-2 mt-4 font-bold'>
+                  <span className='text-[20px]'>Engly</span>
+                </Link>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarGroup>
+                  <SidebarGroupContent className='px-1.5 md:px-0'>
+                    <SidebarMenu>
+                      {data.navMain.map(item => (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton
+                            tooltip={{
+                              children: item.title,
+                              hidden: false,
+                            }}
+                            onClick={() => {
+                              setActiveItem(item)
+                              setOpen(true)
+                            }}
+                            isActive={activeItem.title === item.title}
+                            className='flex items-center justify-center px-2.5 md:px-2'
+                          >
+                            <item.icon
+                              className='!h-[26px] !w-[26px]'
+                              strokeWidth={1.5}
+                            />
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              </SidebarContent>
+              <SidebarFooter>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip={{ children: 'Settings', hidden: false }}
+                      className='flex items-center justify-center px-2.5'
+                    >
+                      <Settings className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip={{ children: 'Logout', hidden: false }}
+                      onClick={logout}
+                      className='flex items-center justify-center px-2.5'
+                    >
+                      <LogOut className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarFooter>
+            </Sidebar>
+
+            <Sidebar collapsible='none' className='flex-1'>
+              <SidebarHeader className='gap-3.5 border-b p-4'>
+                <div className='flex w-full flex-col gap-5'>
+                  <div className='text-[24px] font-medium text-foreground md:text-4xl'>
+                    {activeItem.title}
+                  </div>
+
+                  <div className='flex flex-wrap items-center gap-2'>
+                    {['All', 'Unread', 'Groups', 'Archived'].map(label => (
+                      <button
+                        key={label}
+                        className='rounded-full border border-sidebar-foreground bg-sidebar-accent-foreground px-4 font-medium text-foreground'
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className='flex items-center gap-2'>
+                    <div className='flex-1'>
+                      <SidebarInput placeholder='Search' icon={<Search size={20} />} />
+                    </div>
+                    <button
+                      className='rounded-md border border-sidebar-foreground bg-sidebar-accent-foreground px-5 py-[17px]'
+                      aria-label='Filter'
+                    >
+                      <ListFilter size={16} />
+                    </button>
+                  </div>
+                </div>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarGroup className='px-0 py-0'>
+                  <SidebarGroupContent>
+                    <ChatList chats={chats} isLoading={isLoading} slug={slugValue} />
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              </SidebarContent>
+            </Sidebar>
+          </div>
+        </SheetContent>
+      </Sheet>
+    )
+  }
 
   return (
     <Sidebar
@@ -155,29 +308,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className='overflow-hidden [&>[data-sidebar=sidebar]]:flex-row'
       {...props}
     >
-      {/* This is the first sidebar */}
-      {/* We disable collapsible and adjust width to icon. */}
-      {/* This will make the sidebar appear as icons. */}
       <Sidebar
         collapsible='none'
-        className='!w-[calc(var(--sidebar-width-icon)_+_1px)] border-r'
+        className='!w-[72px] border-r bg-sidebar-primary-foreground'
       >
         <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton size='lg' asChild className='md:h-8 md:p-0'>
-                <a href='#'>
-                  <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-                    <Command className='size-4' />
-                  </div>
-                  <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-semibold'>Acme Inc</span>
-                    <span className='truncate text-xs'>Enterprise</span>
-                  </div>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <Link href='/' className='mb-2 mt-4 font-bold'>
+            <span className='text-[20px]'>Engly</span>
+          </Link>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
@@ -192,20 +330,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       }}
                       onClick={() => {
                         setActiveItem(item)
-                        const mail = data.mails.sort(() => Math.random() - 0.5)
-                        setMails(
-                          mail.slice(
-                            0,
-                            Math.max(5, Math.floor(Math.random() * 10) + 1),
-                          ),
-                        )
                         setOpen(true)
                       }}
                       isActive={activeItem.title === item.title}
-                      className='px-2.5 md:px-2'
+                      className='flex items-center justify-center px-2.5 md:px-2'
                     >
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <item.icon className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -214,44 +344,63 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <NavUser user={data.user} />
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip={{ children: 'Settings', hidden: false }}
+                className='flex items-center justify-center px-2.5'
+              >
+                <Settings className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip={{ children: 'Logout', hidden: false }}
+                onClick={logout}
+                className='flex items-center justify-center px-2.5'
+              >
+                <LogOut className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
 
-      {/* This is the second sidebar */}
-      {/* We disable collapsible and let it fill remaining space */}
-      <Sidebar collapsible='none' className='hidden flex-1 md:flex'>
+      <Sidebar collapsible='none' className='md768:flex hidden flex-1'>
         <SidebarHeader className='gap-3.5 border-b p-4'>
-          <div className='flex w-full items-center justify-between'>
-            <div className='text-base font-medium text-foreground'>
+          <div className='flex w-full flex-col gap-5'>
+            <div className='text-[24px] font-medium text-foreground md:text-4xl'>
               {activeItem.title}
             </div>
-            <Label className='flex items-center gap-2 text-sm'>
-              <span>Unreads</span>
-              <Switch className='shadow-none' />
-            </Label>
+
+            <div className='flex flex-wrap items-center gap-2'>
+              {['All', 'Unread', 'Groups', 'Archived'].map(label => (
+                <button
+                  key={label}
+                  className='rounded-full border border-sidebar-foreground bg-sidebar-accent-foreground px-4 font-medium text-foreground'
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className='flex items-center gap-2'>
+              <div className='flex-1'>
+                <SidebarInput placeholder='Search' icon={<Search size={20} />} />
+              </div>
+              <button
+                className='rounded-md border border-sidebar-foreground bg-sidebar-accent-foreground px-5 py-[17px]'
+                aria-label='Filter'
+              >
+                <ListFilter size={16} />
+              </button>
+            </div>
           </div>
-          <SidebarInput placeholder='Type to search...' />
         </SidebarHeader>
         <SidebarContent>
-          <SidebarGroup className='px-0'>
+          <SidebarGroup className='px-0 py-0'>
             <SidebarGroupContent>
-              {mails.map(mail => (
-                <a
-                  href='#'
-                  key={mail.email}
-                  className='flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-                >
-                  <div className='flex w-full items-center gap-2'>
-                    <span>{mail.name}</span>{' '}
-                    <span className='ml-auto text-xs'>{mail.date}</span>
-                  </div>
-                  <span className='font-medium'>{mail.subject}</span>
-                  <span className='line-clamp-2 w-[260px] whitespace-break-spaces text-xs'>
-                    {mail.teaser}
-                  </span>
-                </a>
-              ))}
+              <ChatList chats={chats} isLoading={isLoading} slug={slugValue} />
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
