@@ -1,10 +1,9 @@
 'use client'
 
 import { ChevronLeft } from 'lucide-react'
-import { ChatSidebar } from '@/features/chats/ui'
 import { AccessGuard } from '@/entities/auth'
-import { Button } from '@/shared/ui/common/button'
 import { SidebarProvider, useSidebar } from '@/shared/ui/common/sidebar'
+import { ChatSidebar } from '@/features/chats'
 
 function SidebarToggleButton() {
   const { setOpenMobile } = useSidebar()
