@@ -7,6 +7,7 @@ export interface Chat {
   }
   createdAt: string
   messages: Message[] | null
+  chatParticipants: []
 }
 
 export interface Message {

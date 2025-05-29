@@ -1,2 +1,2 @@
 export * from './chat-list'
-export * from './app-sidebar'
+export * from './chat-sidebar'
