@@ -1,5 +1,7 @@
-import { Chat } from '@/entities/chats'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { Chat } from '@/entities/chats'
+import { cn } from '@/shared/utils'
 
 interface ChatListProps {
   chats: Chat[]
@@ -8,6 +10,9 @@ interface ChatListProps {
 }
 
 export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
+  const params = useParams()
+  const chatId = Array.isArray(params?.id) ? params.id[0] : params?.id
+
   if (isLoading) {
     return (
       <>
@@ -27,7 +32,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
 
   if (chats.length === 0) {
     return (
-    <div className="px-4 py-8 text-sm text-muted-foreground text-center">
+      <div className='px-4 py-8 text-center text-sm text-muted-foreground'>
         Ще немає жодного чату. Почни новий, щоб розпочати спілкування ✨
       </div>
     )
@@ -41,11 +46,17 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             ? chat.messages[chat.messages.length - 1]
             : null
 
+        const isActive = chat.id === chatId
+
         return (
           <Link
             href={`/chats/${slug}/${chat.id}`}
             key={chat.id}
-            className='flex flex-col items-start gap-2 whitespace-nowrap border-b bg-sidebar-accent-foreground p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+            className={cn(
+              'flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              isActive &&
+                'bg-sidebar-primary font-semibold text-sidebar-primary-foreground',
+            )}
           >
             <div className='flex w-full items-center gap-1'>
               <span className='text-xl font-medium'>{chat.name}</span>
