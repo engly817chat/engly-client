@@ -29,7 +29,8 @@
     }
   },
   "errors": {
-    "unknownError": "Something went wrong. Please try again."
+    "unknownError": "Something went wrong. Please try again.",
+    "credentialsError": "Email or password is incorrect"
   },
   "auth": {
     "registration": "Registration",
@@ -119,6 +120,7 @@
       "emailNotFound": "This email is not registered"
     },
     "success": "User registered successfully.",
+    "loginSuccess": "Logged in successfully",
     "reset": {
       "title": "Password Reset",
       "subtitle": "Enter your email address and we’ll send you a link to reset your password.",
@@ -127,7 +129,7 @@
       "submit": "Send",
       "successMessage": "A password reset link has been sent to your email.",
       "back": "Back to login",
-       "newPasswordSubtitle": "Please create a new password to regain access to your account.",
+      "newPasswordSubtitle": "Please create a new password to regain access to your account.",
       "newPasswordLabel": "New password",
       "newPasswordConfirmLabel": "Confirm password",
       "newPasswordPlaceholder": "Enter new password",

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { authApi, useAuth, type LoginRequestDto } from '@/entities/auth'
 import { useQueryParams } from '@/shared/hooks/useQueryParams'
@@ -21,6 +22,7 @@ export function useLogin() {
   const router = useRouter()
   const { setUser } = useAuth()
   const queryParams = useQueryParams()
+  const { t } = useTranslation()
 
   const redirectPath = queryParams?.get('redirect') || '/'
 
@@ -35,15 +37,15 @@ export function useLogin() {
           error.response?.status === 401 &&
           error.response?.data?.message === 'Password or email is not correct'
         ) {
-          toast.error('Email or password is incorrect')
+          toast.error(t('error.credentialsError'))
           return
         }
       }
-      toast.error('Something went wrong. Please try again.')
+      toast.error(t('errors.unknownError'))
       console.log(error)
     },
     onSuccess: async data => {
-      toast.success('Logged in successfully')
+      toast.success(t('auth.loginSuccess'))
       saveTokenStorage(data.access_token)
 
       try {
