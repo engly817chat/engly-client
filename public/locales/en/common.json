@@ -98,6 +98,8 @@
     "createAccount": "Create account",
     "loading": "Loading...",
     "login": "Login",
+    "logout": "You have been logged out",
+    "logoutError": "Logout failed",
     "validation": {
       "usernameMin": "Username must be at least 2 characters",
       "usernameMax": "Username must be only {{max}} characters",

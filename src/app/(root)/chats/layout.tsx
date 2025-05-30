@@ -1,9 +1,9 @@
 'use client'
 
 import { ChevronLeft } from 'lucide-react'
+import { ChatSidebar } from '@/features/chats'
 import { AccessGuard } from '@/entities/auth'
 import { SidebarProvider, useSidebar } from '@/shared/ui/common/sidebar'
-import { ChatSidebar } from '@/features/chats'
 
 function SidebarToggleButton() {
   const { setOpenMobile } = useSidebar()
@@ -34,7 +34,7 @@ export default function Layout({
         <ChatSidebar />
         <SidebarToggleButton />
         <div
-        className='flex flex-1 min-h-screen w-full bg-cover bg-center bg-no-repeat'
+          className='flex min-h-screen w-full flex-1 bg-cover bg-center bg-no-repeat'
           style={{ backgroundImage: "url('/images/bg-chat.jpg')" }}
         >
           {children}

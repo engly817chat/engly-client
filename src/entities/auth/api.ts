@@ -16,6 +16,7 @@ const endpoints = {
   checkUsername: '/valid/check-username?username=',
   checkEmail: 'valid/check-email?email=',
   refreshToken: '/refresh-token',
+  deleteRefresh: '/api/refresh-token',
   saveGoogleInfo: '/api/addition_info/for-google',
   firstLogin: '/valid/first-login',
   sendVerification: '/api/email-verify',
@@ -88,7 +89,7 @@ export const authApi = {
   },
 
   logout: async (): Promise<void> => {
-    // TODO: Implement logout logic
+    await axiosWithAuth.delete(endpoints.deleteRefresh)
   },
 
   saveGoogleInfo: async (data: GoogleRegisterRequest): Promise<AuthResponse> => {

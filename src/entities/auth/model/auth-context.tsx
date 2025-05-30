@@ -1,6 +1,8 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { authApi, UserProfile } from '@/entities/auth'
 import { getAccessToken, removeFromStorage } from '@/shared/utils'
 
@@ -17,11 +19,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const { t } = useTranslation()
 
-  const logout = () => {
-    setUser(null)
-    removeFromStorage()
-    setIsLoading(false)
+  const logout = async () => {
+    setIsLoading(true)
+    try {
+      await authApi.logout()
+      toast.success(t('auth.logout'))
+    } catch (error) {
+      toast.error(t('auth.logoutError'))
+      console.error('Error during logout:', error)
+    } finally {
+      removeFromStorage()
+      setUser(null)
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -50,7 +62,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isAuthenticated: !!user, logout, isLoading, isEmailVerified: !!user?.emailVerified, }}
+      value={{
+        user,
+        setUser,
+        isAuthenticated: !!user,
+        logout,
+        isLoading,
+        isEmailVerified: !!user?.emailVerified,
+      }}
     >
       {children}
     </AuthContext.Provider>
