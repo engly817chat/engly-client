@@ -1,9 +1,10 @@
 import { axiosWithAuth } from '@/shared/api'
 
-
 const endpoints = {
   getChatsByCategory: '/api/rooms/by-category',
   createChat: '/api/rooms/create',
+  getMessages: (roomId: string) => `/api/message/current-room/${roomId}`,
+  sendMessage: '/api/message/send'
 } as const
 
 export const chatsApi = {
@@ -28,4 +29,30 @@ export const chatsApi = {
     )
     return response.data
   },
+  getMessages: async (
+    roomId: string,
+    options?: {
+      page?: number
+      size?: number
+      sort?: string[]
+    },
+  ) => {
+    const response = await axiosWithAuth.get(endpoints.getMessages(roomId), {
+      params: {
+        ...options,
+      },
+    })
+    return response.data
+  },
+  sendMessage: async (roomId: string, content: string) => {
+    const response = await axiosWithAuth.post(
+      endpoints.sendMessage,
+      {
+        roomId,
+        content
+      }
+    )
+
+    return response.data
+  }
 } as const

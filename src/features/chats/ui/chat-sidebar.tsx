@@ -28,6 +28,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
 import { Sheet, SheetContent } from '../../../shared/ui/common/sheet'
@@ -77,6 +78,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
   const slug = params.slug ?? ''
   const slugValue = Array.isArray(slug) ? slug[0] : (slug ?? '')
   const { isMobile, openMobile, setOpenMobile } = useSidebar()
+  
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -86,7 +88,6 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
       try {
         const data = await chatsApi.getChatsByCategory(slugValue.toUpperCase())
         const rooms = data._embedded?.roomsDtoList || []
-        console.log(data)
         setChats(rooms)
       } catch (error) {
         console.error('Error fetching chats:', error)

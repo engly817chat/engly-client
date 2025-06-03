@@ -3,7 +3,7 @@
 import { ChevronLeft } from 'lucide-react'
 import { ChatSidebar } from '@/features/chats'
 import { AccessGuard } from '@/entities/auth'
-import { SidebarProvider, useSidebar } from '@/shared/ui/common/sidebar'
+import { SidebarProvider, SidebarTrigger, useSidebar } from '@/shared/ui/common/sidebar'
 
 function SidebarToggleButton() {
   const { setOpenMobile } = useSidebar()

@@ -46,6 +46,8 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             ? chat.messages[chat.messages.length - 1]
             : null
 
+        console.log(chat)
+
         const isActive = chat.id === chatId
 
         return (
@@ -53,18 +55,17 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             href={`/chats/${slug}/${chat.id}`}
             key={chat.id}
             className={cn(
-              'flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-              isActive &&
-                'bg-sidebar-primary font-semibold text-sidebar-primary-foreground',
+              'flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border p-4 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              isActive && 'border-none bg-sidebar-primary text-sidebar-primary-foreground',
             )}
           >
             <div className='flex w-full items-center gap-1'>
               <span className='text-xl font-medium'>{chat.name}</span>
-              <span className='ml-auto text-xs'>
-                {new Date(chat.createdAt).toLocaleDateString('uk-UA', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
+              <span className={cn('ml-auto text-xs')}>
+                {new Date(chat.updatedAt).toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
                 })}
               </span>
             </div>
