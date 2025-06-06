@@ -177,5 +177,36 @@
     "title": "Almost there!",
     "description": "Please fill in the additional information to complete your registration.",
     "completeRegister": "Complete registration"
+  },
+  "chatCategoryPage": {
+    "title": "Welcome to the {{category}} chat",
+    "description": "Select a chat from the list and join the conversation. Here you can continue the discussion with already familiar interlocutors or start a new topic to communicate with other platform participants."
+  },
+  "chatList": {
+    "noChats": "No chats yet. Start a new one to begin the conversation ✨",
+    "noMessages": "No messages yet"
+  },
+  "chatPage": {
+    "chatNotFound": "Chat not found",
+    "members": "{{count}} members",
+    "newChatFull": "+ New chat",
+    "inputPlaceholder": "Write a message...",
+    "send": "Send"
+  },
+  "sidebar": {
+    "messages": "Messages",
+    "users": "Users",
+    "bell": "Notifications",
+    "user": "Profile",
+    "alert": "Alerts",
+    "logout": "Logout",
+    "settings": "Settings",
+    "search": "Search",
+    "filters": {
+      "all": "All",
+      "unread": "Unread",
+      "groups": "Groups",
+      "archived": "Archived"
+    }
   }
 }

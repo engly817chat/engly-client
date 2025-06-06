@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 import { Chat } from '@/entities/chats'
 import { cn } from '@/shared/utils'
 
@@ -11,6 +12,7 @@ interface ChatListProps {
 
 export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
   const params = useParams()
+  const { t } = useTranslation()
   const chatId = Array.isArray(params?.id) ? params.id[0] : params?.id
 
   if (isLoading) {
@@ -33,7 +35,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
   if (chats.length === 0) {
     return (
       <div className='px-4 py-8 text-center text-sm text-muted-foreground'>
-        Ще немає жодного чату. Почни новий, щоб розпочати спілкування ✨
+        {t('chatList.noChats')}
       </div>
     )
   }
@@ -46,8 +48,6 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             ? chat.messages[chat.messages.length - 1]
             : null
 
-        console.log(chat)
-
         const isActive = chat.id === chatId
 
         return (
@@ -56,7 +56,8 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             key={chat.id}
             className={cn(
               'flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border p-4 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-              isActive && 'border-none bg-sidebar-primary text-sidebar-primary-foreground',
+              isActive &&
+                'border-none bg-sidebar-primary text-sidebar-primary-foreground',
             )}
           >
             <div className='flex w-full items-center gap-1'>
@@ -71,7 +72,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             </div>
 
             <span className='text-xs'>
-              {lastMessage ? lastMessage.content : 'No messages yet'}
+              {lastMessage ? lastMessage.content : t('chatList.noMessages')}
             </span>
           </Link>
         )

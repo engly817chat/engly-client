@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import {
@@ -14,6 +14,7 @@ import {
   UserRound,
   Users,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { ChatList } from '@/features/chats/ui'
 import { useAuth } from '@/entities/auth'
 import { Chat, chatsApi } from '@/entities/chats'
@@ -28,48 +29,49 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
 import { Sheet, SheetContent } from '../../../shared/ui/common/sheet'
 
-const data = {
-  navMain: [
-    {
-      title: 'Messages',
-      url: '#',
-      icon: MessageSquare,
-      isActive: true,
-    },
-    {
-      title: 'Users',
-      url: '#',
-      icon: Users,
-      isActive: false,
-    },
-    {
-      title: 'Bell',
-      url: '#',
-      icon: Bell,
-      isActive: false,
-    },
-    {
-      title: 'User',
-      url: '#',
-      icon: UserRound,
-      isActive: false,
-    },
-    {
-      title: 'Alert',
-      url: '#',
-      icon: CircleAlert,
-      isActive: false,
-    },
-  ],
-}
-
 export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [activeItem, setActiveItem] = useState(data.navMain[0])
+  const { t } = useTranslation()
+
+  const navMain = useMemo(
+    () => [
+      {
+        title: t('sidebar.messages'),
+        url: '#',
+        icon: MessageSquare,
+        isActive: false,
+      },
+      {
+        title: t('sidebar.users'),
+        url: '#',
+        icon: Users,
+        isActive: false,
+      },
+      {
+        title: t('sidebar.bell'),
+        url: '#',
+        icon: Bell,
+        isActive: false,
+      },
+      {
+        title: t('sidebar.user'),
+        url: '#',
+        icon: UserRound,
+        isActive: false,
+      },
+      {
+        title: t('sidebar.alert'),
+        url: '#',
+        icon: CircleAlert,
+        isActive: false,
+      },
+    ],
+    [t],
+  )
+  const [activeItem, setActiveItem] = useState(navMain[0])
   const { setOpen } = useSidebar()
   const { logout } = useAuth()
   const params = useParams()
@@ -78,7 +80,6 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
   const slug = params.slug ?? ''
   const slugValue = Array.isArray(slug) ? slug[0] : (slug ?? '')
   const { isMobile, openMobile, setOpenMobile } = useSidebar()
-  
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -112,8 +113,6 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
               className='!w-[72px] border-r bg-sidebar-primary-foreground'
             >
               <SidebarHeader>
-                {/* <SidebarTrigger className='-ml-1' /> */}
-
                 <Link href='/' className='mb-2 mt-4 font-bold'>
                   <span className='text-[20px]'>Engly</span>
                 </Link>
@@ -122,7 +121,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 <SidebarGroup>
                   <SidebarGroupContent className='px-1.5 md:px-0'>
                     <SidebarMenu>
-                      {data.navMain.map(item => (
+                      {navMain.map(item => (
                         <SidebarMenuItem key={item.title}>
                           <SidebarMenuButton
                             tooltip={{
@@ -151,7 +150,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton
-                      tooltip={{ children: 'Settings', hidden: false }}
+                      tooltip={{ children: t('sidebar.settings'), hidden: false }}
                       className='flex items-center justify-center px-2.5'
                     >
                       <Settings className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
@@ -159,7 +158,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton
-                      tooltip={{ children: 'Logout', hidden: false }}
+                      tooltip={{ children: t('sidebar.logout'), hidden: false }}
                       onClick={logout}
                       className='flex items-center justify-center px-2.5'
                     >
@@ -183,14 +182,17 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                         key={label}
                         className='rounded-full border border-sidebar-foreground bg-sidebar-accent-foreground px-4 font-medium text-foreground'
                       >
-                        {label}
+                        {t(`sidebar.filters.${label.toLowerCase()}`)}
                       </button>
                     ))}
                   </div>
 
                   <div className='flex items-center gap-2'>
                     <div className='flex-1'>
-                      <SidebarInput placeholder='Search' icon={<Search size={20} />} />
+                      <SidebarInput
+                        placeholder={t('sidebar.search')}
+                        icon={<Search size={20} />}
+                      />
                     </div>
                     <button
                       className='rounded-md border border-sidebar-foreground bg-sidebar-accent-foreground px-5 py-[17px]'
@@ -234,7 +236,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
           <SidebarGroup>
             <SidebarGroupContent className='px-1.5 md:px-0'>
               <SidebarMenu>
-                {data.navMain.map(item => (
+                {navMain.map(item => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       tooltip={{
@@ -260,7 +262,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip={{ children: 'Settings', hidden: false }}
+                tooltip={{ children: t('sidebar.settings'), hidden: false }}
                 className='flex items-center justify-center px-2.5'
               >
                 <Settings className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
@@ -268,7 +270,7 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip={{ children: 'Logout', hidden: false }}
+                tooltip={{ children: t('sidebar.logout'), hidden: false }}
                 onClick={logout}
                 className='flex items-center justify-center px-2.5'
               >
@@ -292,14 +294,17 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                   key={label}
                   className='rounded-full border border-sidebar-foreground bg-sidebar-accent-foreground px-4 font-medium text-foreground'
                 >
-                  {label}
+                  {t(`sidebar.filters.${label.toLowerCase()}`)}
                 </button>
               ))}
             </div>
 
             <div className='flex items-center gap-2'>
               <div className='flex-1'>
-                <SidebarInput placeholder='Search' icon={<Search size={20} />} />
+                <SidebarInput
+                  placeholder={t('sidebar.search')}
+                  icon={<Search size={20} />}
+                />
               </div>
               <button
                 className='rounded-md border border-sidebar-foreground bg-sidebar-accent-foreground px-5 py-[17px]'
