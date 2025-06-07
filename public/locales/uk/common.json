@@ -191,7 +191,13 @@
     "members": "{{count}} учасників",
     "newChatFull": "+ Новий чат",
     "inputPlaceholder": "Напиши повідомлення...",
-    "send": "Надіслати"
+    "send": "Надіслати",
+    "createChat": "Створити чат",
+    "headerPlaceholder": "Введіть назву чату",
+    "descriptionPlaceholder": "Опис чату",
+    "create": "Створити",
+    "chatCreatedError": "Не вдалося створити чат",
+    "chatCreatedSuccess": "Чат успішно створено"
   },
   "sidebar": {
     "messages": "Повідомлення",

@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
 import {
   Bell,
   CircleAlert,
@@ -32,6 +33,11 @@ import {
   useSidebar,
 } from '@/shared/ui/common/sidebar'
 import { Sheet, SheetContent } from '../../../shared/ui/common/sheet'
+
+const fetchChats = async (category: string) => {
+  const data = await chatsApi.getChatsByCategory(category)
+  return data._embedded?.roomsDtoList || []
+}
 
 export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation()
@@ -75,30 +81,15 @@ export function ChatSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
   const { setOpen } = useSidebar()
   const { logout } = useAuth()
   const params = useParams()
-  const [chats, setChats] = useState<Chat[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const slug = params.slug ?? ''
   const slugValue = Array.isArray(slug) ? slug[0] : (slug ?? '')
   const { isMobile, openMobile, setOpenMobile } = useSidebar()
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      if (!slugValue) return
-      setIsLoading(true)
-
-      try {
-        const data = await chatsApi.getChatsByCategory(slugValue.toUpperCase())
-        const rooms = data._embedded?.roomsDtoList || []
-        setChats(rooms)
-      } catch (error) {
-        console.error('Error fetching chats:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchChats()
-  }, [slugValue])
+  const { data: chats = [], isLoading } = useQuery({
+    queryKey: ['chats', slugValue],
+    queryFn: () => fetchChats(slugValue.toUpperCase()),
+    enabled: !!slugValue,
+  })
 
   if (isMobile) {
     return (

@@ -191,7 +191,13 @@
     "members": "{{count}} members",
     "newChatFull": "+ New chat",
     "inputPlaceholder": "Write a message...",
-    "send": "Send"
+    "send": "Send",
+    "createChat": "Create a chat",
+    "headerPlaceholder": "Enter a header name",
+    "descriptionPlaceholder": "Some description",
+    "create": "Create",
+    "chatCreatedError": "Failed to create chat",
+    "chatCreatedSuccess": "Chat has been created successfully"
   },
   "sidebar": {
     "messages": "Messages",
