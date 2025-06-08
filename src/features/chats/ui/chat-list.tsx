@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 import { Chat } from '@/entities/chats'
 import { cn } from '@/shared/utils'
 
@@ -11,6 +12,7 @@ interface ChatListProps {
 
 export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
   const params = useParams()
+  const { t } = useTranslation()
   const chatId = Array.isArray(params?.id) ? params.id[0] : params?.id
 
   if (isLoading) {
@@ -33,7 +35,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
   if (chats.length === 0) {
     return (
       <div className='px-4 py-8 text-center text-sm text-muted-foreground'>
-        Ще немає жодного чату. Почни новий, щоб розпочати спілкування ✨
+        {t('chatList.noChats')}
       </div>
     )
   }
@@ -53,24 +55,24 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             href={`/chats/${slug}/${chat.id}`}
             key={chat.id}
             className={cn(
-              'flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              'flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border p-4 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:border-none',
               isActive &&
-                'bg-sidebar-primary font-semibold text-sidebar-primary-foreground',
+                'border-none bg-sidebar-primary text-sidebar-primary-foreground',
             )}
           >
             <div className='flex w-full items-center gap-1'>
               <span className='text-xl font-medium'>{chat.name}</span>
-              <span className='ml-auto text-xs'>
-                {new Date(chat.createdAt).toLocaleDateString('uk-UA', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
+              <span className={cn('ml-auto text-xs')}>
+                {new Date(chat.updatedAt).toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
                 })}
               </span>
             </div>
 
             <span className='text-xs'>
-              {lastMessage ? lastMessage.content : 'No messages yet'}
+              {lastMessage ? lastMessage.content : t('chatList.noMessages')}
             </span>
           </Link>
         )
