@@ -4,12 +4,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { MoreVertical, Paperclip, Search, Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useChatSocket } from '@/features/chats/hooks/use-chat-socket'
-import { CreateChatModal } from '@/features/chats/ui/create-chat-modal'
-import { MessagesList } from '@/features/chats/ui/messages-list'
 import { useAuth } from '@/entities/auth'
 import { Chat, chatsApi, Message } from '@/entities/chats'
 import { Button } from '@/shared/ui/common/button'
+import { useChatSocket } from '@/features/chats'
+import { CreateChatModal, MessagesList } from '@/features/chats'
 
 export default function ChatPage() {
   const params = useParams()
@@ -85,14 +84,14 @@ export default function ChatPage() {
         <div className='ml-4 flex flex-col gap-y-1'>
           <div className='text-sm font-medium text-foreground md:text-xl'>
             {isLoading ? (
-              <div className='h-5 w-40 animate-pulse rounded bg-gray-200'></div>
+              <div className='h-6 w-40 animate-pulse rounded bg-gray-200'></div>
             ) : (
               chat?.name || t('chatPage.chatNotFound')
             )}
           </div>
           <div className='text-xs text-muted'>
             {isLoading ? (
-              <div className='h-4 w-16 animate-pulse rounded bg-gray-200'></div>
+              <div className='h-5 w-16 animate-pulse rounded bg-gray-200'></div>
             ) : (
               t('chatPage.members', { count: chat?.chatParticipants.length })
             )}

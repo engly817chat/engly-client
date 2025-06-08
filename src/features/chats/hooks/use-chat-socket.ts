@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Client, IMessage } from '@stomp/stompjs'
+import { Client, IMessage, StompSubscription } from '@stomp/stompjs'
 import { Message } from '@/entities/chats'
 
 type OutgoingMessage = {
@@ -9,7 +9,7 @@ type OutgoingMessage = {
 
 export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void) => {
   const clientRef = useRef<Client | null>(null)
-  const subscriptionRef = useRef<any>(null)
+  const subscriptionRef = useRef<StompSubscription | null>(null)
 
   useEffect(() => {
     const client = new Client({
@@ -44,7 +44,7 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
                 console.error('[STOMP] Failed to parse message body:', error)
               }
             }
-          }
+          },
         )
       }
     }

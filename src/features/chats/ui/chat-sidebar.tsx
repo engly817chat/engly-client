@@ -16,9 +16,9 @@ import {
   Users,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { ChatList } from '@/features/chats/ui'
+import { ChatList } from '@/features/chats'
 import { useAuth } from '@/entities/auth'
-import { Chat, chatsApi } from '@/entities/chats'
+import { chatsApi } from '@/entities/chats'
 import {
   Sidebar,
   SidebarContent,

@@ -55,7 +55,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             href={`/chats/${slug}/${chat.id}`}
             key={chat.id}
             className={cn(
-              'flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border p-4 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              'flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border p-4 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:border-none',
               isActive &&
                 'border-none bg-sidebar-primary text-sidebar-primary-foreground',
             )}

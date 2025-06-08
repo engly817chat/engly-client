@@ -61,7 +61,7 @@ export function CreateChatModal({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-      <div className='relative w-full max-w-md rounded-lg bg-white px-9 py-6 shadow-lg'>
+      <div className='relative w-full max-w-lg rounded-lg bg-white px-12 py-9 shadow-lg'>
         <button
           onClick={onClose}
           className='absolute right-4 top-4 text-gray-500 transition hover:text-gray-800'
@@ -82,7 +82,11 @@ export function CreateChatModal({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder={t('chatPage.headerPlaceholder')} {...field} />
+                    <Input
+                      placeholder={t('chatPage.headerPlaceholder')}
+                      {...field}
+                      className='rounded-md border border-black bg-input p-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:border-0'
+                    />
                   </FormControl>
                   <FormMessage className='text-sm text-red-500' />
                 </FormItem>
@@ -98,7 +102,7 @@ export function CreateChatModal({
                     <textarea
                       {...field}
                       placeholder={t('chatPage.descriptionPlaceholder')}
-                      className='w-full resize-none rounded-md border border-input bg-background p-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring'
+                      className='w-full resize-none rounded-md border border-black bg-input p-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground'
                       rows={4}
                     />
                   </FormControl>
@@ -108,7 +112,7 @@ export function CreateChatModal({
             />
 
             <div className='flex justify-center pt-2'>
-              <Button type='submit'>{t('chatPage.create')}</Button>
+              <Button type='submit' className='px-14 py-3.5'>{t('chatPage.create')}</Button>
             </div>
           </form>
         </Form>
