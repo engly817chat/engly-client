@@ -9,7 +9,12 @@ export default function ChatCategoryPage() {
   const slug = params?.slug
 
   const formattedSlug =
-    typeof slug === 'string' ? slug.replace(/_+/g, ' ').replace(/chat/gi, '').trim() : ''
+    typeof slug === 'string'
+      ? slug
+          .replace(/_+/g, ' ')
+          .trim()
+          .replace(/\b\w/g, char => char.toUpperCase())
+      : ''
 
   return (
     <div className='flex w-full items-center justify-center'>

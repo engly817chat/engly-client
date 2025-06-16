@@ -180,7 +180,7 @@
     "completeRegister": "Complete registration"
   },
   "chatCategoryPage": {
-    "title": "Welcome to the {{category}} chat",
+    "title": "Welcome to the {{category}} Chat",
     "description": "Select a chat from the list and join the conversation. Here you can continue the discussion with already familiar interlocutors or start a new topic to communicate with other platform participants."
   },
   "chatList": {
