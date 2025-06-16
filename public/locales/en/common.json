@@ -121,6 +121,7 @@
     },
     "success": "User registered successfully.",
     "loginSuccess": "Logged in successfully",
+    "alreadyRegistered": "This email is already registered. Check your email for confirmation",
     "reset": {
       "title": "Password Reset",
       "subtitle": "Enter your email address and we’ll send you a link to reset your password.",

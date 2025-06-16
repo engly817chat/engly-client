@@ -38,14 +38,20 @@ export function RegisterForm() {
     },
   })
 
-  const { mutate, isPending } = useRegister({ setIsModalOpen })
+  const { mutate, isPending, isSuccess } = useRegister({ setIsModalOpen })
 
   const onContinue = async () => {
     const isValid = await form.trigger(['username', 'email', 'password', 'confirm'])
 
     if (!validatePasswords(form, t)) return
 
-    await checkFieldAvailability('username', form.getValues('username'), form, t, () => {})
+    await checkFieldAvailability(
+      'username',
+      form.getValues('username'),
+      form,
+      t,
+      () => {},
+    )
     await checkFieldAvailability('email', form.getValues('email'), form, t, () => {})
 
     const hasErrors = Object.keys(form.formState.errors).length > 0
@@ -66,11 +72,11 @@ export function RegisterForm() {
         variant='link'
         onClick={() => setStep(RegisterStepEnum.Credentials)}
         className={cn(
-          'absolute left-2 top-2 text-foreground md:left-4 md:top-2 p-2',
+          'absolute left-2 top-2 p-2 text-foreground md:left-4 md:top-2',
           step === RegisterStepEnum.Credentials && 'hidden',
         )}
       >
-        <ArrowLeftIcon style={{ width: '20px', height: '20px' }}/>
+        <ArrowLeftIcon style={{ width: '20px', height: '20px' }} />
       </Button>
 
       <StepBar step={step} className='mb-5 md:mb-10 xl:mb-5' />
@@ -85,7 +91,9 @@ export function RegisterForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {step === RegisterStepEnum.Credentials && <StepCredentials form={form} />}
 
-          {step === RegisterStepEnum.Profile && <StepProfile<RegisterFormValues> form={form} />}
+          {step === RegisterStepEnum.Profile && (
+            <StepProfile<RegisterFormValues> form={form} />
+          )}
 
           <div className='pt-4'>
             {step === RegisterStepEnum.Credentials && (
@@ -94,7 +102,11 @@ export function RegisterForm() {
               </Button>
             )}
             {step === RegisterStepEnum.Profile && (
-              <Button type='submit' className={cn('w-full')}>
+              <Button
+                type='submit'
+                className={cn('w-full')}
+                disabled={isPending || isSuccess}
+              >
                 {isPending ? t('auth.creating') : t('auth.createAccount')}
               </Button>
             )}

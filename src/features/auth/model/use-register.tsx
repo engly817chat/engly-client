@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { authApi, type RegisterRequestDto } from '@/entities/auth'
@@ -28,8 +29,13 @@ export function useRegister({
         signal: meta?.signal ?? abortController.signal,
       }),
     onError: async error => {
-      toast.error(t('errors.unknownError'))
-      console.log(error)
+      const axiosError = error as AxiosError
+
+      if (axiosError?.response?.status === 400) {
+        toast.error(t('auth.alreadyRegistered'))
+      } else {
+        toast.error(t('errors.unknownError'))
+      }
     },
     onSuccess: async data => {
       toast.success(t('auth.success'))
@@ -38,7 +44,6 @@ export function useRegister({
       try {
         await authApi.sendVerificationEmail()
         setIsModalOpen(true)
-
       } catch (notifyError) {
         console.error('Error sending email:', notifyError)
       }
@@ -52,6 +57,7 @@ export function useRegister({
     data: registerMutation.data,
     error: registerMutation.error,
     isPending: registerMutation.isPending,
+    isSuccess: registerMutation.isSuccess,
     mutate: registerMutation.mutate,
   }
 }
