@@ -15,8 +15,8 @@ import { Input } from '@/shared/ui/common/input'
 import { CircleAlertIcon } from '@/shared/ui/icons'
 import { cn } from '@/shared/utils'
 import { validatePasswords, type RegisterFormValues } from '../lib'
-import { credentialStepData } from '../model'
 import { checkFieldAvailability } from '../lib/checkFieldAvailability'
+import { credentialStepData } from '../model'
 
 interface StepCredentialsProps {
   form: UseFormReturn<RegisterFormValues>
@@ -48,11 +48,13 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
           name={i.name}
           render={({ field }) => (
             <FormItem className='space-y-1 md:space-y-1.5'>
-              <FormLabel className='form-label required' htmlFor={i.name}>{t(i.label)}</FormLabel>
+              <FormLabel className='form-label required' htmlFor={i.name}>
+                {t(i.label)}
+              </FormLabel>
               <FormControl>
                 <div className='relative'>
                   <Input
-                   id={i.name}
+                    id={i.name}
                     className={cn(
                       'form-input',
                       form.formState.errors[i.name]
@@ -67,6 +69,7 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                         : i.type
                     }
                     placeholder={t(i.placeholder)}
+                    autoComplete={i.type === 'password' ? 'new-password' : undefined}
                     {...field}
                     onChange={async e => {
                       field.onChange(e)
@@ -76,7 +79,13 @@ export const StepCredentials = ({ form }: StepCredentialsProps) => {
                     onBlur={async () => {
                       field.onBlur()
                       if (i.name === 'username' || i.name === 'email') {
-                        await checkFieldAvailability(i.name, field.value, form, t, setCheckedState)
+                        await checkFieldAvailability(
+                          i.name,
+                          field.value,
+                          form,
+                          t,
+                          setCheckedState,
+                        )
                       }
                       if (i.name === 'confirm') {
                         const isValid = validatePasswords(form, t)
