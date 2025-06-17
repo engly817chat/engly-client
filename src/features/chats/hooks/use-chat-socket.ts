@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs'
 import { Message } from '@/entities/chats'
+import { getAccessToken } from '@/shared/utils'
 
 type OutgoingMessage = {
   roomId: string
@@ -10,6 +11,7 @@ type OutgoingMessage = {
 export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void) => {
   const clientRef = useRef<Client | null>(null)
   const subscriptionRef = useRef<StompSubscription | null>(null)
+  const token = getAccessToken()
 
   useEffect(() => {
     const client = new Client({
@@ -18,6 +20,9 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
       debug: str => console.log('[STOMP]', str),
       heartbeatIncoming: 10000,
       heartbeatOutgoing: 10000,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`
+      }
     })
 
     client.onConnect = () => {
