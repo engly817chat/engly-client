@@ -55,14 +55,19 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
             href={`/chats/${slug}/${chat.id}`}
             key={chat.id}
             className={cn(
-              'flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border p-4 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:border-none',
+              'group flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border bg-sidebar-primary-foreground p-4 text-sm font-medium hover:border-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
               isActive &&
                 'border-none bg-sidebar-primary text-sidebar-primary-foreground',
             )}
           >
             <div className='flex w-full items-center gap-1'>
               <span className='text-xl font-medium'>{chat.name}</span>
-              <span className={cn('ml-auto text-xs')}>
+              <span
+                className={cn(
+                  'ml-auto text-xs text-[rgba(0,0,0,0.5)] group-hover:text-sidebar-accent-foreground',
+                  isActive && 'text-sidebar-accent-foreground',
+                )}
+              >
                 {new Date(chat.updatedAt).toLocaleTimeString('en-US', {
                   hour: 'numeric',
                   minute: '2-digit',
@@ -71,7 +76,13 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
               </span>
             </div>
 
-            <span className='text-xs'>
+            <span
+              className={cn(
+                'text-xs font-medium text-[rgba(0,0,0,0.5)]',
+                'group-hover:text-sidebar-accent-foreground',
+                isActive && 'text-sidebar-accent-foreground',
+              )}
+            >
               {lastMessage ? lastMessage.content : t('chatList.noMessages')}
             </span>
           </Link>
