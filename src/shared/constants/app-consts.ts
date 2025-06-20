@@ -1,5 +1,5 @@
 export const AppConfig = {
-  apiUrl: 'https://equal-aardvark-java-service-74283cac.koyeb.app',
+  apiUrl: 'https://engly-server-practika-5d017e7c.koyeb.app',
   isClient: typeof window !== 'undefined',
 } as const
 

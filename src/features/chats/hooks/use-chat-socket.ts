@@ -15,7 +15,7 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
 
   useEffect(() => {
     const client = new Client({
-      brokerURL: 'wss://equal-aardvark-java-service-74283cac.koyeb.app/chat',
+      brokerURL: 'wss://engly-server-practika-5d017e7c.koyeb.app/chat',
       reconnectDelay: 8000,
       debug: str => console.log('[STOMP]', str),
       heartbeatIncoming: 10000,
