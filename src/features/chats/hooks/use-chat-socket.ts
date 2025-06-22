@@ -21,8 +21,8 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
       heartbeatIncoming: 10000,
       heartbeatOutgoing: 10000,
       connectHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
 
     client.onConnect = () => {
@@ -41,10 +41,34 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
             console.log('[STOMP] Received message:', message.body)
             if (message.body) {
               try {
-                const msgData: Message = JSON.parse(message.body)
-                console.log('[STOMP] Parsed message:', msgData)
+                const parsed = JSON.parse(message.body)
 
-                onMessage(msgData)
+                if (parsed?.type === 'MESSAGE_SEND' && parsed.payload) {
+                  const payload = parsed.payload
+
+                  const msgData: Message = {
+                    id: payload.id,
+                    content: payload.content,
+                    createdAt: payload.createdAt,
+                    updatedAt: payload.updatedAt,
+                    isEdited: payload.isEdited,
+                    isDeleted: payload.isDeleted,
+                    room: payload.room
+                      ? {
+                          id: payload.room.id,
+                          name: payload.room.name,
+                        }
+                      : undefined,
+                    user: {
+                      id: payload.user.id,
+                      username: payload.user.username,
+                      email: payload.user.email,
+                    },
+                  }
+
+                  console.log('[STOMP] Normalized message:', msgData)
+                  onMessage(msgData)
+                }
               } catch (error) {
                 console.error('[STOMP] Failed to parse message body:', error)
               }
