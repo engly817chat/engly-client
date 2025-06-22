@@ -1,5 +1,6 @@
-import { Message } from '@/entities/chats'
+import { useEffect, useRef } from 'react'
 import { Check, CheckCheck } from 'lucide-react'
+import { Message } from '@/entities/chats'
 
 interface MessagesListProps {
   messages: Message[]
@@ -7,8 +8,14 @@ interface MessagesListProps {
 }
 
 export const MessagesList = ({ messages, currentUserId }: MessagesListProps) => {
+  const bottomRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
   return (
-    <div className='flex-1 overflow-y-auto py-8 md:px-12 px-6'>
+    <div className='flex-1 overflow-y-auto px-6 py-8 md:px-12'>
       {messages.map(msg => {
         const isOwn = msg.user.id === currentUserId
         return (
@@ -19,7 +26,9 @@ export const MessagesList = ({ messages, currentUserId }: MessagesListProps) => 
             <div className='max-w-xs sm:max-w-md'>
               <div
                 className={`rounded-lg px-3 py-2 ${
-                  isOwn ? 'bg-primary text-primary-foreground' : 'bg-white text-secodary-foreground'
+                  isOwn
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-secodary-foreground bg-white'
                 }`}
               >
                 {!isOwn && (
@@ -54,6 +63,7 @@ export const MessagesList = ({ messages, currentUserId }: MessagesListProps) => 
           </div>
         )
       })}
+      <div ref={bottomRef} />
     </div>
   )
 }
