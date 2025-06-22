@@ -34,7 +34,7 @@ export default function Layout({
         <ChatSidebar />
         <SidebarToggleButton />
         <div
-          className='flex min-h-screen w-full flex-1 bg-cover bg-center bg-no-repeat'
+          className='flex min-h-screen w-full flex-1 bg-cover bg-center bg-no-repeat bg-fixed'
           style={{ backgroundImage: "url('/images/bg-chat.jpg')" }}
         >
           {children}

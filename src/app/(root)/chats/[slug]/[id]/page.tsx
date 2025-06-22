@@ -1,14 +1,14 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { MoreVertical, Paperclip, Search, Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { CreateChatModal, MessagesList, useChatSocket } from '@/features/chats'
 import { useAuth } from '@/entities/auth'
 import { Chat, chatsApi, Message } from '@/entities/chats'
 import { Button } from '@/shared/ui/common/button'
-import { useChatSocket } from '@/features/chats'
-import { CreateChatModal, MessagesList } from '@/features/chats'
 
 export default function ChatPage() {
   const params = useParams()
@@ -20,16 +20,19 @@ export default function ChatPage() {
   const { user } = useAuth()
   const userId = user?.id
 
-  const [chat, setChat] = useState<Chat | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  const [messages, setMessages] = useState<Message[]>([])
+  const queryClient = useQueryClient()
 
   const [input, setInput] = useState('')
 
-  const handleNewMessage = useCallback((message: Message) => {
-    setMessages(prev => [...prev, message])
-  }, [])
+  const handleNewMessage = useCallback(
+    (message: Message) => {
+      queryClient.setQueryData<Message[]>(['messages', chatId], prev => [
+        ...(prev || []),
+        message,
+      ])
+    },
+    [chatId, queryClient],
+  )
 
   const { sendMessage } = useChatSocket(chatId, handleNewMessage)
 
@@ -44,39 +47,26 @@ export default function ChatPage() {
     }
   }
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const data = await chatsApi.getMessages(chatId)
-        const messages = data._embedded?.messagesDtoList || []
-        setMessages(messages)
-      } catch (error) {
-        console.error('Error fetching messages:', error)
-      }
-    }
+  const {
+    data: messages = [],
+  } = useQuery({
+    queryKey: ['messages', chatId],
+    queryFn: async () => {
+      const data = await chatsApi.getMessages(chatId)
+      return data._embedded?.messagesDtoList || []
+    },
+    enabled: !!chatId,
+  })
 
-    if (chatId) {
-      fetchMessages()
-    }
-  }, [chatId])
+  const { data: chats, isLoading } = useQuery({
+    queryKey: ['chats', categorySlug.toUpperCase()],
+    queryFn: () => chatsApi.getChatsByCategory(categorySlug.toUpperCase()),
+    enabled: !!categorySlug,
+  })
 
-  useEffect(() => {
-    const fetchChat = async () => {
-      try {
-        const chats = await chatsApi.getChatsByCategory(categorySlug.toUpperCase())
-        const matched = chats._embedded?.roomsDtoList.find((c: Chat) => c.id === chatId)
-        setChat(matched || null)
-      } catch (error) {
-        console.error('Error fetching chat:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (categorySlug && chatId) {
-      fetchChat()
-    }
-  }, [categorySlug, chatId])
+  const chat = useMemo(() => {
+    return chats?._embedded?.roomsDtoList.find((c: Chat) => c.id === chatId) || null
+  }, [chats, chatId])
 
   return (
     <div className='flex h-full w-full flex-col'>
@@ -125,7 +115,7 @@ export default function ChatPage() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSend()}
-            className='w-full rounded-[20px] px-5 py-4 pr-32 placeholder:text-sm placeholder:text-[#0000004D] focus:outline-none focus:ring-2 focus:ring-primary bg-white'
+            className='w-full rounded-[20px] bg-white px-5 py-4 pr-32 placeholder:text-sm placeholder:text-[#0000004D] focus:outline-none focus:ring-2 focus:ring-primary'
             placeholder={t('chatPage.inputPlaceholder')}
           />
 
