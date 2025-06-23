@@ -44,12 +44,12 @@ export default function ChatPage() {
       }
       sendMessage(newMsg)
       setInput('')
+
+      queryClient.invalidateQueries({ queryKey: ['chats', categorySlug] })
     }
   }
 
-  const {
-    data: messages = [],
-  } = useQuery({
+  const { data: messages = [] } = useQuery({
     queryKey: ['messages', chatId],
     queryFn: async () => {
       const data = await chatsApi.getMessages(chatId)

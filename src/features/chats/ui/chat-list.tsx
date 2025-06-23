@@ -43,11 +43,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
   return (
     <>
       {chats.map(chat => {
-        const lastMessage =
-          chat.messages && chat.messages.length > 0
-            ? chat.messages[chat.messages.length - 1]
-            : null
-
+        const lastMessage = chat.lastMessage.content.slice(0, 45) + '...'
         const isActive = chat.id === chatId
 
         return (
@@ -68,7 +64,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
                   isActive && 'text-sidebar-accent-foreground',
                 )}
               >
-                {new Date(chat.updatedAt).toLocaleTimeString('en-US', {
+                {new Date(chat.lastMessage.createdAt).toLocaleTimeString('en-US', {
                   hour: 'numeric',
                   minute: '2-digit',
                   hour12: true,
@@ -83,7 +79,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
                 isActive && 'text-sidebar-accent-foreground',
               )}
             >
-              {lastMessage ? lastMessage.content : t('chatList.noMessages')}
+              {lastMessage ? lastMessage : t('chatList.noMessages')}
             </span>
           </Link>
         )

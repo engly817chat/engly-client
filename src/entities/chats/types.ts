@@ -9,6 +9,13 @@ export interface Chat {
   updatedAt: string
   messages: Message[] | null
   chatParticipants: []
+  lastMessage: LastMessage
+}
+
+export interface LastMessage {
+  id: string
+  content: string
+  createdAt: string
 }
 
 export interface Message {
