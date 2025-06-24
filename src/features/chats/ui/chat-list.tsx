@@ -43,8 +43,20 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
   return (
     <>
       {chats.map(chat => {
-        const lastMessage = chat.lastMessage.content.slice(0, 45) + '...'
+        const lastMessage = chat.lastMessage
         const isActive = chat.id === chatId
+
+        const lastMessageContent = lastMessage?.content
+          ? lastMessage.content.slice(0, 45) + '...'
+          : t('chatList.noMessages')
+
+        const lastMessageTime = lastMessage?.createdAt
+          ? new Date(lastMessage.createdAt).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            })
+          : ''
 
         return (
           <Link
@@ -58,18 +70,16 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
           >
             <div className='flex w-full items-center gap-1'>
               <span className='text-xl font-medium'>{chat.name}</span>
-              <span
-                className={cn(
-                  'ml-auto text-xs text-[rgba(0,0,0,0.5)] group-hover:text-sidebar-accent-foreground',
-                  isActive && 'text-sidebar-accent-foreground',
-                )}
-              >
-                {new Date(chat.lastMessage.createdAt).toLocaleTimeString('en-US', {
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  hour12: true,
-                })}
-              </span>
+              {lastMessageTime && (
+                <span
+                  className={cn(
+                    'ml-auto text-xs text-[rgba(0,0,0,0.5)] group-hover:text-sidebar-accent-foreground',
+                    isActive && 'text-sidebar-accent-foreground',
+                  )}
+                >
+                  {lastMessageTime}
+                </span>
+              )}
             </div>
 
             <span
@@ -79,7 +89,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
                 isActive && 'text-sidebar-accent-foreground',
               )}
             >
-              {lastMessage ? lastMessage : t('chatList.noMessages')}
+              {lastMessageContent}
             </span>
           </Link>
         )
