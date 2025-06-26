@@ -49,7 +49,7 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
                   const msgData: Message = {
                     id: payload.id,
                     content: payload.content,
-                    createdAt: payload.createdAt,
+                    createdAt: payload.createdAt ?? new Date().toISOString(),
                     updatedAt: payload.updatedAt,
                     isEdited: payload.isEdited,
                     isDeleted: payload.isDeleted,
