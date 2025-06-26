@@ -6,7 +6,7 @@ import { useCookieConsent } from '@/shared/hooks/useCookieConsent'
 
 export function CookieConsent() {
   const { t } = useTranslation()
-  const { consent, acceptCookies, loading, declineCookies } = useCookieConsent()
+  const { consent, acceptCookies, loading } = useCookieConsent()
 
   if (consent || loading) return null
 
@@ -33,12 +33,6 @@ export function CookieConsent() {
           className='rounded-[10px] bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-dark sm:px-8 sm:py-3 sm:text-lg'
         >
           {t('cookies.accept')}
-        </button>
-        <button
-          onClick={declineCookies}
-          className='rounded-[10px] border border-border bg-background px-6 py-2 text-sm font-semibold text-foreground hover:bg-gray-200 sm:px-8 sm:py-3 sm:text-lg'
-        >
-          {t('cookies.decline')}
         </button>
       </div>
     </div>
