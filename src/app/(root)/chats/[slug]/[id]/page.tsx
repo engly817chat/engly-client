@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { MoreVertical, Paperclip, Search, Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { CreateChatModal, MessagesList, useChatSocket } from '@/features/chats'
+import { MessagesList, useChatSocket } from '@/features/chats'
 import { useAuth } from '@/entities/auth'
 import { Chat, chatsApi, Message } from '@/entities/chats'
 import { Button } from '@/shared/ui/common/button'
@@ -15,7 +15,6 @@ export default function ChatPage() {
   const { t } = useTranslation()
   const chatId = params?.id as string
   const categorySlug = params?.slug as string
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { user } = useAuth()
   const userId = user?.id
@@ -89,13 +88,6 @@ export default function ChatPage() {
         </div>
 
         <div className='flex items-center gap-2 md:gap-8'>
-          <Button
-            className='md:py:3 rounded-lg px-4 py-2 text-base font-semibold md:px-6'
-            onClick={() => setIsModalOpen(true)}
-          >
-            <span className='md768:hidden'>+</span>
-            <span className='hidden md768:inline'>{t('chatPage.newChatFull')}</span>
-          </Button>
           <div className='flex items-center gap-1 md:gap-2'>
             <button className='p-1 text-foreground'>
               <Search size={20} />
@@ -134,13 +126,6 @@ export default function ChatPage() {
           </div>
         </div>
       </div>
-
-      {isModalOpen && (
-        <CreateChatModal
-          onClose={() => setIsModalOpen(false)}
-          categorySlug={categorySlug}
-        />
-      )}
     </div>
   )
 }
