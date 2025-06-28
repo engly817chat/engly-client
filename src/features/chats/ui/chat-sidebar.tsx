@@ -92,7 +92,7 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
   })
 
   return (
-    <Sidebar className='border-r border-border'>
+    <Sidebar>
       <div className='flex h-full w-[72px] flex-col items-center justify-between px-2 py-4'>
         <SidebarHeader>
           <Link href='/' className='mb-2 mt-1 font-bold'>
@@ -147,11 +147,11 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
         </SidebarFooter>
       </div>
 
-      <div className='flex w-full flex-col border-l'>
+      <div className='flex w-full flex-col'>
         <SidebarHeader className='gap-3.5 border-b p-5'>
           <div className='flex w-full flex-col gap-5'>
             <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-4'>
                 <button className='md:hidden' onClick={() => setShowRail(!showRail)}>
                   <AlignJustify />
                 </button>

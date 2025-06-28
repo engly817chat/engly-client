@@ -98,7 +98,7 @@ const Sidebar = ({
         >
           <div className='flex h-full'>
             {showRail && (
-              <div className='border-r bg-sidebar-primary-foreground'>{rail}</div>
+              <div className='border-r border-border bg-sidebar-primary-foreground'>{rail}</div>
             )}
 
             <div className='flex-1'>{content}</div>
@@ -112,14 +112,14 @@ const Sidebar = ({
     <div className='flex h-full'>
       {showRail && (
         <div
-          className='border-r bg-sidebar-primary-foreground'
+          className='border-r border-border bg-sidebar-primary-foreground'
           style={{ width: 'var(--sidebar-width-icon)' }}
         >
           {rail}
         </div>
       )}
       <div
-        className={cn('hidden flex-1 bg-sidebar md768:flex', className)}
+        className={cn('hidden flex-1 bg-sidebar md768:flex border-r border-border', className)}
         style={{ width: 'var(--sidebar-width)' }}
         {...props}
       >
