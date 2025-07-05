@@ -31,70 +31,81 @@ export function usePaginatedMessages(chatId: string) {
 
   const loadPage = useCallback(
     async (pageNumber: number) => {
-      const res = await chatsApi.getMessages(chatId, {
-        page: pageNumber,
-        size: PAGE_SIZE,
-        sort: ['createdAt,asc'],
-      })
+      try {
+        const res = await chatsApi.getMessages(chatId, {
+          page: pageNumber,
+          size: PAGE_SIZE,
+          sort: ['createdAt,asc'],
+        })
 
-      const newMessages: Message[] = res._embedded?.messagesDtoList || []
+        const newMessages: Message[] = res._embedded?.messagesDtoList || []
 
-      setMessages(prev => {
-        const existingIds = new Set(prev.map(m => m.id))
-        const filteredNewMessages = newMessages.filter(m => !existingIds.has(m.id))
-        return [...filteredNewMessages, ...prev]
-      })
-      setPage(pageNumber)
+        setMessages(prev => {
+          const existingIds = new Set(prev.map(m => m.id))
+          const filteredNewMessages = newMessages.filter(m => !existingIds.has(m.id))
+          return [...filteredNewMessages, ...prev]
+        })
+        setPage(pageNumber)
 
-      const isFirstPage = pageNumber === 0
-      setHasMore(!isFirstPage)
+        const isFirstPage = pageNumber === 0
+        setHasMore(!isFirstPage)
+      } catch (error) {
+        console.error('Failed to load messages:', error)
+      }
     },
     [chatId],
   )
 
   useEffect(() => {
     async function loadLastPage() {
-      const metaRes = await chatsApi.getMessages(chatId, {
-        page: 0,
-        size: PAGE_SIZE,
-        sort: ['createdAt,asc'],
-      })
-
-      const totalPages = metaRes.page?.totalPages ?? 1
-      let currentPage = totalPages - 1
-      let allMessages: Message[] = []
-
-      while (currentPage >= 0) {
-        const res = await chatsApi.getMessages(chatId, {
-          page: currentPage,
+      try {
+        const metaRes = await chatsApi.getMessages(chatId, {
+          page: 0,
           size: PAGE_SIZE,
           sort: ['createdAt,asc'],
         })
 
-        const newMessages: Message[] = res._embedded?.messagesDtoList || []
-        const existingIds = new Set(allMessages.map(m => m.id))
-        const filtered = newMessages.filter(m => !existingIds.has(m.id))
+        const totalPages = metaRes.page?.totalPages ?? 1
+        let currentPage = totalPages - 1
+        let allMessages: Message[] = []
 
-        allMessages = [...filtered, ...allMessages]
+        while (currentPage >= 0) {
+          const res = await chatsApi.getMessages(chatId, {
+            page: currentPage,
+            size: PAGE_SIZE,
+            sort: ['createdAt,asc'],
+          })
 
-        currentPage--
+          const newMessages: Message[] = res._embedded?.messagesDtoList || []
+          const existingIds = new Set(allMessages.map(m => m.id))
+          const filtered = newMessages.filter(m => !existingIds.has(m.id))
 
-        await new Promise(resolve => setTimeout(resolve, 30))
+          allMessages = [...filtered, ...allMessages]
 
-        const container = containerRef.current
-        if (container && container.scrollHeight > container.clientHeight) {
-          break
+          currentPage--
+
+          await new Promise(resolve => setTimeout(resolve, 30))
+
+          const container = containerRef.current
+          if (container && container.scrollHeight > container.clientHeight) {
+            break
+          }
         }
-      }
 
-      setMessages(allMessages)
-      setPage(currentPage + 1)
-      setHasMore(currentPage + 1 > 0)
+        setMessages(allMessages)
+        setPage(currentPage + 1)
+        setHasMore(currentPage + 1 > 0)
 
-      setTimeout(() => {
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+        if (allMessages.length === 0) setHasMore(false)
+
+        setTimeout(() => {
+          scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+          setIsInitialLoad(false)
+        }, 50)
+      } catch (error) {
+        console.error('Failed to load initial messages:', error)
         setIsInitialLoad(false)
-      }, 50)
+      }
     }
 
     if (chatId) {
@@ -104,7 +115,7 @@ export function usePaginatedMessages(chatId: string) {
 
   const onScroll = useCallback(() => {
     const container = containerRef.current
-    if (!container || isInitialLoad) return
+    if (!container || isInitialLoad || isLoadingMore) return
 
     const nearTop = container.scrollTop === 0
     const nearBottom =
