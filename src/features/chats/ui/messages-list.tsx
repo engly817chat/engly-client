@@ -4,8 +4,8 @@ import { Message } from '@/entities/chats'
 interface MessagesListProps {
   messages: Message[]
   currentUserId?: string
-  containerRef: React.RefObject<HTMLDivElement>
-  scrollRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
+  scrollRef: React.RefObject<HTMLDivElement | null>
   onScroll: () => void
   isLoadingMore?: boolean
 }
