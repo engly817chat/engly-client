@@ -3,9 +3,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { MoreVertical, Paperclip, Search, Send } from 'lucide-react'
+import { Loader2, MoreVertical, Paperclip, Search, Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { MessagesList, useChatSocket } from '@/features/chats'
+import { MessagesList, useChatSocket, usePaginatedMessages } from '@/features/chats'
 import { AccessGuard, useAuth } from '@/entities/auth'
 import { Chat, chatsApi, Message } from '@/entities/chats'
 import { Button } from '@/shared/ui/common/button'
@@ -22,15 +22,21 @@ export default function ChatPage() {
   const queryClient = useQueryClient()
 
   const [input, setInput] = useState('')
+  const {
+    messages,
+    containerRef,
+    scrollRef,
+    onScroll,
+    appendMessage,
+    isInitialLoad,
+    isLoadingMore,
+  } = usePaginatedMessages(chatId)
 
   const handleNewMessage = useCallback(
     (message: Message) => {
-      queryClient.setQueryData<Message[]>(['messages', chatId], prev => [
-        ...(prev || []),
-        message,
-      ])
+      appendMessage(message)
     },
-    [chatId, queryClient],
+    [appendMessage],
   )
 
   const { sendMessage } = useChatSocket(chatId, handleNewMessage)
@@ -47,15 +53,6 @@ export default function ChatPage() {
       queryClient.invalidateQueries({ queryKey: ['chats', categorySlug] })
     }
   }
-
-  const { data: messages = [] } = useQuery({
-    queryKey: ['messages', chatId],
-    queryFn: async () => {
-      const data = await chatsApi.getMessages(chatId)
-      return data._embedded?.messagesDtoList || []
-    },
-    enabled: !!chatId,
-  })
 
   const { data: chats, isLoading } = useQuery({
     queryKey: ['chats', categorySlug.toUpperCase()],
@@ -100,7 +97,20 @@ export default function ChatPage() {
           </div>
         </header>
 
-        <MessagesList messages={messages} currentUserId={userId} />
+        {isInitialLoad ? (
+          <div className='flex flex-1 items-center justify-center'>
+            <Loader2 className='h-10 w-10 animate-spin text-primary' />
+          </div>
+        ) : (
+          <MessagesList
+            messages={messages}
+            currentUserId={userId}
+            containerRef={containerRef}
+            scrollRef={scrollRef}
+            onScroll={onScroll}
+            isLoadingMore={isLoadingMore}
+          />
+        )}
 
         <div className='flex px-4 pb-8 md768:px-6 md:px-12'>
           <div className='relative flex-1'>

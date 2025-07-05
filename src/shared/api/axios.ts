@@ -3,6 +3,7 @@ import axios, {
   type AxiosError,
   type InternalAxiosRequestConfig,
 } from 'axios'
+import qs from 'qs'
 import { refreshTokens } from '@/shared/api/refresh'
 import { AppConfig } from '@/shared/constants'
 import { getAccessToken, removeFromStorage } from '@/shared/utils'
@@ -31,6 +32,10 @@ const options: CreateAxiosDefaults = {
   baseURL: AppConfig.apiUrl,
   headers: getContentType(),
   withCredentials: true,
+  paramsSerializer: params =>
+    qs.stringify(params, {
+      arrayFormat: 'repeat',
+    }),
 }
 
 export const axiosBase = axios.create(options)
@@ -47,7 +52,7 @@ axiosWithAuth.interceptors.request.use(config => {
 
 const isTokenError = (errorMessage: string) =>
   ['jwt expired', 'jwt must be provided', 'refresh token not passed'].some(msg =>
-    errorMessage.toLowerCase().includes(msg.toLowerCase())
+    errorMessage.toLowerCase().includes(msg.toLowerCase()),
   )
 
 axiosWithAuth.interceptors.response.use(
@@ -80,5 +85,5 @@ axiosWithAuth.interceptors.response.use(
     }
 
     throw error
-  }
+  },
 )

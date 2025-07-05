@@ -1,21 +1,35 @@
-import { useEffect, useRef } from 'react'
-import { Check, CheckCheck } from 'lucide-react'
+import { Check, CheckCheck, Loader2 } from 'lucide-react'
 import { Message } from '@/entities/chats'
 
 interface MessagesListProps {
   messages: Message[]
   currentUserId?: string
+  containerRef: React.RefObject<HTMLDivElement | null>
+  scrollRef: React.RefObject<HTMLDivElement | null>
+  onScroll: () => void
+  isLoadingMore?: boolean
 }
 
-export const MessagesList = ({ messages, currentUserId }: MessagesListProps) => {
-  const bottomRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
+export const MessagesList = ({
+  messages,
+  currentUserId,
+  containerRef,
+  scrollRef,
+  onScroll,
+  isLoadingMore,
+}: MessagesListProps) => {
   return (
-    <div className='flex-1 overflow-y-auto px-6 py-8 md:px-12'>
+    <div
+      ref={containerRef}
+      onScroll={onScroll}
+      className='flex-1 overflow-y-auto px-6 py-8 md:px-12'
+    >
+      {isLoadingMore && (
+        <div className='flex items-center justify-center'>
+          <Loader2 className='h-10 w-10 animate-spin text-primary' />
+        </div>
+      )}
+
       {messages.map(msg => {
         const isOwn = msg.user.id === currentUserId
         return (
@@ -63,7 +77,7 @@ export const MessagesList = ({ messages, currentUserId }: MessagesListProps) => 
           </div>
         )
       })}
-      <div ref={bottomRef} />
+      <div ref={scrollRef} />
     </div>
   )
 }
