@@ -126,7 +126,7 @@ export function usePaginatedMessages(chatId: string) {
     const container = containerRef.current
     if (!container || isInitialLoad || isLoadingMore) return
 
-    const nearTop = container.scrollTop === 0
+    const nearTop = container.scrollTop < 1
     const nearBottom =
       container.scrollHeight - container.scrollTop - container.clientHeight < 100
 
@@ -139,13 +139,18 @@ export function usePaginatedMessages(chatId: string) {
 
         setIsLoadingMore(true)
 
-        loadPage(nextPage).then(() => {
-          setTimeout(() => {
-            const newHeight = container.scrollHeight
-            container.scrollTop = newHeight - prevHeight
+        loadPage(nextPage)
+          .then(() => {
+            setTimeout(() => {
+              const newHeight = container.scrollHeight
+              container.scrollTop = newHeight - prevHeight
+              setIsLoadingMore(false)
+            }, 0)
+          })
+          .catch(error => {
+            console.error('Failed to load more messages:', error)
             setIsLoadingMore(false)
-          }, 0)
-        })
+          })
       }
     }
   }, [page, loadPage, hasMore, isInitialLoad])
