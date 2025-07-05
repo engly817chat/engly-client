@@ -12,22 +12,31 @@ export function usePaginatedMessages(chatId: string) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const isAtBottomRef = useRef(true)
 
-  const appendMessage = useCallback(
-    (message: Message) => {
-      setMessages(prev => {
-        if (prev.some(m => m.id === message.id)) return prev
-        return [...prev, message]
-      })
+  useEffect(() => {
+    isAtBottomRef.current = isAtBottom
+  }, [isAtBottom])
 
-      setTimeout(() => {
-        if (isAtBottom) {
-          scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-        }
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const appendMessage = useCallback((message: Message) => {
+    setMessages(prev => {
+      if (prev.some(m => m.id === message.id)) return prev
+      return [...prev, message]
+    })
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current)
+    }
+
+    if (isAtBottomRef.current) {
+      scrollTimeoutRef.current = setTimeout(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+        scrollTimeoutRef.current = null
       }, 50)
-    },
-    [isAtBottom],
-  )
+    }
+  }, [])
 
   const loadPage = useCallback(
     async (pageNumber: number) => {
@@ -140,6 +149,14 @@ export function usePaginatedMessages(chatId: string) {
       }
     }
   }, [page, loadPage, hasMore, isInitialLoad])
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
+    }
+  }, [])
 
   return {
     messages,
