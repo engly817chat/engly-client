@@ -10,15 +10,24 @@ export function usePaginatedMessages(chatId: string) {
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-
+  const [isAtBottom, setIsAtBottom] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
 
-  const appendMessage = useCallback((message: Message) => {
-    setMessages(prev => {
-      if (prev.some(m => m.id === message.id)) return prev
-      return [...prev, message]
-    })
-  }, [])
+  const appendMessage = useCallback(
+    (message: Message) => {
+      setMessages(prev => {
+        if (prev.some(m => m.id === message.id)) return prev
+        return [...prev, message]
+      })
+
+      setTimeout(() => {
+        if (isAtBottom) {
+          scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 50)
+    },
+    [isAtBottom],
+  )
 
   const loadPage = useCallback(
     async (pageNumber: number) => {
@@ -95,13 +104,21 @@ export function usePaginatedMessages(chatId: string) {
 
   const onScroll = useCallback(() => {
     const container = containerRef.current
-    if (!container || !hasMore || isInitialLoad) return
+    if (!container || isInitialLoad) return
 
-    if (container.scrollTop === 0) {
+    const nearTop = container.scrollTop === 0
+    const nearBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight < 100
+
+    setIsAtBottom(nearBottom)
+
+    if (nearTop && hasMore) {
       const nextPage = page !== null ? page - 1 : null
       if (nextPage !== null && nextPage >= 0) {
         const prevHeight = container.scrollHeight
+
         setIsLoadingMore(true)
+
         loadPage(nextPage).then(() => {
           setTimeout(() => {
             const newHeight = container.scrollHeight
