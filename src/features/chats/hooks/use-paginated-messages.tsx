@@ -107,10 +107,12 @@ export function usePaginatedMessages(chatId: string) {
 
         if (allMessages.length === 0) setHasMore(false)
 
-        setTimeout(() => {
-          scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-          setIsInitialLoad(false)
-        }, 50)
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+            setIsInitialLoad(false)
+          })
+        })
       } catch (error) {
         console.error('Failed to load initial messages:', error)
         setIsInitialLoad(false)
