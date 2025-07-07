@@ -190,7 +190,7 @@
   "chatPage": {
     "chatNotFound": "Чат не знайдено",
     "members": "{{count}} учасників",
-    "newChatFull": "+ Новий чат",
+    "newChatFull": "+ Чат",
     "inputPlaceholder": "Напиши повідомлення...",
     "send": "Надіслати",
     "createChat": "Створити чат",
