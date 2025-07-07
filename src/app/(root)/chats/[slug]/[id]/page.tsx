@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Loader2, MoreVertical, Paperclip, Search, Send } from 'lucide-react'
@@ -38,6 +38,20 @@ export default function ChatPage() {
     },
     [appendMessage],
   )
+
+  useLayoutEffect(() => {
+    if (!isInitialLoad && messages.length > 0 && containerRef.current) {
+      const container = containerRef.current
+
+      if (container.scrollHeight > container.clientHeight) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+          })
+        })
+      }
+    }
+  }, [isInitialLoad, messages])
 
   const { sendMessage } = useChatSocket(chatId, handleNewMessage)
 
