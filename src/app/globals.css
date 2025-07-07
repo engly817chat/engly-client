@@ -133,3 +133,21 @@ body {
     @apply text-xs font-medium text-destructive;
   }
 }
+
+.scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: auto auto;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}

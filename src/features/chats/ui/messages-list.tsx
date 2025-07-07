@@ -22,7 +22,7 @@ export const MessagesList = ({
     <div
       ref={containerRef}
       onScroll={onScroll}
-      className='flex-1 overflow-y-auto px-6 py-8 md:px-12'
+      className='flex-1 overflow-y-auto px-6 py-8 md:px-12 scrollbar'
     >
       {isLoadingMore && (
         <div className='flex items-center justify-center'>
