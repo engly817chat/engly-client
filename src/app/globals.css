@@ -95,6 +95,20 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+   * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
 }
 
 @layer base {
@@ -132,22 +146,4 @@ body {
   .form-error {
     @apply text-xs font-medium text-destructive;
   }
-}
-
-.scrollbar {
-  scrollbar-width: auto;
-  scrollbar-color: auto auto;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  background: transparent;
 }
