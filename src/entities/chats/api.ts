@@ -3,7 +3,7 @@ import { axiosWithAuth } from '@/shared/api'
 const endpoints = {
   getChatsByCategory: '/api/rooms/by-category',
   createChat: '/api/rooms/create',
-  getMessages: (roomId: string) => `/api/message/current-room/${roomId}`,
+  getMessages: (roomId: string) => `/api/message/current-room/native/${roomId}`,
   sendMessage: '/api/message/send'
 } as const
 
@@ -34,7 +34,6 @@ export const chatsApi = {
     options?: {
       page?: number
       size?: number
-      sort?: string[]
     },
   ) => {
     const response = await axiosWithAuth.get(endpoints.getMessages(roomId), {

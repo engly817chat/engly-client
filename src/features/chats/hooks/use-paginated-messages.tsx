@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { chatsApi, Message } from '@/entities/chats'
 
-const PAGE_SIZE = 8
+const PAGE_SIZE = 30
 
 export function usePaginatedMessages(chatId: string) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -44,22 +44,19 @@ export function usePaginatedMessages(chatId: string) {
         const res = await chatsApi.getMessages(chatId, {
           page: pageNumber,
           size: PAGE_SIZE,
-          sort: ['createdAt,asc'],
         })
 
-        const newMessages: Message[] = res._embedded?.messagesDtoList || []
+        const newMessages: Message[] = res.messages || []
 
         setMessages(prev => {
           const existingIds = new Set(prev.map(m => m.id))
-          const filteredNewMessages = newMessages.filter(m => !existingIds.has(m.id))
-          return [...filteredNewMessages, ...prev]
+          const filtered = newMessages.filter(m => !existingIds.has(m.id))
+          return [...filtered, ...prev]
         })
         setPage(pageNumber)
-
-        const isFirstPage = pageNumber === 0
-        setHasMore(!isFirstPage)
-      } catch (error) {
-        console.error('Failed to load messages:', error)
+        setHasMore(pageNumber > 0)
+      } catch (e) {
+        console.error('Load page failed', e)
       }
     },
     [chatId],
@@ -68,13 +65,12 @@ export function usePaginatedMessages(chatId: string) {
   useEffect(() => {
     async function loadLastPage() {
       try {
-        const metaRes = await chatsApi.getMessages(chatId, {
+        const meta = await chatsApi.getMessages(chatId, {
           page: 0,
           size: PAGE_SIZE,
-          sort: ['createdAt,asc'],
         })
 
-        const totalPages = metaRes.page?.totalPages ?? 1
+        const totalPages = meta.totalPages ?? 1
         let currentPage = totalPages - 1
         let allMessages: Message[] = []
 
@@ -82,35 +78,23 @@ export function usePaginatedMessages(chatId: string) {
           const res = await chatsApi.getMessages(chatId, {
             page: currentPage,
             size: PAGE_SIZE,
-            sort: ['createdAt,asc'],
           })
 
-          const newMessages: Message[] = res._embedded?.messagesDtoList || []
-          const existingIds = new Set(allMessages.map(m => m.id))
-          const filtered = newMessages.filter(m => !existingIds.has(m.id))
-
-          allMessages = [...filtered, ...allMessages]
-
+          const newMessages: Message[] = res.messages || []
+          allMessages = [...allMessages, ...newMessages]
           currentPage--
 
-          await new Promise(resolve => setTimeout(resolve, 30))
-
+          await new Promise(res => setTimeout(res, 30))
           const container = containerRef.current
-          if (container && container.scrollHeight > container.clientHeight) {
-            break
-          }
+          if (container && container.scrollHeight > container.clientHeight) break
         }
 
-        setMessages(allMessages)
+        setMessages(allMessages.reverse())
         setPage(currentPage + 1)
         setHasMore(currentPage + 1 > 0)
-
-        if (allMessages.length === 0) setHasMore(false)
-
         setIsInitialLoad(false)
-      } catch (error) {
-        console.error('Failed to load initial messages:', error)
-        setIsInitialLoad(false)
+      } catch (e) {
+        console.error('Initial load failed', e)
       }
     }
 
@@ -123,34 +107,26 @@ export function usePaginatedMessages(chatId: string) {
     const container = containerRef.current
     if (!container || isInitialLoad || isLoadingMore) return
 
-    const nearTop = container.scrollTop < 1
+    const nearTop = container.scrollTop < 50
     const nearBottom =
       container.scrollHeight - container.scrollTop - container.clientHeight < 100
 
     setIsAtBottom(nearBottom)
 
-    if (nearTop && hasMore) {
-      const nextPage = page !== null ? page - 1 : null
-      if (nextPage !== null && nextPage >= 0) {
-        const prevHeight = container.scrollHeight
+    if (nearTop && hasMore && page !== null && page > 0) {
+      const prevHeight = container.scrollHeight
+      const nextPage = page - 1
 
-        setIsLoadingMore(true)
-
-        loadPage(nextPage)
-          .then(() => {
-            setTimeout(() => {
-              const newHeight = container.scrollHeight
-              container.scrollTop = newHeight - prevHeight
-              setIsLoadingMore(false)
-            }, 0)
-          })
-          .catch(error => {
-            console.error('Failed to load more messages:', error)
-            setIsLoadingMore(false)
-          })
-      }
+      setIsLoadingMore(true)
+      loadPage(nextPage).then(() => {
+        requestAnimationFrame(() => {
+          const newHeight = container.scrollHeight
+          container.scrollTop = newHeight - prevHeight
+          setIsLoadingMore(false)
+        })
+      })
     }
-  }, [page, loadPage, hasMore, isInitialLoad])
+  }, [page, hasMore, isLoadingMore, isInitialLoad])
 
   useEffect(() => {
     return () => {
