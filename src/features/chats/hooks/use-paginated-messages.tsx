@@ -35,6 +35,44 @@ export function usePaginatedMessages(chatId: string) {
     [setScrollBottom],
   )
 
+  const ensureEnoughMessagesToScroll = useCallback(
+    async (currentPage: number) => {
+      const container = containerRef.current
+      if (!container) return
+
+      const isScrollable = container.scrollHeight > container.clientHeight
+
+      if (!isScrollable && currentPage > 0) {
+        const prevPage = currentPage - 1
+
+        try {
+          const res = await chatsApi.getMessages(chatId, {
+            page: prevPage,
+            size: PAGE_SIZE,
+          })
+
+          const newMessages: Message[] = res.messages || []
+
+          setMessages(prev => {
+            const existingIds = new Set(prev.map(m => m.id))
+            const filtered = newMessages.filter(m => !existingIds.has(m.id))
+            return [...filtered, ...prev]
+          })
+
+          setPage(prevPage)
+          setHasMore(prevPage > 0)
+
+          requestAnimationFrame(() => {
+            ensureEnoughMessagesToScroll(prevPage)
+          })
+        } catch (e) {
+          console.error('Auto-scroll load failed', e)
+        }
+      }
+    },
+    [chatId],
+  )
+
   const loadPage = useCallback(
     async (pageNumber: number) => {
       try {
@@ -69,21 +107,37 @@ export function usePaginatedMessages(chatId: string) {
 
       const total = meta.totalElements ?? 0
       const totalPages = Math.max(Math.ceil(total / PAGE_SIZE), 1)
-      const lastPage = totalPages - 1
+      let currentPage = totalPages - 1
+      let loadedMessages: Message[] = []
 
-      const res = await chatsApi.getMessages(chatId, {
-        page: lastPage,
-        size: PAGE_SIZE,
-      })
+      const container = containerRef.current
 
-      setMessages(res.messages || [])
-      setPage(lastPage)
-      setHasMore(lastPage > 0)
+      while (currentPage >= 0) {
+        const res = await chatsApi.getMessages(chatId, {
+          page: currentPage,
+          size: PAGE_SIZE,
+        })
+
+        const pageMessages = res.messages || []
+        loadedMessages = [...pageMessages, ...loadedMessages]
+        currentPage--
+
+        setMessages([...loadedMessages])
+
+        await new Promise(resolve => requestAnimationFrame(resolve))
+
+        if (container && container.scrollHeight > container.clientHeight) {
+          currentPage++
+          break
+        }
+
+        if (currentPage < 0) break
+      }
+
+      setPage(currentPage + 1)
+      setHasMore(currentPage + 1 > 0)
       setIsInitialLoad(false)
 
-      requestAnimationFrame(() => {
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-      })
     } catch (e) {
       console.error('Initial load failed', e)
     }
