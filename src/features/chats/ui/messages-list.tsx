@@ -1,4 +1,6 @@
+import { enUS, uk } from 'date-fns/locale'
 import { Check, CheckCheck, Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Message } from '@/entities/chats'
 import { groupMessagesByDate } from '../lib/groupMessagesByDate'
 
@@ -19,7 +21,10 @@ export const MessagesList = ({
   onScroll,
   isLoadingMore,
 }: MessagesListProps) => {
-  const groupedMessages = groupMessagesByDate(messages)
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language === 'uk' ? uk : enUS
+  const groupedMessages = groupMessagesByDate(messages, t, locale)
+  
   return (
     <div
       ref={containerRef}
@@ -34,7 +39,7 @@ export const MessagesList = ({
 
       {Object.entries(groupedMessages).map(([dateLabel, group]) => (
         <div key={dateLabel}>
-          <div className='mb-4 flex justify-center sticky top-0 z-10'>
+          <div className='sticky top-0 z-10 mb-4 flex justify-center'>
             <span className='rounded-md bg-gray-200 px-4 py-1 text-sm font-medium text-gray-600'>
               {dateLabel}
             </span>

@@ -198,7 +198,9 @@
     "descriptionPlaceholder": "Some description",
     "create": "Create",
     "chatCreatedError": "Failed to create chat",
-    "chatCreatedSuccess": "Chat has been created successfully"
+    "chatCreatedSuccess": "Chat has been created successfully",
+    "Today": "Today",
+    "Yesterday": "Yesterday"
   },
   "sidebar": {
     "messages": "Messages",

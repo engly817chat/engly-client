@@ -198,7 +198,9 @@
     "descriptionPlaceholder": "Опис чату",
     "create": "Створити",
     "chatCreatedError": "Не вдалося створити чат",
-    "chatCreatedSuccess": "Чат успішно створено"
+    "chatCreatedSuccess": "Чат успішно створено",
+    "Today": "Сьогодні",
+    "Yesterday": "Вчора"
   },
   "sidebar": {
     "messages": "Повідомлення",
