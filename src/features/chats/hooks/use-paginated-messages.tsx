@@ -8,35 +8,32 @@ export function usePaginatedMessages(chatId: string) {
   const [page, setPage] = useState<number | null>(null)
   const [hasMore, setHasMore] = useState(true)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
-  const scrollRef = useRef<HTMLDivElement | null>(null)
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const [isAtBottom, setIsAtBottom] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const isAtBottomRef = useRef(true)
 
-  useEffect(() => {
-    isAtBottomRef.current = isAtBottom
-  }, [isAtBottom])
-
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const scrollRef = useRef<HTMLDivElement | null>(null)
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const appendMessage = useCallback((message: Message) => {
-    setMessages(prev => {
-      if (prev.some(m => m.id === message.id)) return prev
-      return [...prev, message]
-    })
+  const isAtBottomRef = useRef(true)
 
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current)
-    }
-
-    if (isAtBottomRef.current) {
-      scrollTimeoutRef.current = setTimeout(() => {
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-        scrollTimeoutRef.current = null
-      }, 50)
-    }
+  const setScrollBottom = useCallback(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
+
+  const appendMessage = useCallback(
+    (message: Message) => {
+      setMessages(prev => {
+        if (prev.some(m => m.id === message.id)) return prev
+        return [...prev, message]
+      })
+
+      if (isAtBottomRef.current) {
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+        scrollTimeoutRef.current = setTimeout(setScrollBottom, 50)
+      }
+    },
+    [setScrollBottom],
+  )
 
   const loadPage = useCallback(
     async (pageNumber: number) => {
@@ -53,8 +50,9 @@ export function usePaginatedMessages(chatId: string) {
           const filtered = newMessages.filter(m => !existingIds.has(m.id))
           return [...filtered, ...prev]
         })
+
         setPage(pageNumber)
-        setHasMore(pageNumber > 0)
+        setHasMore(!res.isFirst)
       } catch (e) {
         console.error('Load page failed', e)
       }
@@ -62,46 +60,40 @@ export function usePaginatedMessages(chatId: string) {
     [chatId],
   )
 
-  useEffect(() => {
-    async function loadLastPage() {
-      try {
-        const meta = await chatsApi.getMessages(chatId, {
-          page: 0,
-          size: PAGE_SIZE,
-        })
+  const loadInitialMessages = useCallback(async () => {
+    try {
+      const meta = await chatsApi.getMessages(chatId, {
+        page: 0,
+        size: 1,
+      })
 
-        const totalPages = meta.totalPages ?? 1
-        let currentPage = totalPages - 1
-        let allMessages: Message[] = []
+      const total = meta.totalElements ?? 0
+      const totalPages = Math.max(Math.ceil(total / PAGE_SIZE), 1)
+      const lastPage = totalPages - 1
 
-        while (currentPage >= 0) {
-          const res = await chatsApi.getMessages(chatId, {
-            page: currentPage,
-            size: PAGE_SIZE,
-          })
+      const res = await chatsApi.getMessages(chatId, {
+        page: lastPage,
+        size: PAGE_SIZE,
+      })
 
-          const newMessages: Message[] = res.messages || []
-          allMessages = [...allMessages, ...newMessages]
-          currentPage--
+      setMessages(res.messages || [])
+      setPage(lastPage)
+      setHasMore(lastPage > 0)
+      setIsInitialLoad(false)
 
-          await new Promise(res => setTimeout(res, 30))
-          const container = containerRef.current
-          if (container && container.scrollHeight > container.clientHeight) break
-        }
-
-        setMessages(allMessages.reverse())
-        setPage(currentPage + 1)
-        setHasMore(currentPage + 1 > 0)
-        setIsInitialLoad(false)
-      } catch (e) {
-        console.error('Initial load failed', e)
-      }
-    }
-
-    if (chatId) {
-      loadLastPage()
+      requestAnimationFrame(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+      })
+    } catch (e) {
+      console.error('Initial load failed', e)
     }
   }, [chatId])
+
+  useEffect(() => {
+    if (chatId) {
+      loadInitialMessages()
+    }
+  }, [chatId, loadInitialMessages])
 
   const onScroll = useCallback(() => {
     const container = containerRef.current
@@ -110,14 +102,13 @@ export function usePaginatedMessages(chatId: string) {
     const nearTop = container.scrollTop < 50
     const nearBottom =
       container.scrollHeight - container.scrollTop - container.clientHeight < 100
-
-    setIsAtBottom(nearBottom)
+    isAtBottomRef.current = nearBottom
 
     if (nearTop && hasMore && page !== null && page > 0) {
       const prevHeight = container.scrollHeight
       const nextPage = page - 1
-
       setIsLoadingMore(true)
+
       loadPage(nextPage).then(() => {
         requestAnimationFrame(() => {
           const newHeight = container.scrollHeight
@@ -126,13 +117,11 @@ export function usePaginatedMessages(chatId: string) {
         })
       })
     }
-  }, [page, hasMore, isLoadingMore, isInitialLoad])
+  }, [page, hasMore, isLoadingMore, isInitialLoad, loadPage])
 
   useEffect(() => {
     return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current)
-      }
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
     }
   }, [])
 
