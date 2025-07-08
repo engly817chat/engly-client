@@ -45,9 +45,12 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
         const lastMessage = chat.lastMessage
         const isActive = chat.id === chatId
 
-        const lastMessageContent = lastMessage?.content
-          ? lastMessage.content.slice(0, 45) + '...'
-          : t('chatList.noMessages')
+        const lastMessageContent =
+          lastMessage?.content && lastMessage.content.length > 45
+            ? lastMessage.content.slice(0, 45) + '...'
+            : lastMessage?.content || t('chatList.noMessages')
+
+        console.log(lastMessageContent)
 
         const lastMessageTime = lastMessage?.createdAt
           ? new Date(lastMessage.createdAt).toLocaleTimeString('en-US', {

@@ -24,7 +24,7 @@ export const MessagesList = ({
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'uk' ? uk : enUS
   const groupedMessages = groupMessagesByDate(messages, t, locale)
-  
+
   return (
     <div
       ref={containerRef}
@@ -66,7 +66,9 @@ export const MessagesList = ({
                       </div>
                     )}
 
-                    <div className='text-base font-medium'>{msg.content}</div>
+                    <div className='whitespace-pre-wrap break-words text-base font-medium'>
+                      {msg.content}
+                    </div>
 
                     <div
                       className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
