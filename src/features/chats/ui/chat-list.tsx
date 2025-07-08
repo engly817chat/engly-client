@@ -21,11 +21,10 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
         {Array.from({ length: 5 }).map((_, index) => (
           <div key={index} className='flex animate-pulse flex-col gap-2 border-b p-4'>
             <div className='flex items-center justify-between'>
-              <div className='h-4 w-24 rounded bg-gray-300' />
+              <div className='h-5 w-24 rounded bg-gray-300' />
               <div className='h-3 w-12 rounded bg-gray-300' />
             </div>
             <div className='h-4 w-40 rounded bg-gray-300' />
-            <div className='h-3 w-60 rounded bg-gray-300' />
           </div>
         ))}
       </>
