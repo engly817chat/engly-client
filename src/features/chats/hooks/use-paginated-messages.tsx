@@ -51,7 +51,7 @@ export function usePaginatedMessages(chatId: string) {
             size: PAGE_SIZE,
           })
 
-          const newMessages: Message[] = res.messages || []
+          const newMessages: Message[] = res.content || []
 
           setMessages(prev => {
             const existingIds = new Set(prev.map(m => m.id))
@@ -81,7 +81,7 @@ export function usePaginatedMessages(chatId: string) {
           size: PAGE_SIZE,
         })
 
-        const newMessages: Message[] = res.messages || []
+        const newMessages: Message[] = res.content || []
 
         setMessages(prev => {
           const existingIds = new Set(prev.map(m => m.id))
@@ -90,7 +90,7 @@ export function usePaginatedMessages(chatId: string) {
         })
 
         setPage(pageNumber)
-        setHasMore(!res.isFirst)
+        setHasMore(!res.first)
       } catch (e) {
         console.error('Load page failed', e)
       }
@@ -118,7 +118,7 @@ export function usePaginatedMessages(chatId: string) {
           size: PAGE_SIZE,
         })
 
-        const pageMessages = res.messages || []
+        const pageMessages = res.content || []
         loadedMessages = [...pageMessages, ...loadedMessages]
         currentPage--
 
@@ -137,7 +137,6 @@ export function usePaginatedMessages(chatId: string) {
       setPage(currentPage + 1)
       setHasMore(currentPage + 1 > 0)
       setIsInitialLoad(false)
-
     } catch (e) {
       console.error('Initial load failed', e)
     }
