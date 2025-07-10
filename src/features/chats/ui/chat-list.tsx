@@ -8,9 +8,10 @@ interface ChatListProps {
   chats: Chat[]
   isLoading: boolean
   slug: string | string[]
+  loadMoreRef?: React.RefObject<HTMLDivElement | null>
 }
 
-export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
+export const ChatList = ({ chats, isLoading, slug, loadMoreRef }: ChatListProps) => {
   const params = useParams()
   const { t } = useTranslation()
   const chatId = Array.isArray(params?.id) ? params.id[0] : params?.id
@@ -49,9 +50,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
           lastMessage?.content && lastMessage.content.length > 45
             ? lastMessage.content.slice(0, 45) + '...'
             : lastMessage?.content || t('chatList.noMessages')
-
-        console.log(lastMessageContent)
-
+            
         const lastMessageTime = lastMessage?.createdAt
           ? new Date(lastMessage.createdAt).toLocaleTimeString('en-US', {
               hour: 'numeric',
@@ -96,6 +95,7 @@ export const ChatList = ({ chats, isLoading, slug }: ChatListProps) => {
           </Link>
         )
       })}
+      <div ref={loadMoreRef} className='mt-20 h-10' />
     </>
   )
 }

@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
 import {
   AlignJustify,
   Bell,
@@ -17,9 +16,8 @@ import {
   Users,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { ChatList } from '@/features/chats'
+import { ChatList, useInfiniteScroll, usePaginatedChats } from '@/features/chats'
 import { useAuth } from '@/entities/auth'
-import { chatsApi } from '@/entities/chats'
 import { Button } from '@/shared/ui/common/button'
 import {
   Sidebar,
@@ -34,11 +32,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
-
-const fetchChats = async (category: string) => {
-  const data = await chatsApi.getChatsByCategory(category)
-  return data._embedded?.roomsDtoList || []
-}
 
 export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => void }) {
   const { t } = useTranslation()
@@ -85,11 +78,10 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
   const slug = params.slug ?? ''
   const slugValue = Array.isArray(slug) ? slug[0] : (slug ?? '')
 
-  const { data: chats = [], isLoading } = useQuery({
-    queryKey: ['chats', slugValue],
-    queryFn: () => fetchChats(slugValue.toUpperCase()),
-    enabled: !!slugValue,
-  })
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    usePaginatedChats(slugValue)
+
+  const loadMoreRef = useInfiniteScroll(hasNextPage, fetchNextPage)
 
   return (
     <Sidebar>
@@ -184,7 +176,12 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
         <SidebarContent>
           <SidebarGroup className='px-0 py-0'>
             <SidebarGroupContent>
-              <ChatList chats={chats} isLoading={isLoading} slug={slugValue} />
+              <ChatList
+                chats={data?.pages.flatMap(page => page.content) || []}
+                isLoading={isLoading || isFetchingNextPage}
+                slug={slugValue}
+                loadMoreRef={loadMoreRef}
+              />
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
