@@ -75,7 +75,7 @@ export default function ChatPage() {
   })
 
   const chat = useMemo(() => {
-    return chats?._embedded?.roomsDtoList.find((c: Chat) => c.id === chatId) || null
+    return chats?.content.find((c: Chat) => c.id === chatId) || null
   }, [chats, chatId])
 
   return (
