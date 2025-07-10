@@ -57,7 +57,7 @@ export const CategoryList = () => {
 
   return (
     <div className='grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4 xl:gap-6'>
-      {data?._embedded?.categoriesDtoList?.map(cat => {
+      {data?.content.map(cat => {
         const isTopPick = cat.activeRoomsCount > 15
         const key = formatKey(cat.name)
 

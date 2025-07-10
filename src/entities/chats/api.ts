@@ -1,16 +1,25 @@
 import { axiosWithAuth } from '@/shared/api'
+import { PaginatedChatsResponse } from './types'
 
 const endpoints = {
   getChatsByCategory: '/api/rooms/by-category',
   createChat: '/api/rooms/create',
   getMessages: (roomId: string) => `/api/message/current-room/native/${roomId}`,
-  sendMessage: '/api/message/send'
+  sendMessage: '/api/message/send',
 } as const
 
 export const chatsApi = {
-  getChatsByCategory: async (categorySlug: string) => {
+  getChatsByCategory: async (
+    categorySlug: string,
+    page: number = 0,
+    size: number = 8,
+  ): Promise<PaginatedChatsResponse> => {
     const response = await axiosWithAuth.get(endpoints.getChatsByCategory, {
-      params: { category: categorySlug },
+      params: {
+        category: categorySlug,
+        page,
+        size,
+      },
     })
     return response.data
   },
@@ -44,14 +53,11 @@ export const chatsApi = {
     return response.data
   },
   sendMessage: async (roomId: string, content: string) => {
-    const response = await axiosWithAuth.post(
-      endpoints.sendMessage,
-      {
-        roomId,
-        content
-      }
-    )
+    const response = await axiosWithAuth.post(endpoints.sendMessage, {
+      roomId,
+      content,
+    })
 
     return response.data
-  }
+  },
 } as const
