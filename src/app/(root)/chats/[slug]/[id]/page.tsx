@@ -193,8 +193,10 @@ export default function ChatPage() {
             {typingUsers.length > 0 && (
               <div className='py-2 pl-12 text-sm italic text-gray-600'>
                 {typingUsers.length === 1
-                  ? `${typingUsers[0]} печатает...`
-                  : `${typingUsers.join(', ')} печатают...`}
+                  ? t('typingIndicator.oneUser', { username: typingUsers[0] })
+                  : t('typingIndicator.multipleUsers', {
+                      usernames: typingUsers.join(', '),
+                    })}
               </div>
             )}
           </>

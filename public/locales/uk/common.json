@@ -217,5 +217,9 @@
       "groups": "Групи",
       "archived": "Архівовані"
     }
+  },
+  "typingIndicator": {
+    "oneUser": "{{username}} набирає повідомлення...",
+    "multipleUsers": "{{usernames}} набирають повідомлення..."
   }
 }

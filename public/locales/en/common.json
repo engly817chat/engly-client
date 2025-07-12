@@ -217,5 +217,9 @@
       "groups": "Groups",
       "archived": "Archived"
     }
+  },
+    "typingIndicator": {
+    "oneUser": "{{username}} is typing...",
+    "multipleUsers": "{{usernames}} are typing..."
   }
 }
