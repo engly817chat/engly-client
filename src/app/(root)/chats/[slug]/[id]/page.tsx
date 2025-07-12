@@ -14,16 +14,19 @@ import { Button } from '@/shared/ui/common/button'
 export default function ChatPage() {
   const params = useParams()
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const userId = user?.id
   const chatId = params?.id as string
   const categorySlug = params?.slug as string
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const emojiPickerRef = useRef<HTMLDivElement>(null)
-  const { user } = useAuth()
-  const userId = user?.id
+  const [typingUsers, setTypingUsers] = useState<string[]>([])
+  const [isTyping, setIsTyping] = useState(false)
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [input, setInput] = useState('')
 
   const queryClient = useQueryClient()
 
-  const [input, setInput] = useState('')
   const {
     messages,
     containerRef,
@@ -33,6 +36,44 @@ export default function ChatPage() {
     isInitialLoad,
     isLoadingMore,
   } = usePaginatedMessages(chatId)
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value)
+
+    if (!isTyping) {
+      setIsTyping(true)
+      sendTyping(true)
+    }
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false)
+      sendTyping(false)
+    }, 2000)
+  }
+
+  const handleTyping = useCallback(
+    ({ username, isTyping }: { username: string; isTyping: boolean }) => {
+      if (username === user?.username) {
+        return
+      }
+
+      setTypingUsers(prev => {
+        if (isTyping) {
+          if (!prev.includes(username)) {
+            return [...prev, username]
+          }
+          return prev
+        } else {
+          return prev.filter(u => u !== username)
+        }
+      })
+    },
+    [user?.username],
+  )
 
   const handleNewMessage = useCallback(
     (message: Message) => {
@@ -72,7 +113,11 @@ export default function ChatPage() {
     }
   }, [])
 
-  const { sendMessage } = useChatSocket(chatId, handleNewMessage)
+  const { sendMessage, sendTyping } = useChatSocket(
+    chatId,
+    handleNewMessage,
+    handleTyping,
+  )
 
   const handleSend = () => {
     if (input.trim()) {
@@ -135,21 +180,31 @@ export default function ChatPage() {
             <Loader2 className='h-10 w-10 animate-spin text-primary' />
           </div>
         ) : (
-          <MessagesList
-            messages={messages}
-            currentUserId={userId}
-            containerRef={containerRef}
-            scrollRef={scrollRef}
-            onScroll={onScroll}
-            isLoadingMore={isLoadingMore}
-          />
+          <>
+            <MessagesList
+              messages={messages}
+              currentUserId={userId}
+              containerRef={containerRef}
+              scrollRef={scrollRef}
+              onScroll={onScroll}
+              isLoadingMore={isLoadingMore}
+            />
+
+            {typingUsers.length > 0 && (
+              <div className='py-2 pl-12 text-sm italic text-gray-600'>
+                {typingUsers.length === 1
+                  ? `${typingUsers[0]} печатает...`
+                  : `${typingUsers.join(', ')} печатают...`}
+              </div>
+            )}
+          </>
         )}
 
         <div className='flex px-4 pb-8 md768:px-6 md:px-12'>
           <div className='relative flex-1' ref={emojiPickerRef}>
             <input
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={onInputChange}
               onKeyDown={e => e.key === 'Enter' && handleSend()}
               className='w-full rounded-[20px] bg-white px-5 py-4 pr-32 placeholder:text-sm placeholder:text-[#0000004D] focus:outline-none focus:ring-2 focus:ring-primary'
               placeholder={t('chatPage.inputPlaceholder')}

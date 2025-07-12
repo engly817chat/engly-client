@@ -8,7 +8,11 @@ type OutgoingMessage = {
   content: string
 }
 
-export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void) => {
+export const useChatSocket = (
+  chatId: string,
+  onMessage: (msg: Message) => void,
+  onTyping?: (data: { username: string; isTyping: boolean }) => void,
+) => {
   const clientRef = useRef<Client | null>(null)
   const subscriptionRef = useRef<StompSubscription | null>(null)
   const token = getAccessToken()
@@ -68,6 +72,12 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
 
                   console.log('[STOMP] Normalized message:', msgData)
                   onMessage(msgData)
+                } else if (parsed?.type === 'USER_TYPING' && parsed.payload) {
+                  const { username, isTyping } = parsed.payload
+
+                  if (onTyping) {
+                    onTyping({ username, isTyping })
+                  }
                 }
               } catch (error) {
                 console.error('[STOMP] Failed to parse message body:', error)
@@ -122,6 +132,20 @@ export const useChatSocket = (chatId: string, onMessage: (msg: Message) => void)
       console.warn('[STOMP] Cannot send: client not connected')
     }
   }
+  
+  const sendTyping = (isTyping: boolean) => {
+    const client = clientRef.current
 
-  return { sendMessage }
+    if (client && client.connected) {
+      client.publish({
+        destination: '/app/chat/user.typing',
+        body: JSON.stringify({
+          roomId: chatId,
+          isTyping,
+        }),
+      })
+    }
+  }
+
+  return { sendMessage, sendTyping }
 }
