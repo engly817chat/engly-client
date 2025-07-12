@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Loader2, MoreVertical, Paperclip, Search, Send } from 'lucide-react'
+import EmojiPicker from 'emoji-picker-react'
+import { Loader2, MoreVertical, Paperclip, Search, Send, Smile } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MessagesList, useChatSocket, usePaginatedMessages } from '@/features/chats'
 import { AccessGuard, useAuth } from '@/entities/auth'
@@ -15,7 +16,8 @@ export default function ChatPage() {
   const { t } = useTranslation()
   const chatId = params?.id as string
   const categorySlug = params?.slug as string
-
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const emojiPickerRef = useRef<HTMLDivElement>(null)
   const { user } = useAuth()
   const userId = user?.id
 
@@ -52,6 +54,23 @@ export default function ChatPage() {
       }
     }
   }, [isInitialLoad, messages])
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [])
 
   const { sendMessage } = useChatSocket(chatId, handleNewMessage)
 
@@ -127,7 +146,7 @@ export default function ChatPage() {
         )}
 
         <div className='flex px-4 pb-8 md768:px-6 md:px-12'>
-          <div className='relative flex-1'>
+          <div className='relative flex-1' ref={emojiPickerRef}>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
@@ -136,7 +155,23 @@ export default function ChatPage() {
               placeholder={t('chatPage.inputPlaceholder')}
             />
 
+            {showEmojiPicker && (
+              <div className='absolute bottom-[60px] right-20 z-50'>
+                <EmojiPicker
+                  onEmojiClick={emojiData => setInput(prev => prev + emojiData.emoji)}
+                />
+              </div>
+            )}
+
             <div className='absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-2'>
+              <button
+                type='button'
+                className='text-gray-500'
+                onClick={() => setShowEmojiPicker(prev => !prev)}
+              >
+                <Smile size={20} strokeWidth={1.5} />
+              </button>
+
               <button type='button' className='text-gray-500'>
                 <Paperclip size={20} strokeWidth={1.5} />
               </button>
