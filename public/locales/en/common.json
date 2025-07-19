@@ -172,7 +172,8 @@
     "resentSuccess": "A new verification link has been sent to your email.",
     "linkSentTo": "An email with a verification link has been sent to:",
     "instructions": "Please click the link in that email to validate your account.",
-    "resend": "Resend Link"
+    "resend": "Resend Link",
+    "cooldownMessage": "You can resend the email in {{seconds}} seconds."
   },
   "additionalInfo": {
     "title": "Almost there!",
@@ -218,7 +219,7 @@
       "archived": "Archived"
     }
   },
-    "typingIndicator": {
+  "typingIndicator": {
     "oneUser": "{{username}} is typing...",
     "multipleUsers": "{{usernames}} are typing..."
   }
