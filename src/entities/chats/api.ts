@@ -6,6 +6,7 @@ const endpoints = {
   createChat: '/api/rooms/create',
   getMessages: (roomId: string) => `/api/message/current-room/native/${roomId}`,
   sendMessage: '/api/message/send',
+  findChats: (category: string) => `/api/rooms/find/in/${category}/by-keyString/`,
 } as const
 
 export const chatsApi = {
@@ -56,6 +57,18 @@ export const chatsApi = {
     const response = await axiosWithAuth.post(endpoints.sendMessage, {
       roomId,
       content,
+    })
+
+    return response.data
+  },
+  findChats: async (
+    category: string,
+    keyString: string,
+  ): Promise<PaginatedChatsResponse> => {
+    const response = await axiosWithAuth.get(endpoints.findChats(category), {
+      params: {
+        keyString: keyString.trim(),
+      },
     })
 
     return response.data

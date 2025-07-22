@@ -16,6 +16,7 @@ import {
   Users,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useDebounceCallback } from 'usehooks-ts'
 import { ChatList, useInfiniteScroll, usePaginatedChats } from '@/features/chats'
 import { useAuth } from '@/entities/auth'
 import { Button } from '@/shared/ui/common/button'
@@ -32,6 +33,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
+import { useSearchChats } from '../hooks/use-search-chats'
 
 export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => void }) {
   const { t } = useTranslation()
@@ -77,11 +79,26 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
   const params = useParams()
   const slug = params.slug ?? ''
   const slugValue = Array.isArray(slug) ? slug[0] : (slug ?? '')
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePaginatedChats(slugValue)
 
   const loadMoreRef = useInfiniteScroll(hasNextPage, fetchNextPage)
+
+  const debouncedUpdate = useDebounceCallback((value: string) => {
+    setDebouncedSearch(value)
+  }, 500)
+
+  const { data: searchResults, isLoading: isSearchLoading } = useSearchChats(
+    slugValue,
+    debouncedSearch,
+  )
+
+  const chatsToShow = debouncedSearch
+    ? searchResults?.content || []
+    : data?.pages.flatMap(page => page.content) || []
 
   return (
     <Sidebar>
@@ -162,6 +179,12 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
                 <SidebarInput
                   placeholder={t('sidebar.search')}
                   icon={<Search size={20} />}
+                  value={search}
+                  onChange={e => {
+                    const value = e.target.value
+                    setSearch(value)
+                    debouncedUpdate(value)
+                  }}
                 />
               </div>
               <button
@@ -177,8 +200,8 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
           <SidebarGroup className='px-0 py-0'>
             <SidebarGroupContent>
               <ChatList
-                chats={data?.pages.flatMap(page => page.content) || []}
-                isLoading={isLoading || isFetchingNextPage}
+                chats={chatsToShow}
+                isLoading={(debouncedSearch ? isSearchLoading : isLoading) || isFetchingNextPage}
                 slug={slugValue}
                 loadMoreRef={loadMoreRef}
               />
