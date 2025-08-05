@@ -7,6 +7,7 @@ const endpoints = {
   getMessages: (roomId: string) => `/api/message/current-room/native/${roomId}`,
   sendMessage: '/api/message/send',
   findChats: (category: string) => `/api/rooms/find/in/${category}/by-keyString/`,
+  uploadImage: '/api/upload',
 } as const
 
 export const chatsApi = {
@@ -68,6 +69,18 @@ export const chatsApi = {
     const response = await axiosWithAuth.get(endpoints.findChats(category), {
       params: {
         keyString: keyString.trim(),
+      },
+    })
+
+    return response.data
+  },
+  uploadImage: async (file: File): Promise<{ url: string }> => {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const response = await axiosWithAuth.post(endpoints.uploadImage, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
     })
 

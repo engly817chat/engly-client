@@ -3,6 +3,7 @@ import { Check, CheckCheck, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Message } from '@/entities/chats'
 import { groupMessagesByDate } from '../lib/groupMessagesByDate'
+import { renderMessageContent } from '../lib/renderMessageContent'
 
 interface MessagesListProps {
   messages: Message[]
@@ -67,7 +68,7 @@ export const MessagesList = ({
                     )}
 
                     <div className='whitespace-pre-wrap break-words text-base font-medium'>
-                      {msg.content}
+                      {renderMessageContent(msg.content)}
                     </div>
 
                     <div
