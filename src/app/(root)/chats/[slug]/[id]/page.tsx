@@ -3,13 +3,13 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import EmojiPicker from 'emoji-picker-react'
-import { Loader2, MoreVertical, Paperclip, Search, Send, Smile } from 'lucide-react'
+import { Loader2, MoreVertical, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MessagesList, useChatSocket, usePaginatedMessages } from '@/features/chats'
+import { useImageUpload } from '@/features/chats/hooks/use-image-upload'
+import MessageInput from '@/features/chats/ui/message-input'
 import { AccessGuard, useAuth } from '@/entities/auth'
 import { Chat, chatsApi, Message } from '@/entities/chats'
-import { Button } from '@/shared/ui/common/button'
 
 export default function ChatPage() {
   const params = useParams()
@@ -24,6 +24,10 @@ export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false)
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [input, setInput] = useState('')
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { imagePreview, imageUrl, isUploading, uploadImage, clearImage } =
+    useImageUpload()
 
   const queryClient = useQueryClient()
 
@@ -53,6 +57,22 @@ export default function ChatPage() {
       setIsTyping(false)
       sendTyping(false)
     }, 2000)
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('You can only upload image files.')
+      return
+    }
+
+    try {
+      await uploadImage(file)
+    } catch (err) {
+      console.error('Error loading', err)
+    }
   }
 
   const handleTyping = useCallback(
@@ -119,17 +139,20 @@ export default function ChatPage() {
     handleTyping,
   )
 
-  const handleSend = () => {
-    if (input.trim()) {
-      const newMsg = {
-        roomId: chatId,
-        content: input,
-      }
-      sendMessage(newMsg)
-      setInput('')
+  const handleSend = async () => {
+    if (!input.trim() && !imageUrl) return
 
-      queryClient.invalidateQueries({ queryKey: ['chats', categorySlug] })
+    const newMsg = {
+      roomId: chatId,
+      content: [imageUrl, input.trim()].filter(Boolean).join('\n'),
     }
+
+    sendMessage(newMsg)
+
+    setInput('')
+    clearImage()
+
+    queryClient.invalidateQueries({ queryKey: ['chats', categorySlug] })
   }
 
   const { data: chats, isLoading } = useQuery({
@@ -202,47 +225,20 @@ export default function ChatPage() {
           </>
         )}
 
-        <div className='flex px-4 pb-8 md768:px-6 md:px-12'>
-          <div className='relative flex-1' ref={emojiPickerRef}>
-            <input
-              value={input}
-              onChange={onInputChange}
-              onKeyDown={e => e.key === 'Enter' && handleSend()}
-              className='w-full rounded-[20px] bg-white px-5 py-4 pr-32 placeholder:text-sm placeholder:text-[#0000004D] focus:outline-none focus:ring-2 focus:ring-primary'
-              placeholder={t('chatPage.inputPlaceholder')}
-            />
-
-            {showEmojiPicker && (
-              <div className='absolute bottom-[60px] right-20 z-50'>
-                <EmojiPicker
-                  onEmojiClick={emojiData => setInput(prev => prev + emojiData.emoji)}
-                />
-              </div>
-            )}
-
-            <div className='absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-2'>
-              <button
-                type='button'
-                className='text-gray-500'
-                onClick={() => setShowEmojiPicker(prev => !prev)}
-              >
-                <Smile size={20} strokeWidth={1.5} />
-              </button>
-
-              <button type='button' className='text-gray-500'>
-                <Paperclip size={20} strokeWidth={1.5} />
-              </button>
-
-              <Button
-                onClick={handleSend}
-                className='flex items-center gap-2 rounded-[20px] px-3 py-1 md768:px-5 md768:py-2'
-              >
-                {t('chatPage.send')}
-                <Send size={16} strokeWidth={1.5} />
-              </Button>
-            </div>
-          </div>
-        </div>
+        <MessageInput
+          input={input}
+          imagePreview={imagePreview}
+          isUploading={isUploading}
+          showEmojiPicker={showEmojiPicker}
+          emojiPickerRef={emojiPickerRef}
+          fileInputRef={fileInputRef}
+          onInputChange={onInputChange}
+          handleSend={handleSend}
+          handleFileChange={handleFileChange}
+          toggleEmojiPicker={() => setShowEmojiPicker(prev => !prev)}
+          onEmojiSelect={emoji => setInput(prev => prev + emoji)}
+          clearImage={clearImage}
+        />
       </div>
     </AccessGuard>
   )
