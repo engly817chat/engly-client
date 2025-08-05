@@ -1,7 +1,7 @@
-import { Smile, Paperclip, Send, X } from 'lucide-react'
-import { Button } from '@/shared/ui/common/button'
 import EmojiPicker from 'emoji-picker-react'
+import { Paperclip, Send, Smile } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@/shared/ui/common/button'
 import { ImagePreview } from './image-preview'
 
 interface MessageInputProps {
@@ -9,7 +9,7 @@ interface MessageInputProps {
   imagePreview: string | null
   isUploading: boolean
   showEmojiPicker: boolean
-  emojiPickerRef: React.RefObject<HTMLDivElement | null> 
+  emojiPickerRef: React.RefObject<HTMLDivElement | null>
   fileInputRef: React.RefObject<HTMLInputElement | null>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleSend: () => void
@@ -19,7 +19,7 @@ interface MessageInputProps {
   clearImage: () => void
 }
 
-export default function MessageInput({
+export function MessageInput({
   input,
   imagePreview,
   isUploading,
