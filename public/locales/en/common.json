@@ -182,7 +182,17 @@
   },
   "chatCategoryPage": {
     "title": "Welcome to the {{category}} Chat",
-    "description": "Select a chat from the list and join the conversation. Here you can continue the discussion with already familiar interlocutors or start a new topic to communicate with other platform participants."
+    "description": "Select a chat from the list and join the conversation. Here you can continue the discussion with already familiar interlocutors or start a new topic to communicate with other platform participants.",
+    "categories": {
+      "travel_and_food": "Travel and Food",
+      "tech": "Tech",
+      "news": "News",
+      "hobbies": "Hobbies",
+      "movies": "Movies",
+      "sports": "Sports",
+      "career": "Career",
+      "general_chat": "General"
+    }
   },
   "chatList": {
     "noChats": "No chats yet. Start a new one to begin the conversation ✨",
