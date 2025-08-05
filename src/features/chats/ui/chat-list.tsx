@@ -2,7 +2,9 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { Chat } from '@/entities/chats'
+import { i18n } from '@/shared/lib'
 import { cn } from '@/shared/utils'
+import { formatChatTime } from '../lib/formatChatTime'
 
 interface ChatListProps {
   chats: Chat[]
@@ -50,13 +52,9 @@ export const ChatList = ({ chats, isLoading, slug, loadMoreRef }: ChatListProps)
           lastMessage?.content && lastMessage.content.length > 45
             ? lastMessage.content.slice(0, 45) + '...'
             : lastMessage?.content || t('chatList.noMessages')
-            
+
         const lastMessageTime = lastMessage?.createdAt
-          ? new Date(lastMessage.createdAt).toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true,
-            })
+          ? formatChatTime(lastMessage.createdAt, i18n.language)
           : ''
 
         return (

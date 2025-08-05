@@ -2,6 +2,7 @@ import { enUS, uk } from 'date-fns/locale'
 import { Check, CheckCheck, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Message } from '@/entities/chats'
+import { formatChatTime } from '../lib/formatChatTime'
 import { groupMessagesByDate } from '../lib/groupMessagesByDate'
 import { renderMessageContent } from '../lib/renderMessageContent'
 
@@ -76,12 +77,7 @@ export const MessagesList = ({
                         isOwn ? 'text-primary-foreground/70' : 'text-muted-foreground'
                       }`}
                     >
-                      {msg.createdAt
-                        ? new Date(msg.createdAt).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        : ''}
+                      {msg.createdAt ? formatChatTime(msg.createdAt, i18n.language) : ''}
 
                       {isOwn &&
                         (msg.id === 'some-read-id' ? (
