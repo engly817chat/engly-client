@@ -1,29 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { chatsApi, Message, Reader } from '@/entities/chats'
 
 type MessageReadersMap = Record<string, Reader[]>
 
-export const useMessageReadStatuses = (messages: Message[], currentUserId?: string) => {
+export const useObservedMessageReadStatuses = (
+  messages: Message[],
+  currentUserId?: string,
+) => {
   const [readersMap, setReadersMap] = useState<MessageReadersMap>({})
+  const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set())
 
-  useEffect(() => {
-    if (!currentUserId) return
+  const loadForId = async (messageId: string) => {
+    if (!currentUserId || loadedIds.has(messageId)) return
 
-    const fetchStatuses = async () => {
-      const map: MessageReadersMap = {}
+    const msg = messages.find(m => m.id === messageId && m.user.id === currentUserId)
+    if (!msg) return
 
-      const last10 = [...messages].filter(msg => msg.user.id === currentUserId).slice(-10)
-
-      for (const msg of last10) {
-        const readers = await chatsApi.getMessageReaders(msg.id)
-        map[msg.id] = readers
-      }
-
-      setReadersMap(map)
+    try {
+      const readers = await chatsApi.getMessageReaders(msg.id)
+      setReadersMap(prev => ({ ...prev, [msg.id]: readers }))
+      setLoadedIds(prev => new Set(prev).add(msg.id))
+    } catch (e) {
+      console.error('Failed to load readers for', msg.id)
     }
+  }
 
-    fetchStatuses()
-  }, [messages, currentUserId])
-
-  return readersMap
+  return { readersMap, loadForId }
 }

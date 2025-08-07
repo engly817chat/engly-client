@@ -2,7 +2,8 @@ import { enUS, uk } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Message } from '@/entities/chats'
-import { useMessageReadStatuses } from '../hooks/use-message-read-statuses'
+import { useObservedMessageReadStatuses } from '../hooks/use-message-read-statuses'
+import { useVisibleMessages } from '../hooks/use-visible-message-observer'
 import { formatChatTime } from '../lib/formatChatTime'
 import { groupMessagesByDate } from '../lib/groupMessagesByDate'
 import { renderMessageContent } from '../lib/renderMessageContent'
@@ -28,7 +29,15 @@ export const MessagesList = ({
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'uk' ? uk : enUS
   const groupedMessages = groupMessagesByDate(messages, t, locale)
-  const readStatuses = useMessageReadStatuses(messages, currentUserId)
+  const { readersMap: readStatuses, loadForId } = useObservedMessageReadStatuses(
+    messages,
+    currentUserId,
+  )
+
+  useVisibleMessages(
+    messages.map(m => m.id),
+    loadForId,
+  )
 
   return (
     <div
@@ -56,6 +65,7 @@ export const MessagesList = ({
               <div
                 key={msg.id}
                 className={`mb-4 flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                data-message-id={msg.id}
               >
                 <div className='max-w-xs sm:max-w-md'>
                   <div
