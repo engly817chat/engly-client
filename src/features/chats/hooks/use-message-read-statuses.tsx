@@ -21,7 +21,7 @@ export const useObservedMessageReadStatuses = (
       setReadersMap(prev => ({ ...prev, [msg.id]: readers }))
       setLoadedIds(prev => new Set(prev).add(msg.id))
     } catch (e) {
-      console.error('Failed to load readers for', msg.id)
+      console.error('Failed to load readers for', msg.id, e)
     }
   }
 
