@@ -1,10 +1,12 @@
 import { enUS, uk } from 'date-fns/locale'
-import { Check, CheckCheck, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Message } from '@/entities/chats'
+import { useMessageReadStatuses } from '../hooks/use-message-read-statuses'
 import { formatChatTime } from '../lib/formatChatTime'
 import { groupMessagesByDate } from '../lib/groupMessagesByDate'
 import { renderMessageContent } from '../lib/renderMessageContent'
+import { ReadStatusTooltip } from './read-status-tooltip'
 
 interface MessagesListProps {
   messages: Message[]
@@ -26,6 +28,7 @@ export const MessagesList = ({
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'uk' ? uk : enUS
   const groupedMessages = groupMessagesByDate(messages, t, locale)
+  const readStatuses = useMessageReadStatuses(messages, currentUserId)
 
   return (
     <div
@@ -79,12 +82,7 @@ export const MessagesList = ({
                     >
                       {msg.createdAt ? formatChatTime(msg.createdAt, i18n.language) : ''}
 
-                      {isOwn &&
-                        (msg.id === 'some-read-id' ? (
-                          <CheckCheck size={14} strokeWidth={1.5} />
-                        ) : (
-                          <Check size={14} strokeWidth={1.5} />
-                        ))}
+                      {isOwn && <ReadStatusTooltip readers={readStatuses[msg.id]} />}
                     </div>
                   </div>
                 </div>

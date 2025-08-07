@@ -232,5 +232,9 @@
   "typingIndicator": {
     "oneUser": "{{username}} набирає повідомлення...",
     "multipleUsers": "{{usernames}} набирають повідомлення..."
+  },
+    "readStatusTooltip": {
+    "read": "Прочитано {{users}}",
+    "unread": "Не прочитано"
   }
 }

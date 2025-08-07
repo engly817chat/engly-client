@@ -232,5 +232,9 @@
   "typingIndicator": {
     "oneUser": "{{username}} is typing...",
     "multipleUsers": "{{usernames}} are typing..."
+  },
+  "readStatusTooltip": {
+    "read": "Read by {{users}}",
+    "unread": "Unread"
   }
 }

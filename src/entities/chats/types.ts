@@ -38,22 +38,28 @@ export interface Message {
 }
 
 export interface PaginatedChatsResponse {
-  content: Chat[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfElements: number;
-  pageable: Pageable;
-  size: number;
-  totalElements: number;
-  totalPages: number;
+  content: Chat[]
+  empty: boolean
+  first: boolean
+  last: boolean
+  number: number
+  numberOfElements: number
+  pageable: Pageable
+  size: number
+  totalElements: number
+  totalPages: number
 }
 
 export interface Pageable {
-  pageNumber: number;
-  pageSize: number;
-  offset: number;
-  paged: boolean;
-  unpaged: boolean;
+  pageNumber: number
+  pageSize: number
+  offset: number
+  paged: boolean
+  unpaged: boolean
+}
+
+export interface Reader {
+  id: string
+  username: string
+  email: string
 }

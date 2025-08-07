@@ -86,4 +86,8 @@ export const chatsApi = {
 
     return response.data
   },
+  getMessageReaders: async (messageId: string) => {
+    const response = await axiosWithAuth.get(`/api/message/${messageId}/readers`)
+    return response.data.content
+  },
 } as const
