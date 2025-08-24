@@ -4,7 +4,7 @@ import { PaginatedChatsResponse } from './types'
 const endpoints = {
   getChatsByCategory: '/api/rooms/by-category',
   createChat: '/api/rooms/create',
-  getMessages: (roomId: string) => `/api/message/current-room/native/${roomId}`,
+  getMessages: (roomId: string) => `/api/message/current-room/native/${roomId}?sort=createdAt%2CASC`,
   sendMessage: '/api/message/send',
   findChats: (category: string) => `/api/rooms/find/in/${category}/by-keyString/`,
   uploadImage: '/api/upload',
