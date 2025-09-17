@@ -33,6 +33,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/shared/ui/common/sidebar'
+import { cn } from '@/shared/utils'
 import { useSearchChats } from '../hooks/use-search-chats'
 
 export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => void }) {
@@ -45,30 +46,35 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
         url: '#',
         icon: MessageSquare,
         isActive: false,
+        disabled: false,
       },
       {
         title: t('sidebar.users'),
         url: '#',
         icon: Users,
         isActive: false,
+        disabled: true,
       },
       {
         title: t('sidebar.bell'),
         url: '#',
         icon: Bell,
         isActive: false,
+        disabled: true,
       },
       {
         title: t('sidebar.user'),
         url: '#',
         icon: UserRound,
         isActive: false,
+        disabled: true,
       },
       {
         title: t('sidebar.alert'),
         url: '#',
         icon: CircleAlert,
         isActive: false,
+        disabled: true,
       },
     ],
     [t],
@@ -119,11 +125,12 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
                         children: item.title,
                         hidden: false,
                       }}
-                      onClick={() => {
-                        setActiveItem(item)
-                      }}
+                      onClick={() => !item.disabled && setActiveItem(item)}
                       isActive={activeItem.title === item.title}
-                      className='flex items-center justify-center px-2.5 md:px-2'
+                      className={cn(
+                        'flex items-center justify-center px-2.5 md:px-2',
+                        item.disabled && 'pointer-events-none opacity-40',
+                      )}
                     >
                       <item.icon className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
                     </SidebarMenuButton>
@@ -138,7 +145,7 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
             <SidebarMenuItem>
               <SidebarMenuButton
                 tooltip={{ children: t('sidebar.settings'), hidden: false }}
-                className='flex items-center justify-center px-2.5'
+                className='pointer-events-none flex items-center justify-center px-2.5 opacity-40'
               >
                 <Settings className='!h-[26px] !w-[26px]' strokeWidth={1.5} />
               </SidebarMenuButton>
@@ -206,7 +213,7 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
                 }
                 slug={slugValue}
                 loadMoreRef={loadMoreRef}
-                 onChatClick={() => setOpenMobile(false)}
+                onChatClick={() => setOpenMobile(false)}
               />
             </SidebarGroupContent>
           </SidebarGroup>
