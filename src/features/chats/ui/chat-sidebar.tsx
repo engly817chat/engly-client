@@ -74,7 +74,7 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
     [t],
   )
   const [activeItem, setActiveItem] = useState(navMain[0])
-  const { showRail, setShowRail } = useSidebar()
+  const { showRail, setShowRail, setOpenMobile } = useSidebar()
   const { logout } = useAuth()
   const params = useParams()
   const slug = params.slug ?? ''
@@ -201,9 +201,12 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
             <SidebarGroupContent>
               <ChatList
                 chats={chatsToShow}
-                isLoading={(debouncedSearch ? isSearchLoading : isLoading) || isFetchingNextPage}
+                isLoading={
+                  (debouncedSearch ? isSearchLoading : isLoading) || isFetchingNextPage
+                }
                 slug={slugValue}
                 loadMoreRef={loadMoreRef}
+                 onChatClick={() => setOpenMobile(false)}
               />
             </SidebarGroupContent>
           </SidebarGroup>

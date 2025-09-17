@@ -11,9 +11,16 @@ interface ChatListProps {
   isLoading: boolean
   slug: string | string[]
   loadMoreRef?: React.RefObject<HTMLDivElement | null>
+  onChatClick?: () => void
 }
 
-export const ChatList = ({ chats, isLoading, slug, loadMoreRef }: ChatListProps) => {
+export const ChatList = ({
+  chats,
+  isLoading,
+  slug,
+  loadMoreRef,
+  onChatClick,
+}: ChatListProps) => {
   const params = useParams()
   const { t } = useTranslation()
   const chatId = Array.isArray(params?.id) ? params.id[0] : params?.id
@@ -61,6 +68,7 @@ export const ChatList = ({ chats, isLoading, slug, loadMoreRef }: ChatListProps)
           <Link
             href={`/chats/${slug}/${chat.id}`}
             key={chat.id}
+            onClick={() => onChatClick?.()}
             className={cn(
               'group flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border bg-sidebar-primary-foreground p-4 text-sm font-medium hover:border-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
               isActive &&

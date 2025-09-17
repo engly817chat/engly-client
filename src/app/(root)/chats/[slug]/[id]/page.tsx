@@ -179,7 +179,7 @@ export default function ChatPage() {
               {isLoading ? (
                 <div className='h-5 w-16 animate-pulse rounded bg-gray-200'></div>
               ) : (
-                t('chatPage.members', { count: chat?.chatParticipants.length })
+                t('chatPage.members', { count: chat?.chatParticipants?.length ?? 0 })
               )}
             </div>
           </div>
