@@ -1,3 +1,4 @@
+import React from 'react'
 import { enUS, uk } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +17,7 @@ interface MessagesListProps {
   scrollRef: React.RefObject<HTMLDivElement | null>
   onScroll: () => void
   isLoadingMore?: boolean
+  markAsRead?: (messageIds: string[]) => void
 }
 
 export const MessagesList = ({
@@ -25,6 +27,7 @@ export const MessagesList = ({
   scrollRef,
   onScroll,
   isLoadingMore,
+  markAsRead,
 }: MessagesListProps) => {
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'uk' ? uk : enUS
@@ -34,9 +37,30 @@ export const MessagesList = ({
     currentUserId,
   )
 
+  const visibleMessageIds = React.useRef<Set<string>>(new Set())
+
+  const handleMessageVisible = React.useCallback((messageId: string) => {
+    loadForId(messageId)
+    
+    // Only mark as read if it's not from current user
+    const message = messages.find(m => m.id === messageId)
+    if (message && message.user.id !== currentUserId && markAsRead) {
+      visibleMessageIds.current.add(messageId)
+      
+      // Debounce marking as read - collect visible messages and send in batch
+      setTimeout(() => {
+        const idsToMark = Array.from(visibleMessageIds.current)
+        if (idsToMark.length > 0) {
+          markAsRead(idsToMark)
+          visibleMessageIds.current.clear()
+        }
+      }, 1000)
+    }
+  }, [messages, currentUserId, markAsRead, loadForId])
+
   useVisibleMessages(
     messages.map(m => m.id),
-    loadForId,
+    handleMessageVisible,
   )
 
   return (

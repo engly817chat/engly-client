@@ -131,10 +131,16 @@ export default function ChatPage() {
     }
   }, [])
 
-  const { sendMessage, sendTyping } = useChatSocket(
+  const handleMessageRead = useCallback((data: { messageIds: string[]; userId: string; timestamp: string }) => {
+    console.log('Messages read by user:', data)
+    // You can update UI here to show read status
+  }, [])
+
+  const { sendMessage, sendTyping, markAsRead } = useChatSocket(
     chatId,
     handleNewMessage,
     handleTyping,
+    handleMessageRead,
   )
 
   const handleSend = async () => {
@@ -179,7 +185,7 @@ export default function ChatPage() {
               {isLoading ? (
                 <div className='h-5 w-16 animate-pulse rounded bg-gray-200'></div>
               ) : (
-                t('chatPage.members', { count: chat?.chatParticipants?.length ?? 0 })
+                t('chatPage.members', { count: chat?.members ?? 0 })
               )}
             </div>
           </div>
@@ -209,6 +215,7 @@ export default function ChatPage() {
               scrollRef={scrollRef}
               onScroll={onScroll}
               isLoadingMore={isLoadingMore}
+              markAsRead={markAsRead}
             />
 
             {typingUsers.length > 0 && (
