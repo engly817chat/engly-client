@@ -29,6 +29,13 @@ export function CreateChatModal({
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
+  const formatCategoryName = (slug: string) => {
+    return slug
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+  }
+
   const form = useForm<CreateChatFormValues>({
     resolver: zodResolver(CreateChatSchema(t)),
     defaultValues: {
@@ -61,73 +68,78 @@ export function CreateChatModal({
   }
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
-      <div className='relative w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl'>
-        <button
-          onClick={onClose}
-          className='absolute right-5 top-5 text-gray-400 transition-colors hover:text-gray-700'
-          aria-label={t('common.close')}
-        >
-          <X size={24} />
-        </button>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md'>
+      <div className='relative w-full max-w-lg animate-in fade-in zoom-in-95 duration-200'>
+        <div className='relative overflow-hidden rounded-3xl bg-gradient-to-br from-white to-gray-50 p-8 shadow-2xl ring-1 ring-gray-200'>
+          <button
+            onClick={onClose}
+            className='absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-all hover:bg-gray-200 hover:text-gray-700 hover:scale-110'
+            aria-label={t('common.close')}
+          >
+            <X size={18} />
+          </button>
 
-        <div className='mb-6 text-center'>
-          <h2 className='text-2xl font-bold text-gray-800'>
-            {t('chatPage.createChat')}
-          </h2>
-          <p className='text-sm text-gray-500'>
-            Start a new conversation in the {categorySlug} category.
-          </p>
+          <div className='mb-8'>
+            <div className='mb-2 inline-flex rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-1.5'>
+              <span className='text-xs font-semibold text-white'>{formatCategoryName(categorySlug)}</span>
+            </div>
+            <h2 className='text-3xl font-bold text-gray-900'>
+              {t('chatPage.createChat')}
+            </h2>
+            <p className='mt-2 text-sm text-gray-600'>
+              Start a new conversation and connect with others
+            </p>
+          </div>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder={t('chatPage.headerPlaceholder')}
+                        {...field}
+                        className='h-12 rounded-xl border-gray-200 bg-white px-4 text-sm shadow-sm transition-all focus:border-blue-400 focus:shadow-md focus:ring-2 focus:ring-blue-100'
+                      />
+                    </FormControl>
+                    <FormMessage className='mt-2 text-xs text-red-500' />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        placeholder={t('chatPage.descriptionPlaceholder')}
+                        {...field}
+                        className='min-h-[100px] rounded-xl border-gray-200 bg-white px-4 py-3 text-sm shadow-sm transition-all focus:border-blue-400 focus:shadow-md focus:ring-2 focus:ring-blue-100'
+                        rows={4}
+                      />
+                    </FormControl>
+                    <FormMessage className='mt-2 text-xs text-red-500' />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type='submit'
+                className='h-12 w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-6 text-sm font-semibold text-white shadow-lg transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60 disabled:hover:scale-100'
+                disabled={createChatMutation.isPending}
+              >
+                {createChatMutation.isPending
+                  ? t('common.creating')
+                  : t('chatPage.create')}
+              </Button>
+            </form>
+          </Form>
         </div>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder={t('chatPage.headerPlaceholder')}
-                      {...field}
-                      className='w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm transition focus:border-blue-500 focus:ring-blue-500'
-                    />
-                  </FormControl>
-                  <FormMessage className='mt-1 text-xs text-red-500' />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      placeholder={t('chatPage.descriptionPlaceholder')}
-                      {...field}
-                      className='w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm transition focus:border-blue-500 focus:ring-blue-500'
-                      rows={4}
-                    />
-                  </FormControl>
-                  <FormMessage className='mt-1 text-xs text-red-500' />
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type='submit'
-              className='w-full rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-              disabled={createChatMutation.isPending}
-            >
-              {createChatMutation.isPending
-                ? t('common.creating')
-                : t('chatPage.create')}
-            </Button>
-          </form>
-        </Form>
       </div>
     </div>
   )

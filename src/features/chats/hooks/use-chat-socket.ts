@@ -26,7 +26,7 @@ export const useChatSocket = (
 
   useEffect(() => {
     const client = new Client({
-      brokerURL: 'wss://engly-server-latest.onrender.com/chat',
+      brokerURL: 'ws://localhost:8000/chat',
       reconnectDelay: 8000,
       debug: str => console.log('[STOMP]', str),
       heartbeatIncoming: 10000,
