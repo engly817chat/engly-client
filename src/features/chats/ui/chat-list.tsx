@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Chat } from '@/entities/chats'
 import { i18n } from '@/shared/lib'
 import { cn } from '@/shared/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/common/avatar'
 import { formatChatTime } from '../lib/formatChatTime'
 
 interface ChatListProps {
@@ -27,37 +28,37 @@ export const ChatList = ({
 
   if (isLoading) {
     return (
-      <>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className='flex animate-pulse flex-col gap-2 border-b p-4'>
-            <div className='flex items-center justify-between'>
-              <div className='h-5 w-24 rounded bg-gray-300' />
-              <div className='h-3 w-12 rounded bg-gray-300' />
+      <div className='space-y-2 px-2'>
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div key={index} className='flex animate-pulse items-center gap-3 rounded-lg p-3'>
+            <div className='h-12 w-12 rounded-full bg-gray-300' />
+            <div className='flex-1 space-y-2'>
+              <div className='h-4 w-3/4 rounded bg-gray-300' />
+              <div className='h-3 w-1/2 rounded bg-gray-300' />
             </div>
-            <div className='h-4 w-40 rounded bg-gray-300' />
           </div>
         ))}
-      </>
+      </div>
     )
   }
 
   if (chats.length === 0) {
     return (
-      <div className='px-4 py-8 text-center text-sm text-muted-foreground'>
+      <div className='mt-10 text-center text-sm text-gray-500'>
         {t('chatList.noChats')}
       </div>
     )
   }
 
   return (
-    <>
+    <nav className='flex-1 space-y-1 px-2'>
       {chats.map(chat => {
         const lastMessage = chat.lastMessage
         const isActive = chat.id === chatId
 
         const lastMessageContent =
-          lastMessage && lastMessage.length > 45
-            ? lastMessage.slice(0, 45) + '...'
+          lastMessage && lastMessage.length > 30
+            ? lastMessage.slice(0, 30) + '...'
             : lastMessage || t('chatList.noMessages')
 
         const lastMessageTime = chat.lastMessageCreatedAt
@@ -70,38 +71,45 @@ export const ChatList = ({
             key={chat.id}
             onClick={() => onChatClick?.()}
             className={cn(
-              'group flex flex-col items-start gap-2 whitespace-nowrap border-b border-b-border bg-sidebar-primary-foreground p-4 text-sm font-medium hover:border-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-              isActive &&
-                'border-none bg-sidebar-primary text-sidebar-primary-foreground',
+              'group flex items-center gap-3 rounded-lg p-3 text-sm font-medium transition-colors',
+              isActive
+                ? 'bg-blue-500 text-white'
+                : 'text-gray-700 hover:bg-gray-100',
             )}
           >
-            <div className='flex w-full items-center gap-1'>
-              <span className='text-xl font-medium'>{chat.name}</span>
-              {lastMessageTime && (
-                <span
-                  className={cn(
-                    'ml-auto text-xs text-[rgba(0,0,0,0.5)] group-hover:text-sidebar-accent-foreground',
-                    isActive && 'text-sidebar-accent-foreground',
-                  )}
-                >
-                  {lastMessageTime}
-                </span>
-              )}
+            <Avatar className='h-11 w-11 border-2 border-white'>
+              <AvatarImage src={chat.creator?.avatarUrl} alt={chat.name} />
+              <AvatarFallback className='text-base font-semibold'>
+                {chat.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className='flex-1 truncate'>
+              <div className='flex items-center justify-between'>
+                <span className='font-semibold'>{chat.name}</span>
+                {lastMessageTime && (
+                  <span
+                    className={cn(
+                      'text-xs',
+                      isActive ? 'text-gray-200' : 'text-gray-500',
+                    )}
+                  >
+                    {lastMessageTime}
+                  </span>
+                )}
+              </div>
+              <p
+                className={cn(
+                  'truncate text-xs',
+                  isActive ? 'text-gray-200' : 'text-gray-500',
+                )}
+              >
+                {lastMessageContent}
+              </p>
             </div>
-
-            <span
-              className={cn(
-                'text-xs font-medium text-[rgba(0,0,0,0.5)]',
-                'group-hover:text-sidebar-accent-foreground',
-                isActive && 'text-sidebar-accent-foreground',
-              )}
-            >
-              {lastMessageContent}
-            </span>
           </Link>
         )
       })}
-      <div ref={loadMoreRef} className='mt-20 h-10' />
-    </>
+      <div ref={loadMoreRef} className='h-10' />
+    </nav>
   )
 }

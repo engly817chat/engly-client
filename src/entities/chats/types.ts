@@ -4,6 +4,7 @@ export interface Chat {
   description: string
   creator?: {
     email?: string
+    avatarUrl?: string
   }
   createdAt?: string
   updatedAt?: string
@@ -33,6 +34,7 @@ export interface Message {
     username: string
     email: string
     id: string
+    avatarUrl?: string
   }
   content: string
   isEdited: boolean
