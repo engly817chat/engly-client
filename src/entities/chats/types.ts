@@ -5,11 +5,13 @@ export interface Chat {
   creator?: {
     email?: string
   }
-  createdAt: string
-  updatedAt: string
-  messages: Message[] | null
-  chatParticipants: []
-  lastMessage: LastMessage
+  createdAt?: string
+  updatedAt?: string
+  messages?: Message[] | null
+  chatParticipants?: []
+  lastMessage: string | null
+  lastMessageCreatedAt: string | null
+  members: number
 }
 
 export interface LastMessage {

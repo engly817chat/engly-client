@@ -56,12 +56,12 @@ export const ChatList = ({
         const isActive = chat.id === chatId
 
         const lastMessageContent =
-          lastMessage?.content && lastMessage.content.length > 45
-            ? lastMessage.content.slice(0, 45) + '...'
-            : lastMessage?.content || t('chatList.noMessages')
+          lastMessage && lastMessage.length > 45
+            ? lastMessage.slice(0, 45) + '...'
+            : lastMessage || t('chatList.noMessages')
 
-        const lastMessageTime = lastMessage?.createdAt
-          ? formatChatTime(lastMessage.createdAt, i18n.language)
+        const lastMessageTime = chat.lastMessageCreatedAt
+          ? formatChatTime(chat.lastMessageCreatedAt, i18n.language)
           : ''
 
         return (

@@ -8,10 +8,17 @@ type OutgoingMessage = {
   content: string
 }
 
+type MessageReadData = {
+  messageIds: string[]
+  userId: string
+  timestamp: string
+}
+
 export const useChatSocket = (
   chatId: string,
   onMessage: (msg: Message) => void,
   onTyping?: (data: { username: string; isTyping: boolean }) => void,
+  onMessageRead?: (data: MessageReadData) => void,
 ) => {
   const clientRef = useRef<Client | null>(null)
   const subscriptionRef = useRef<StompSubscription | null>(null)
@@ -19,7 +26,7 @@ export const useChatSocket = (
 
   useEffect(() => {
     const client = new Client({
-      brokerURL: 'wss://engly-server-latest.onrender.com/chat',
+      brokerURL: 'ws://localhost:8000/chat',
       reconnectDelay: 8000,
       debug: str => console.log('[STOMP]', str),
       heartbeatIncoming: 10000,
@@ -77,6 +84,16 @@ export const useChatSocket = (
 
                   if (onTyping) {
                     onTyping({ username, isTyping })
+                  }
+                } else if (parsed?.type === 'MESSAGE_READ' && parsed.payload) {
+                  console.log('[STOMP] Messages marked as read:', parsed.payload)
+                  
+                  if (onMessageRead) {
+                    onMessageRead({
+                      messageIds: parsed.payload.messageIds,
+                      userId: parsed.payload.userId,
+                      timestamp: parsed.payload.timestamp,
+                    })
                   }
                 }
               } catch (error) {
@@ -147,5 +164,22 @@ export const useChatSocket = (
     }
   }
 
-  return { sendMessage, sendTyping }
+  const markAsRead = (messageIds: string[]) => {
+    const client = clientRef.current
+
+    if (client && client.connected) {
+      console.log('[STOMP] Marking messages as read:', messageIds)
+      client.publish({
+        destination: '/app/chat/message.markAsRead',
+        body: JSON.stringify({
+          roomId: chatId,
+          messageIds,
+        }),
+      })
+    } else {
+      console.warn('[STOMP] Cannot mark as read: client not connected')
+    }
+  }
+
+  return { sendMessage, sendTyping, markAsRead }
 }
