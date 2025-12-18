@@ -1,5 +1,5 @@
 export const AppConfig = {
-  apiUrl: 'http://localhost:8000',
+  apiUrl: 'https://engly-server-latest.onrender.com',
   isClient: typeof window !== 'undefined',
 } as const
 
