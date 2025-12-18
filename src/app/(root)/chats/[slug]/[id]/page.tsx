@@ -9,6 +9,8 @@ import { MessagesList, useChatSocket, useImageUpload, usePaginatedMessages, Mess
 import { AccessGuard, useAuth } from '@/entities/auth'
 import { Chat, chatsApi, Message } from '@/entities/chats'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/common/avatar'
+
 export default function ChatPage() {
   const params = useParams()
   const { t } = useTranslation()
@@ -171,40 +173,44 @@ export default function ChatPage() {
 
   return (
     <AccessGuard requireAuth>
-      <div className='flex h-full w-full flex-col'>
-        <header className='sticky top-0 z-10 flex items-center justify-between border-b bg-primary-foreground px-6 py-4 shadow-sm'>
-          <div className='ml-4 flex flex-col gap-y-1'>
-            <div className='text-sm font-medium text-foreground md:text-xl'>
-              {isLoading ? (
-                <div className='h-6 w-40 animate-pulse rounded bg-gray-200'></div>
-              ) : (
-                chat?.name || t('chatPage.chatNotFound')
-              )}
-            </div>
-            <div className='text-xs text-muted'>
-              {isLoading ? (
-                <div className='h-5 w-16 animate-pulse rounded bg-gray-200'></div>
-              ) : (
-                t('chatPage.members', { count: chat?.members ?? 0 })
-              )}
+      <div className='flex h-full w-full flex-col bg-gray-50'>
+        <header className='sticky top-0 z-10 flex items-center justify-between border-b bg-white px-6 py-3 shadow-sm'>
+          <div className='flex items-center gap-4'>
+            <Avatar className='h-11 w-11'>
+              <AvatarImage src={chat?.creator?.avatarUrl} alt={chat?.name} />
+              <AvatarFallback>{chat?.name?.charAt(0).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className='flex flex-col'>
+              <div className='text-lg font-bold text-gray-800'>
+                {isLoading ? (
+                  <div className='h-6 w-40 animate-pulse rounded bg-gray-200'></div>
+                ) : (
+                  chat?.name || t('chatPage.chatNotFound')
+                )}
+              </div>
+              <div className='text-sm text-gray-500'>
+                {isLoading ? (
+                  <div className='mt-1 h-4 w-20 animate-pulse rounded bg-gray-200'></div>
+                ) : (
+                  t('chatPage.members', { count: chat?.members ?? 0 })
+                )}
+              </div>
             </div>
           </div>
 
-          <div className='flex items-center gap-2 md:gap-8'>
-            <div className='flex items-center gap-1 md:gap-2'>
-              <button className='p-1 text-foreground'>
-                <Search size={20} />
-              </button>
-              <button className='p-1 text-foreground'>
-                <MoreVertical size={20} />
-              </button>
-            </div>
+          <div className='flex items-center gap-3'>
+            <button className='rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100'>
+              <Search size={20} />
+            </button>
+            <button className='rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100'>
+              <MoreVertical size={20} />
+            </button>
           </div>
         </header>
 
         {isInitialLoad ? (
           <div className='flex flex-1 items-center justify-center'>
-            <Loader2 className='h-10 w-10 animate-spin text-primary' />
+            <Loader2 className='h-12 w-12 animate-spin text-blue-500' />
           </div>
         ) : (
           <>
@@ -219,7 +225,7 @@ export default function ChatPage() {
             />
 
             {typingUsers.length > 0 && (
-              <div className='py-2 pl-12 text-sm italic text-gray-600'>
+              <div className='px-8 pb-2 text-sm italic text-gray-500'>
                 {typingUsers.length === 1
                   ? t('typingIndicator.oneUser', { username: typingUsers[0] })
                   : t('typingIndicator.multipleUsers', {

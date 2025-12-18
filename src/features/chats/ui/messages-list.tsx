@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Message } from '@/entities/chats'
 import { useObservedMessageReadStatuses } from '../hooks/use-message-read-statuses'
 import { useVisibleMessages } from '../hooks/use-visible-message-observer'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/common/avatar'
 import { formatChatTime } from '../lib/formatChatTime'
 import { groupMessagesByDate } from '../lib/groupMessagesByDate'
 import { renderMessageContent } from '../lib/renderMessageContent'
@@ -67,51 +68,59 @@ export const MessagesList = ({
     <div
       ref={containerRef}
       onScroll={onScroll}
-      className='flex-1 overflow-y-auto px-6 py-6 md:px-12'
+      className='flex-1 overflow-y-auto p-6'
     >
       {isLoadingMore && (
-        <div className='flex items-center justify-center'>
-          <Loader2 className='h-10 w-10 animate-spin text-primary' />
+        <div className='flex justify-center py-4'>
+          <Loader2 className='h-8 w-8 animate-spin text-blue-500' />
         </div>
       )}
 
       {Object.entries(groupedMessages).map(([dateLabel, group]) => (
-        <div key={dateLabel}>
-          <div className='sticky top-0 z-10 mb-4 flex justify-center'>
-            <span className='rounded-md bg-gray-200 px-4 py-1 text-sm font-medium text-gray-600'>
+        <div key={dateLabel} className='relative mb-6'>
+          <div className='sticky top-4 z-10 mb-4 flex justify-center'>
+            <span className='rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-600'>
               {dateLabel}
             </span>
           </div>
 
-          {group.map(msg => {
-            const isOwn = msg.user.id === currentUserId
-            return (
-              <div
-                key={msg.id}
-                className={`mb-4 flex ${isOwn ? 'justify-end' : 'justify-start'}`}
-                data-message-id={msg.id}
-              >
-                <div className='max-w-xs sm:max-w-md'>
+          <div className='space-y-6'>
+            {group.map(msg => {
+              const isOwn = msg.user.id === currentUserId
+              return (
+                <div
+                  key={msg.id}
+                  className={`flex items-end gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}
+                  data-message-id={msg.id}
+                >
+                  {!isOwn && (
+                    <Avatar className='h-8 w-8'>
+                      <AvatarImage src={msg.user.avatarUrl} alt={msg.user.username} />
+                      <AvatarFallback>
+                        {msg.user.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
                   <div
-                    className={`rounded-lg px-3 py-2 ${
+                    className={`max-w-md rounded-2xl px-4 py-3 ${
                       isOwn
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-secodary-foreground bg-white'
+                        ? 'rounded-br-none bg-blue-500 text-white'
+                        : 'rounded-bl-none bg-white shadow-md'
                     }`}
                   >
                     {!isOwn && (
-                      <div className='mb-1 text-sm font-medium text-[#803828]'>
+                      <div className='mb-1 text-sm font-semibold text-blue-600'>
                         {msg.user.username}
                       </div>
                     )}
 
-                    <div className='whitespace-pre-wrap break-words text-base font-medium'>
+                    <div className='whitespace-pre-wrap break-words text-sm'>
                       {renderMessageContent(msg.content)}
                     </div>
 
                     <div
-                      className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
-                        isOwn ? 'text-primary-foreground/70' : 'text-muted-foreground'
+                      className={`mt-1.5 flex items-center justify-end gap-1.5 text-xs ${
+                        isOwn ? 'text-blue-200' : 'text-gray-400'
                       }`}
                     >
                       {msg.createdAt ? formatChatTime(msg.createdAt, i18n.language) : ''}
@@ -120,9 +129,9 @@ export const MessagesList = ({
                     </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       ))}
 

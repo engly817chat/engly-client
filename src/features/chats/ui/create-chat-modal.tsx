@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from '@/shared/ui/common/form'
 import { Input } from '@/shared/ui/common/input'
+import { Textarea } from '@/shared/ui/common/textarea'
 import { CreateChatFormValues, CreateChatSchema } from '../lib/schema'
 
 export function CreateChatModal({
@@ -60,22 +61,27 @@ export function CreateChatModal({
   }
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-      <div className='relative w-full max-w-lg rounded-lg bg-white px-12 py-9 shadow-lg'>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
+      <div className='relative w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl'>
         <button
           onClick={onClose}
-          className='absolute right-4 top-4 text-gray-500 transition hover:text-gray-800'
+          className='absolute right-5 top-5 text-gray-400 transition-colors hover:text-gray-700'
           aria-label={t('common.close')}
         >
-          <X size={20} />
+          <X size={24} />
         </button>
 
-        <h2 className='mb-4 text-center text-2xl font-medium'>
-          {t('chatPage.createChat')}
-        </h2>
+        <div className='mb-6 text-center'>
+          <h2 className='text-2xl font-bold text-gray-800'>
+            {t('chatPage.createChat')}
+          </h2>
+          <p className='text-sm text-gray-500'>
+            Start a new conversation in the {categorySlug} category.
+          </p>
+        </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <FormField
               control={form.control}
               name='name'
@@ -85,10 +91,10 @@ export function CreateChatModal({
                     <Input
                       placeholder={t('chatPage.headerPlaceholder')}
                       {...field}
-                      className='rounded-md border border-black bg-input p-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:border-0'
+                      className='w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm transition focus:border-blue-500 focus:ring-blue-500'
                     />
                   </FormControl>
-                  <FormMessage className='text-sm text-red-500' />
+                  <FormMessage className='mt-1 text-xs text-red-500' />
                 </FormItem>
               )}
             />
@@ -99,21 +105,27 @@ export function CreateChatModal({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <textarea
-                      {...field}
+                    <Textarea
                       placeholder={t('chatPage.descriptionPlaceholder')}
-                      className='w-full resize-none rounded-md border border-black bg-input p-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground'
+                      {...field}
+                      className='w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm transition focus:border-blue-500 focus:ring-blue-500'
                       rows={4}
                     />
                   </FormControl>
-                  <FormMessage className='text-sm text-red-500' />
+                  <FormMessage className='mt-1 text-xs text-red-500' />
                 </FormItem>
               )}
             />
 
-            <div className='flex justify-center pt-2'>
-              <Button type='submit' className='px-14 py-3.5'>{t('chatPage.create')}</Button>
-            </div>
+            <Button
+              type='submit'
+              className='w-full rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+              disabled={createChatMutation.isPending}
+            >
+              {createChatMutation.isPending
+                ? t('common.creating')
+                : t('chatPage.create')}
+            </Button>
           </form>
         </Form>
       </div>
