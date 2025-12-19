@@ -18,7 +18,7 @@ export const Providers = () => {
       className='w-full'
       onClick={() => {
         window.location.href =
-        AppConfig.apiUrl + '/oauth2/login/google'
+        AppConfig.apiUrl + '/oauth2/authorization/google'
       }}
     >
       <GoogleIcon />

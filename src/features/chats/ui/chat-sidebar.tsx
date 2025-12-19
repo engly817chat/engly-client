@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation'
 import {
   AlignJustify,
   Bell,
+  ChevronLeft,
   CircleAlert,
   ListFilter,
   LogOut,
@@ -36,8 +37,19 @@ import {
 import { cn } from '@/shared/utils'
 import { useSearchChats } from '../hooks/use-search-chats'
 
-export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => void }) {
+export function ChatSidebar({ 
+  onOpenModal,
+  isRoomListOpen,
+  setIsRoomListOpen 
+}: { 
+  onOpenModal: (slug: string) => void
+  isRoomListOpen?: boolean
+  setIsRoomListOpen?: (open: boolean) => void
+}) {
   const { t } = useTranslation()
+  const [internalIsOpen, setInternalIsOpen] = useState(true)
+  const isOpen = isRoomListOpen ?? internalIsOpen
+  const setIsOpen = setIsRoomListOpen ?? setInternalIsOpen
 
   const navMain = useMemo(
     () => [
@@ -80,7 +92,7 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
     [t],
   )
   const [activeItem, setActiveItem] = useState(navMain[0])
-  const { showRail, setShowRail, setOpenMobile } = useSidebar()
+  const { showRail, setShowRail, setOpenMobile, isMobile } = useSidebar()
   const { logout } = useAuth()
   const params = useParams()
   const slug = params.slug ?? ''
@@ -107,8 +119,8 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
     : data?.pages.flatMap(page => page.content) || []
 
   return (
-    <Sidebar>
-      <div className='flex h-full w-[72px] flex-col items-center justify-between px-2 py-4'>
+    <Sidebar className='flex shrink-0 overflow-hidden transition-all duration-300' style={{ width: isOpen ? '365px' : '72px' }}>
+      <div className={cn('flex h-full w-[72px] shrink-0 flex-col items-center justify-between px-2 py-4', isOpen && 'border-r')}>
         <SidebarHeader>
           <Link href='/' className='mb-2 mt-1 font-bold'>
             <span className='text-xl'>Engly</span>
@@ -163,42 +175,55 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
         </SidebarFooter>
       </div>
 
-      <div className='flex w-full flex-col'>
-        <SidebarHeader className='gap-3.5 border-b p-5'>
-          <div className='flex w-full flex-col gap-5'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-4'>
-                <button className='md:hidden' onClick={() => setShowRail(!showRail)}>
-                  <AlignJustify />
-                </button>
-                <div className='text-[24px] font-medium text-foreground md:text-4xl'>
-                  {activeItem.title}
+      {isOpen && (
+        <div className='flex w-full flex-col transition-all duration-300'>
+          <SidebarHeader className='gap-4 border-b bg-white p-6 shadow-sm'>
+            <div className='flex w-full flex-col gap-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-3'>
+                  <button 
+                    className='flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all hover:bg-gray-50 hover:shadow-md'
+                    onClick={() => setIsOpen(false)}
+                    aria-label='Hide room list'
+                  >
+                    <ChevronLeft size={18} className='text-gray-600' />
+                  </button>
+                  <button className='md:hidden' onClick={() => setShowRail(!showRail)}>
+                    <AlignJustify />
+                  </button>
+                  <div className='text-2xl font-semibold text-foreground md:text-3xl'>
+                    {activeItem.title}
+                  </div>
                 </div>
-              </div>
 
-              <Button onClick={() => onOpenModal(slugValue)}>
+              <Button 
+                onClick={() => onOpenModal(slugValue)}
+                size='sm'
+                className='rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg hover:scale-105'
+              >
                 {t('chatPage.newChatFull')}
               </Button>
             </div>
 
-            <div className='flex items-center gap-2.5'>
-              <div className='flex-1'>
+            <div className='flex items-center gap-2'>
+              <div className='relative flex-1'>
                 <SidebarInput
                   placeholder={t('sidebar.search')}
-                  icon={<Search size={20} />}
+                  icon={<Search size={16} className='text-gray-400' />}
                   value={search}
                   onChange={e => {
                     const value = e.target.value
                     setSearch(value)
                     debouncedUpdate(value)
                   }}
+                  className='h-10 rounded-full border-gray-200 bg-white pl-10 pr-4 text-sm shadow-sm transition-all placeholder:text-gray-400 hover:shadow-md focus:border-blue-400 focus:ring-2 focus:ring-blue-100'
                 />
               </div>
               <button
-                className='rounded-md border border-sidebar-foreground bg-sidebar-accent-foreground px-5 py-[17px]'
+                className='flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all hover:border-blue-400 hover:bg-blue-50 hover:shadow-md hover:scale-105'
                 aria-label='Filter'
               >
-                <ListFilter size={16} />
+                <ListFilter size={16} className='text-gray-600' />
               </button>
             </div>
           </div>
@@ -219,6 +244,16 @@ export function ChatSidebar({ onOpenModal }: { onOpenModal: (slug: string) => vo
           </SidebarGroup>
         </SidebarContent>
       </div>
+      )}
+      {!isOpen && (
+        <button
+          className='fixed left-[84px] top-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md transition-all hover:bg-gray-50 hover:shadow-lg'
+          onClick={() => setIsOpen(true)}
+          aria-label='Show room list'
+        >
+          <ChevronLeft size={14} className='rotate-180 text-gray-600' />
+        </button>
+      )}
     </Sidebar>
   )
 }
