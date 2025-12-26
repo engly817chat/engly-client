@@ -203,7 +203,7 @@
     "members": "{{count}} members",
     "newChatFull": "+ New chat",
     "inputPlaceholder": "Write a message...",
-    "send": "Send",
+    "send": "Go",
     "createChat": "Create a chat",
     "headerPlaceholder": "Enter a header name",
     "descriptionPlaceholder": "Some description",
