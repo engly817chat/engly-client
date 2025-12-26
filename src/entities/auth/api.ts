@@ -7,6 +7,8 @@ import type {
   GoogleRegisterRequest,
   LoginRequestDto,
   RegisterRequestDto,
+  UpdateProfileRequest,
+  UpdateSettingsRequest,
   UserProfile,
 } from './types'
 
@@ -21,8 +23,10 @@ const endpoints = {
   firstLogin: '/valid/first-login',
   sendVerification: '/api/email-verify',
   confirmEmail: '/api/email-verify/check',
-  getProfile: 'api/profile/check',
-  resetPasswordSend: 'api/password-reset/send',
+  getProfile: '/api/profile/check',
+  updateProfile: '/api/profile',
+  updateSettings: '/api/user-settings',
+  resetPasswordSend: '/api/password-reset/send',
   resetPasswordConfirm: '/api/password-reset',
 } as const
 
@@ -107,6 +111,14 @@ export const authApi = {
 
   getProfile: async (): Promise<UserProfile> => {
     const response = await axiosWithAuth.get<UserProfile>(endpoints.getProfile)
+    return response.data
+  },
+  updateProfile: async (data: UpdateProfileRequest): Promise<UserProfile> => {
+    const response = await axiosWithAuth.put<UserProfile>(endpoints.updateProfile, data)
+    return response.data
+  },
+  updateSettings: async (data: UpdateSettingsRequest): Promise<UserProfile> => {
+    const response = await axiosWithAuth.put<UserProfile>(endpoints.updateSettings, data)
     return response.data
   },
   sendResetLink: async (email: string): Promise<void> => {

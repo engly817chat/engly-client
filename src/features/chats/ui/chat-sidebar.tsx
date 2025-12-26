@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import {
   AlignJustify,
   Bell,
@@ -46,7 +46,8 @@ export function ChatSidebar({
   isRoomListOpen?: boolean
   setIsRoomListOpen?: (open: boolean) => void
 }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
+  const router = useRouter()
   const [internalIsOpen, setInternalIsOpen] = useState(true)
   const isOpen = isRoomListOpen ?? internalIsOpen
   const setIsOpen = setIsRoomListOpen ?? setInternalIsOpen
@@ -79,7 +80,8 @@ export function ChatSidebar({
         url: '#',
         icon: UserRound,
         isActive: false,
-        disabled: true,
+        disabled: false,
+        onClick: () => router.push('/profile'),
       },
       {
         title: t('sidebar.alert'),
@@ -89,7 +91,7 @@ export function ChatSidebar({
         disabled: true,
       },
     ],
-    [t],
+    [t, router],
   )
   const [activeItem, setActiveItem] = useState(navMain[0])
   const { showRail, setShowRail, setOpenMobile, isMobile } = useSidebar()
@@ -137,7 +139,15 @@ export function ChatSidebar({
                         children: item.title,
                         hidden: false,
                       }}
-                      onClick={() => !item.disabled && setActiveItem(item)}
+                      onClick={() => {
+                        if (!item.disabled) {
+                          if (item.onClick) {
+                            item.onClick()
+                          } else {
+                            setActiveItem(item)
+                          }
+                        }
+                      }}
                       isActive={activeItem.title === item.title}
                       className={cn(
                         'flex items-center justify-center px-2.5 md:px-2',

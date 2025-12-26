@@ -33,6 +33,19 @@ export interface GoogleRegisterRequest {
   goals: string;
 }
 
+export interface UpdateProfileRequest {
+  username?: string
+  goal?: string
+  englishLevel?: string
+  nativeLanguage?: string
+}
+
+export interface UpdateSettingsRequest {
+  theme?: string
+  interfaceLanguage?: string
+  notifications?: boolean
+}
+
 export interface FirstLoginResponse {
   userExists: boolean
 }
@@ -44,11 +57,21 @@ export interface UserProfile {
   providerId: string
   createdAt: string
   roles: string
+  imgUrl: string | null
   emailVerified: boolean
+  updatedAt: string
+  lastLogin: string
   provider: string
   additionalInfo: {
+    id: string
     englishLevel: string
     nativeLanguage: string
     goal: string
+  }
+  userSettings: {
+    id: string
+    theme: string
+    notifications: boolean
+    interfaceLanguage: string
   }
 }
